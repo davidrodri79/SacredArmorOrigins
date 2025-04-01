@@ -3,6 +3,7 @@ package com.activeminds.sao;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -17,7 +18,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class Main extends Game {
+public class Main extends Game
+{
+    AssetManager manager;
     public SpriteBatch batch;
     public OrthographicCamera camera;
     private Texture image;
@@ -36,6 +39,12 @@ public class Main extends Game {
 
     @Override
     public void create() {
+
+        manager = new AssetManager();
+        manager.load("gui/Button-on.png", Texture.class);
+        manager.load("gui/Button-off.png", Texture.class);
+        manager.finishLoading();
+
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
 
@@ -47,6 +56,7 @@ public class Main extends Game {
         loadPalette();
 
         Loadfont("ARMOR.FNT");
+        load_items();
 
         setScreen(new MainMenuScreen(this));
 
@@ -131,6 +141,65 @@ public class Main extends Game {
         scr = loadBinaryImage(file, 320, 200);
     }
 
+    Texture[] keys;
+    Texture[] ammo;
+    Texture[] addings;
+    Texture[][] weapon;
+    Texture marca1, marca2;
+    Texture helmet[];
+
+
+    void load_items()
+    {
+        int i,g,h,j;
+        FileHandle file = Gdx.files.internal("OBJECTS.CHR");
+        InputStream inputStream = file.read();
+
+        keys = new Texture[3];
+        for(g=0; g<3; ++g)
+            keys[g] = loadBinaryImage(inputStream,24,26);
+        ammo = new Texture[5];
+        for(g=0; g<5; ++g)
+            ammo[g] = loadBinaryImage(inputStream,24,26);
+        addings = new Texture[12];
+        for(g=0; g<12; ++g)
+            addings[g] = loadBinaryImage(inputStream,24,26);
+        weapon = new Texture[2][6];
+        for(h=0; h<2; ++h)
+            for(g=0; g<6; ++g)
+                weapon[h][g] = loadBinaryImage(inputStream,40,27);
+        marca1 = loadBinaryImage(inputStream, 97, 34);
+        marca2 = loadBinaryImage(inputStream, 51, 50);
+
+        helmet = new Texture[2];
+        helmet[0] = loadBinaryImage(inputStream, 22, 18);
+        helmet[1] = helmet[0];
+
+/*
+        for(j=0; j<2; ++j)
+            for(h=0; h<2; ++h)
+                for(g=0; g<3; ++g)
+                    for(i=0; i<1080; ++i)
+                        fscanf(ptr,"%c",&bullet[j][h][g][i]);
+        for(h=0; h<3; ++h)
+            for(g=0; g<3; ++g)
+                for(i=0; i<1080; ++i)
+                    fscanf(ptr,"%c",&explos[h][g][i]);
+        for(g=0; g<2; ++g)
+            for(i=0; i<1180; ++i)
+                fscanf(ptr,"%c",&field[g][i]);
+        for(i=0; i<920; ++i)
+            fscanf(ptr,"%c",&sombra[i]);
+
+        fclose(ptr);*/
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     Texture[] font;
     public void Copytext(SpriteBatch batch, int x, int y, String text) {
 
@@ -148,4 +217,11 @@ public class Main extends Game {
         batch.draw(bitmap, xx + GAME_SCREEN_START_X, VIEWPORT_HEIGHT - yy - sy);
     }
 
+    public void COPY_BUFFER_1(SpriteBatch batch, int x, int y, int sx, int sy, Texture texture) {
+        batch.draw(texture, x + GAME_SCREEN_START_X, VIEWPORT_HEIGHT - y - sy);
+    }
+
+    public void COPY_BUFFER_2(SpriteBatch batch, int x, int y, int sx, int sy, Texture texture) {
+        batch.draw(texture, x + GAME_SCREEN_START_X, VIEWPORT_HEIGHT - y - sy, sx, sy, 0, 0, sx, sy, true, false );
+    }
 }

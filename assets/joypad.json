@@ -1,0 +1,58 @@
+{
+  "buttons" : [
+    {
+      x: 700
+      y: 40
+      width: 80
+      height: 80,
+      action: Pause
+      image_on: "gui/Button-on.png",
+      image_off: "gui/Button-off.png"
+    },
+    {
+      x: 10
+      y: 60
+      width: 40
+      height: 40,
+      action: Left,
+      image_on: "gui/Button-on.png",
+      image_off: "gui/Button-off.png"
+    },
+    {
+      x: 90
+      y: 60
+      width: 40
+      height: 40
+      action: Right,
+      image_on: "gui/Button-on.png",
+      image_off: "gui/Button-off.png"
+    },
+    {
+      x: 50
+      y: 100
+      width: 40
+      height: 40,
+      action: Up,
+      image_on: "gui/Button-on.png",
+      image_off: "gui/Button-off.png"
+    },
+    {
+      x: 50
+      y: 20
+      width: 40
+      height: 40,
+      action: Down,
+      image_on: "gui/Button-on.png",
+      image_off: "gui/Button-off.png"
+    },
+    {
+      x: 490
+      y: 60
+      width: 40
+      height: 40
+      action: Accept,
+      image_on: "gui/Button-on.png",
+      image_off: "gui/Button-off.png"
+    }
+  ]
+}

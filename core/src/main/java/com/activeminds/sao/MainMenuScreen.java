@@ -7,11 +7,18 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class MainMenuScreen implements Screen {
 
     Main game;
+    int op = 0;
+    ButtonLayout joypad;
+
     public MainMenuScreen(Main game)
     {
         this.game = game;
 
         game.load_scr("TITLE.SCR");
+
+        // Create joypad
+        joypad = new ButtonLayout(game.camera, game.manager, null);
+        joypad.loadFromJson("joypad.json");
     }
 
     @Override
@@ -35,9 +42,17 @@ public class MainMenuScreen implements Screen {
         game.Copytext(game.batch,80,140,"OPCIONES");
         game.Copytext(game.batch,80,165,"SALIR");
         game.Copytext(game.batch,30,185,"Active Minds 1997,98");
-        //game.COPY_BUFFER_1(scr,45,60+(25*op),22,18,helmet[1]);
-        //game.COPY_BUFFER_2(scr,253,60+(25*op),22,18,helmet[1]);
+        game.COPY_BUFFER_1(game.batch,45,60+(25*op),22,18,game.helmet[1]);
+        game.COPY_BUFFER_2(game.batch,253,60+(25*op),22,18,game.helmet[1]);
         game.batch.end();
+
+        joypad.render(game.batch, game.batch);
+
+        if(joypad.consumePush("Up")) {op--; };
+        if(joypad.consumePush("Down")) {op++;};
+
+        if(op<0) op=4;
+        if(op>4) op=0;
     }
 
     @Override
