@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,18 +18,37 @@ import java.io.InputStream;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
-    private SpriteBatch batch;
-    private Texture image, wall;
+    public SpriteBatch batch;
+    public OrthographicCamera camera;
+    private Texture image;
+    public Texture scr;
 
     float[][] palette;
+
+    public static final int VIEWPORT_WIDTH = 540;
+    public static final int VIEWPORT_HEIGHT = 200;
+    public static final int GAME_SCREEN_WIDTH = 320;
+    public static final int GAME_SCREEN_HEIGHT = 200;
+    public static final int GAME_SCREEN_START_X = (VIEWPORT_WIDTH - GAME_SCREEN_WIDTH) /2;
+
+
+
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
 
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+        //camera.translate(-176, -100);
+
+
         loadPalette();
-        wall = loadBinaryImage("SOLDIER.SCR", 320,200);
+
+        Loadfont("ARMOR.FNT");
+
+        setScreen(new MainMenuScreen(this));
 
     }
 
@@ -55,14 +75,21 @@ public class Main extends Game {
 
     }
 
+    private void Loadfont(String s) {
+        font = new Texture[256];
+
+        FileHandle file = Gdx.files.internal(s);
+        InputStream inputStream = file.read();
+
+        for(int i = 0; i < 256; i++)
+        {
+            font[i] = loadBinaryImage(inputStream, 11, 12);
+        }
+    }
+
     @Override
     public void render() {
         super.render();
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        batch.begin();
-        batch.draw(image, 140, 210);
-        batch.draw(wall, 0, 0);
-        batch.end();
     }
 
     @Override
@@ -74,11 +101,14 @@ public class Main extends Game {
 
     Texture loadBinaryImage(String fileName, int width, int height)
     {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-
         FileHandle file = Gdx.files.internal(fileName);
-
         InputStream inputStream = file.read();
+        return loadBinaryImage(inputStream, width, height);
+    }
+
+    Texture loadBinaryImage(InputStream inputStream, int width, int height)
+    {
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
 
         try {
         for(int i = 0; i < height; i++)
@@ -95,4 +125,27 @@ public class Main extends Game {
         }
         return new Texture(pixmap);
     }
+
+    public void load_scr(String file)
+    {
+        scr = loadBinaryImage(file, 320, 200);
+    }
+
+    Texture[] font;
+    public void Copytext(SpriteBatch batch, int x, int y, String text) {
+
+            int d=0, i = 0;
+            do{
+                char c = text.charAt(i);
+                Copy_Buffer(batch, x+d,y,11,12,font[(int)c],1,0);
+                d+=11;
+                i++;
+            }while(i < text.length());
+        }
+
+    private void Copy_Buffer(SpriteBatch batch, int xx, int yy, int sx, int sy, Texture bitmap, int type, int dir)
+    {
+        batch.draw(bitmap, xx + GAME_SCREEN_START_X, VIEWPORT_HEIGHT - yy - sy);
+    }
+
 }
