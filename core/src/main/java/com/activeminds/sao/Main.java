@@ -135,7 +135,7 @@ class BALA {
 
 
 
-    int lev, epi_actual, p_l, x_map, y_map, px, py, llave[] = new int[3], n_secrets,
+    int lev, epi_actual, p_l, x_map, y_map, llave[] = new int[3], n_secrets,
         t_secrets, visto[][] = new int[10][10];
     int[] armas = new int[6];
     int[] completed = new int[5];
@@ -145,8 +145,8 @@ class BALA {
     T_ENEMY []ene_datos = new T_ENEMY[100];
     SPRITE sol, trp, ene1, ene2;
     boolean MAP = false;
-    float frame = 0f, invi = 0f;
-    char p_d = 0, p_p = 0, p_e = 0, p_w = 0, desp = 0;
+    float frame = 0f, invi = 0f, vari, px, py;
+    char p_d = 0, p_p = 0, p_e = 0, p_w = 0, desp = 0, x_room, y_room;
 
     @Override
     public void create() {

@@ -8,10 +8,17 @@ public class GameScreen implements Screen {
 
     Main game;
     int x, y;
+    ButtonLayout joypad;
+    float mes_c = 0f;
+    String message;
 
     GameScreen(Main game)
     {
         this.game = game;
+        joypad = new ButtonLayout(game.camera, game.manager, null);
+        joypad.loadFromJson("joypad.json");
+        show_mes(game.fase.map_name);
+
     }
     @Override
     public void show() {
@@ -31,6 +38,10 @@ public class GameScreen implements Screen {
         game.batch.begin();
         if(!game.MAP) visualizar(game.batch, 1,1);
         else map_2d();
+        if(mes_c > 0) {game.Copytext(game.batch,5,5,message); };
+        game.COPY_BUFFER_1(game.batch,0,166,97,34,game.marca1);
+        game.COPY_BUFFER_1(game.batch,269,150,51,50,game.marca2);
+
         game.batch.end();
         /*
         CLEAR_BUFFER(scr,0);
@@ -45,6 +56,10 @@ public class GameScreen implements Screen {
         FLIP_BUFFER(scr);
         */
 
+        joypad.render(game.batch, game.batch);
+
+        float K = delta * 2.5f;
+
         // LOGIC STEP =========================================
 
         /*do{
@@ -52,17 +67,21 @@ public class GameScreen implements Screen {
                 mov ah , 0
                 int 1Ah
             };
-            m1=_DX;
-            x_room=(char)px; y_room=(char)py;
-            vari+=2*K; if(vari>=3) vari-=3.0;
+            m1=_DX;*/
+            game.x_room=(char)game.px; game.y_room=(char)game.py;
+            game.vari+=2*K; if(game.vari>=3) game.vari-=3.0;
 
-            play_sound();
+            //play_sound();
 
-            if(frame<3.0) frame=vari;
-            else frame=vari-2.0;
+            if(game.frame<3.0f) game.frame=game.vari;
+            else game.frame=game.vari-2.0f;
 
-            visto[x_map][y_map]=1;
+            game.visto[game.x_map][game.y_map]=1;
 
+            if(mes_c > 0) { mes_c-=K;};
+
+
+            /*
             if(escudo>0) escudo-=K;
             if(pocima>0) pocima-=K;
             if(invi>0) invi-=K;
@@ -84,19 +103,51 @@ public class GameScreen implements Screen {
             if(kbhit())
                 key=toupper(getch());
 
-            if((keymap[57]) && (p_l<=0)) goto GAME_OVER;
+            if((keymap[57]) && (p_l<=0)) goto GAME_OVER;*/
 
-            if((p_e>=5) && (p_e<13)) goto NO_MUEVE;
-            p_p=0;
-            if(keymap[72]) {if(!keymap[56]) p_d=2; p_p=frame+1; acceso(px,py-K); goto TECLA_REC;};
-            if(keymap[80]) {if(!keymap[56]) p_d=0; p_p=frame+1; acceso(px,py+K); goto TECLA_REC;};
-            if(keymap[75]) {if(!keymap[56]) p_d=1; p_p=frame+1; acceso(px-K,py); goto TECLA_REC;};
-            if(keymap[77]) {if(!keymap[56]) p_d=3; p_p=frame+1; acceso(px+K,py); goto TECLA_REC;};
-            TECLA_REC:
-            if(keymap[29]) p_disparo();
-            if((keymap[27]) && (S_MAP<5)) {S_MAP++; vaciarbuffer();};
-            if((keymap[53]) && (S_MAP>1)) {S_MAP--; vaciarbuffer();};
-
+            if((game.p_e>=5) && (game.p_e<13)) {
+                //NO_MUEVE;
+            }
+            else {
+                game.p_p = 0;
+                if (joypad.isPressed("North")) {
+                    //if (!keymap[56])
+                        game.p_d = 2;
+                    game.p_p = (char)(game.frame + 1);
+                    acceso(game.px, game.py - K);
+                }
+                else if (joypad.isPressed("South")) {
+                    //if (!keymap[56])
+                        game.p_d = 0;
+                    game.p_p = (char)(game.frame + 1);
+                    acceso(game.px, game.py + K);
+                }
+                else if (joypad.isPressed("West")) {
+                    //if (!keymap[56])
+                        game.p_d = 1;
+                    game.p_p = (char)(game.frame + 1);
+                    acceso(game.px - K, game.py);
+                }
+                else if (joypad.isPressed("East")) {
+                    //if (!keymap[56])
+                    game.p_d = 3;
+                    game.p_p = (char)(game.frame + 1);
+                    acceso(game.px + K, game.py);
+                } ;
+                //TECLA_REC:
+                /*if (keymap[29]) p_disparo();
+                if ((keymap[27]) && (S_MAP < 5)) {
+                    S_MAP++;
+                    vaciarbuffer();
+                }
+                ;
+                if ((keymap[53]) && (S_MAP > 1)) {
+                    S_MAP--;
+                    vaciarbuffer();
+                }*/
+                ;
+            }
+            /*
             // Cambio de armas
             if(keymap[11]) p_w=0;
             if(keymap[2]){
@@ -260,6 +311,49 @@ public class GameScreen implements Screen {
 
         }while(key!='\x1B');
         */
+    }
+
+    void show_mes(String text)
+    {
+        message = text;
+        mes_c=35;
+    }
+
+    void acceso(float nx, float ny)
+    {
+
+        char acc=0, ba, mx=(char)game.x_map, my=(char)game.y_map;
+
+
+        if(nx>=8.0){ nx-=8.0; mx+=1; };
+        if(nx<0.0){ nx+=8.0; mx-=1; };
+        if(ny<0.0){ ny+=8.0; my-=1; };
+        if(ny>=8.0){ ny-=8.0; my+=1; };
+
+        game.desp=0;
+        ba=(char)game.fase.map[mx][my][(char)nx][(char)ny];
+
+        if(ba==1) acc=1;
+        if((ba>7) && (ba<47)) acc=1;
+
+        if((ba==10) || (ba==11)) game.desp=4;
+
+        if((ba>51) && (ba<56) && (game.llave[0] != 0)) acc=1;
+        if((ba>55) && (ba<60) && (game.llave[1] != 0)) acc=1;
+        if((ba>59) && (ba<64) && (game.llave[2] != 0)) acc=1;
+
+        //if(game.ene_map[(char)nx][(char)ny]>0) acc=0;
+
+        //if(game.GHOST) acc=1;
+
+        if(acc==0) return;
+
+        //if(is_item(ba)) {pick_item(ba);
+        //    fase.map[x_map][y_map][(char)nx][(char)ny]=1;};
+
+        game.px=nx; game.py=ny; game.x_map=mx; game.y_map=my;
+
+
     }
 
     private void map_2d() {

@@ -18,7 +18,7 @@ public class MainMenuScreen implements Screen {
 
         // Create joypad
         joypad = new ButtonLayout(game.camera, game.manager, null);
-        joypad.loadFromJson("joypad.json");
+        joypad.loadFromJson("menukeys.json");
     }
 
     @Override
