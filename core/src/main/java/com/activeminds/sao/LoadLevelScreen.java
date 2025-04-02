@@ -72,6 +72,32 @@ public class LoadLevelScreen implements Screen {
         game.Copytext(game.batch,25,150,"Preparado, soldado");
         game.Copytext(game.batch,235,150,game.p_name);
         game.batch.end();
+
+        // Update =====
+        game.load_charset();
+
+        game.x_map=game.fase.start_xy[0];
+        game.y_map=game.fase.start_xy[1];
+        game.px=game.fase.start_xy[2];
+        game.py=game.fase.start_xy[3];
+        game.llave[0] = 0;
+        game.llave[1] = 0;
+        game.llave[2] = 0;
+        game.n_secrets=0;
+        game.t_secrets=game.total_secrets();
+        //game.K=0;
+        //game.m3=0;
+
+        game.show_mes(game.fase.map_name);
+
+        // Mapa inicialmente desconocido
+        for(int i=0; i<10; ++i)
+            for(int j=0; j<10; ++j)
+                game.visto[i][j]=0;
+
+        //game.tiem_i=time(NULL);
+        game.setScreen(new GameScreen(game));
+        dispose();
     }
 
     @Override

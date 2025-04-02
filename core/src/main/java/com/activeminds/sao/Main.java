@@ -1,25 +1,21 @@
 package com.activeminds.sao;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game
 {
+
     AssetManager manager;
     public SpriteBatch batch;
     public OrthographicCamera camera;
@@ -33,9 +29,35 @@ public class Main extends Game
     public static final int GAME_SCREEN_WIDTH = 320;
     public static final int GAME_SCREEN_HEIGHT = 200;
     public static final int GAME_SCREEN_START_X = (VIEWPORT_WIDTH - GAME_SCREEN_WIDTH) /2;
+    public static final int cx = 160;
+    public static final int cy = 40;
 
 
-    class sprite {
+    class CHARSET {
+
+        Texture tile;
+        Texture[] bad_tile = new Texture[3];
+        Texture[] mor_tile = new Texture[3];
+        Texture wall1;
+        Texture wall2;
+        Texture[] wall3 = new Texture[3];
+        Texture[] door = new Texture[2];
+        Texture epi_end;
+        Texture fas_end;
+        Texture teletrans;
+        Texture secret_trans;
+        Texture[] boton = new Texture[2];
+        Texture[] clos_door = new Texture[2];
+        Texture[][] key_door1 = new Texture[2][2];
+        Texture[][] key_door2 = new Texture[2][2];
+        Texture[][] key_door3 = new Texture[2][2];
+        Texture decor1;
+        Texture decor2;
+        Texture[] decor3 = new Texture[3];
+        Texture column;
+    };
+
+    class SPRITE {
         Texture []b_stand = new Texture[2];
         Texture []b_pain = new Texture[2];
         Texture []b_punch = new Texture[2];
@@ -72,26 +94,26 @@ class SWITCH {
 };
 
 
-class LEVEL {
-    int t_n;
-    int e_n;
-    int s_n;
-    int []start_xy = new int[4];
-    String map_name;
-    int [][][][]map = new int[10][10][8][8];
-     ENEMY []enemies = new ENEMY[100];
-    TELEPORT []teleport = new TELEPORT[20];
-    SWITCH []switches = new SWITCH[20];
+    class LEVEL {
+        int t_n;
+        int e_n;
+        int s_n;
+        int []start_xy = new int[4];
+        String map_name;
+        int [][][][]map = new int[10][10][8][8];
+        ENEMY []enemies = new ENEMY[100];
+        TELEPORT []teleport = new TELEPORT[20];
+        SWITCH []switches = new SWITCH[20];
 
-    LEVEL()
-    {
-        for(int i = 0; i < enemies.length; i++)
-            enemies[i] = new ENEMY();
-        for(int i = 0; i < teleport.length; i++)
-            teleport[i] = new TELEPORT();
-        for(int i = 0; i < switches.length; i++)
-            switches[i] = new SWITCH();
-    }
+        LEVEL()
+        {
+            for(int i = 0; i < enemies.length; i++)
+                enemies[i] = new ENEMY();
+            for(int i = 0; i < teleport.length; i++)
+                teleport[i] = new TELEPORT();
+            for(int i = 0; i < switches.length; i++)
+                switches[i] = new SWITCH();
+        }
     };
 
 
@@ -113,13 +135,18 @@ class BALA {
 
 
 
-    int lev, epi_actual, p_l;
+    int lev, epi_actual, p_l, x_map, y_map, px, py, llave[] = new int[3], n_secrets,
+        t_secrets, visto[][] = new int[10][10];
     int[] armas = new int[6];
     int[] completed = new int[5];
     String epi_file, epi_name, file, enemy_file, p_name = "Sigma";
+    CHARSET chr = new CHARSET();
     LEVEL fase = new LEVEL();
     T_ENEMY []ene_datos = new T_ENEMY[100];
-    sprite sol, trp, ene1, ene2;
+    SPRITE sol, trp, ene1, ene2;
+    boolean MAP = false;
+    float frame = 0f, invi = 0f;
+    char p_d = 0, p_p = 0, p_e = 0, p_w = 0, desp = 0;
 
     @Override
     public void create() {
@@ -380,6 +407,73 @@ class BALA {
 
     }
 
+    void load_charset()
+    {
+        int i,g,j,k,h;
+
+        FileHandle f = Gdx.files.internal("CHARSET/"+file);
+        InputStream inputStream = f.read();
+
+        chr.tile = loadBinaryImage(inputStream, 40, 23);
+
+        for(g=0; g<3; ++g)
+            chr.bad_tile[g] = loadBinaryImage(inputStream, 40, 23);
+
+        for(g=0; g<3; ++g)
+            chr.mor_tile[g] = loadBinaryImage(inputStream, 40, 23);
+
+        chr.wall1 = loadBinaryImage(inputStream, 20, 70);
+
+        chr.wall2 = loadBinaryImage(inputStream, 20, 70);
+
+        for(g=0; g<3; ++g)
+            chr.wall3[g] = loadBinaryImage(inputStream, 20, 70);
+
+        for(g=0; g<2; ++g)
+            chr.door[g] = loadBinaryImage(inputStream, 20, 70);
+
+        chr.epi_end = loadBinaryImage(inputStream, 40, 39);
+
+        chr.fas_end = loadBinaryImage(inputStream, 40, 39);
+
+        chr.teletrans = loadBinaryImage(inputStream, 40, 39);
+
+        chr.secret_trans = loadBinaryImage(inputStream, 40, 39);
+
+        for(g=0; g<2; ++g)
+            chr.boton[g] = loadBinaryImage(inputStream, 40, 39);
+
+        for(g=0; g<2; ++g)
+            chr.clos_door[g] = loadBinaryImage(inputStream, 20, 70);
+
+        for(h=0; h<2; ++h)
+            for(g=0; g<2; ++g)
+                chr.key_door1[h][g] = loadBinaryImage(inputStream, 20, 70);
+
+        for(h=0; h<2; ++h)
+            for(g=0; g<2; ++g)
+                chr.key_door2[h][g] = loadBinaryImage(inputStream, 20, 70);
+
+        for(h=0; h<2; ++h)
+            for(g=0; g<2; ++g)
+                chr.key_door3[h][g] = loadBinaryImage(inputStream, 20, 70);
+
+        chr.decor1 = loadBinaryImage(inputStream, 40, 39);
+
+        chr.decor2 = loadBinaryImage(inputStream, 40, 39);
+
+        for(g=0; g<3; ++g)
+            chr.decor3[g] = loadBinaryImage(inputStream, 40, 39);
+
+        chr.column = loadBinaryImage(inputStream, 40, 79);
+
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     void load_player()
     {
         FileHandle f = Gdx.files.internal("WARRIOR/PLAYER.WAR");
@@ -392,9 +486,9 @@ class BALA {
         }
     }
 
-    sprite load_warrior(InputStream inputStream)
+    SPRITE load_warrior(InputStream inputStream)
     {
-        sprite spr = new sprite();
+        SPRITE spr = new SPRITE();
         int i,g,h;
         for(i=0; i<2; ++i)
             spr.b_stand[i] = loadBinaryImage(inputStream, 40, 39);
@@ -413,6 +507,13 @@ class BALA {
             spr.w_ground[i] = loadBinaryImage(inputStream, 60, 30);
 
         return spr;
+    }
+
+    public void show_mes(String mapName) {
+    }
+
+    public int total_secrets() {
+        return 0;
     }
 
     Texture[] font;
