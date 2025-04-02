@@ -1,6 +1,7 @@
 package com.activeminds.sao;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.io.IOException;
 
@@ -15,6 +16,40 @@ public class LoadLevelScreen implements Screen {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        //Enemigos inicialmente muertos
+        for(int i=0; i<game.fase.e_n; ++i)
+            if(game.fase.enemies[i].e_l==0) game.ene_datos[i].est=7;
+
+        game.load_player();
+
+
+        //Si episodio Hell, carga armadura sagrada
+        /*if(game.epi_actual==6){
+            ptr=fopen("warrior\\sacred.war","rb");
+            load_warrior(sol);
+            fclose(ptr);
+        };*/
+
+        //cambia_color(32,p_col);
+
+        //Puerta a Hell abierta si 5 reinos completados
+        if(game.epi_actual==0){
+            if(game.completed[0]==1 && game.completed[1]==1 && game.completed[2]==1 && game.completed[3]==1 &&
+                game.completed[4]==1)
+            {game.fase.map[4][3][3][0]=8; game.fase.map[4][3][4][0]=9;};
+
+            //Caso que se hayan completado los 5 reinos iniciales
+
+            if(game.completed[0]==1){ game.fase.map[4][4][3][7]=47; game.fase.map[4][4][4][7]=48;};
+            if(game.completed[1]==1){ game.fase.map[4][4][0][4]=49; game.fase.map[4][4][0][5]=50;};
+            if(game.completed[2]==1){ game.fase.map[4][4][7][4]=49; game.fase.map[4][4][7][5]=50;};
+            if(game.completed[3]==1){ game.fase.map[4][3][0][3]=49; game.fase.map[4][3][0][4]=50;};
+            if(game.completed[4]==1){ game.fase.map[4][3][7][3]=49; game.fase.map[4][3][7][4]=50;};
+        };
+
+        game.load_scr("SOLDIER.SCR");
+
     }
     @Override
     public void show() {
@@ -24,6 +59,19 @@ public class LoadLevelScreen implements Screen {
     @Override
     public void render(float delta) {
 
+        ScreenUtils.clear(0, 0, 0, 1f);
+
+        game.camera.update();
+        game.batch.setProjectionMatrix(game.camera.combined);
+
+        game.batch.begin();
+        game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
+        game.Copytext(game.batch,50,20,game.epi_name);
+        game.Copytext(game.batch,90,80,"Entrando en:");
+        game.Copytext(game.batch,20,100,game.fase.map_name);
+        game.Copytext(game.batch,25,150,"Preparado, soldado");
+        game.Copytext(game.batch,235,150,game.p_name);
+        game.batch.end();
     }
 
     @Override

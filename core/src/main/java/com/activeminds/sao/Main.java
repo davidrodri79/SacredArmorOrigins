@@ -35,6 +35,15 @@ public class Main extends Game
     public static final int GAME_SCREEN_START_X = (VIEWPORT_WIDTH - GAME_SCREEN_WIDTH) /2;
 
 
+    class sprite {
+        Texture []b_stand = new Texture[2];
+        Texture []b_pain = new Texture[2];
+        Texture []b_punch = new Texture[2];
+        Texture [][]l_walk = new Texture[2][3];
+        Texture []l_stand = new Texture[2];
+        Texture []w_falling = new Texture[4];
+        Texture []w_ground  = new Texture[2];
+    };
 
     class ENEMY {
         int []e_xy = new int[4];
@@ -106,8 +115,11 @@ class BALA {
 
     int lev, epi_actual, p_l;
     int[] armas = new int[6];
-    String epi_file, epi_name, file, enemy_file;
+    int[] completed = new int[5];
+    String epi_file, epi_name, file, enemy_file, p_name = "Sigma";
     LEVEL fase = new LEVEL();
+    T_ENEMY []ene_datos = new T_ENEMY[100];
+    sprite sol, trp, ene1, ene2;
 
     @Override
     public void create() {
@@ -209,14 +221,15 @@ class BALA {
         };
         inputStream.close();
 
+        path = "WARRIOR/"+enemy_file;
+        f = Gdx.files.internal(path);
+        if(f.exists() && !f.isDirectory()) {
+            inputStream = f.read();
 
-        /*
-
-        sprintf(path,"warrior\\%s",enemy_file);
-        ptr=fopen(path,"rb");
-        load_warrior(ene1);
-        load_warrior(ene2);
-        fclose(ptr);
+            ene1 = load_warrior(inputStream);
+            ene2 = load_warrior(inputStream);
+            inputStream.close();
+        }
 
         for(n=0; n<fase.e_n; ++n){
             ene_datos[n].xy[0]=fase.enemies[n].e_xy[0];
@@ -226,7 +239,7 @@ class BALA {
             ene_datos[n].pos=0;
             ene_datos[n].est=0;
             ene_datos[n].life=fase.enemies[n].e_l;
-        };*/
+        };
     }
 
     void loadPalette()
@@ -365,6 +378,41 @@ class BALA {
             throw new RuntimeException(e);
         }
 
+    }
+
+    void load_player()
+    {
+        FileHandle f = Gdx.files.internal("WARRIOR/PLAYER.WAR");
+        InputStream inputStream = f.read();
+        sol = load_warrior(inputStream);
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    sprite load_warrior(InputStream inputStream)
+    {
+        sprite spr = new sprite();
+        int i,g,h;
+        for(i=0; i<2; ++i)
+            spr.b_stand[i] = loadBinaryImage(inputStream, 40, 39);
+        for(i=0; i<2; ++i)
+            spr.b_pain[i] = loadBinaryImage(inputStream, 40, 39);
+        for(i=0; i<2; ++i)
+            spr.b_punch[i] = loadBinaryImage(inputStream, 40, 39);
+        for(h=0; h<2; ++h)
+            for(i=0; i<3; ++i)
+                spr.l_walk[h][i] = loadBinaryImage(inputStream, 40, 39);
+        for(i=0; i<2; ++i)
+            spr.l_stand[i] = loadBinaryImage(inputStream, 40, 39);
+        for(i=0; i<4; ++i)
+            spr.w_falling[i] = loadBinaryImage(inputStream, 40, 59);
+        for(i=0; i<2; ++i)
+            spr.w_ground[i] = loadBinaryImage(inputStream, 60, 30);
+
+        return spr;
     }
 
     Texture[] font;
