@@ -36,6 +36,78 @@ public class Main extends Game
 
 
 
+    class ENEMY {
+        int []e_xy = new int[4];
+        int e_t;
+        int e_l;
+        int e_d;
+        int e_w;
+	};
+
+    class T_ENEMY {
+        float []xy = new float[4];
+        float est;
+        float pos;
+        int life;
+	};
+
+class TELEPORT {
+	int []origen_xy = new int[4];          //Un teleport puede estar en un bloque
+    int []destino_xy = new int[4];         // convencional
+};
+
+class SWITCH {
+    int []activador_xy = new int[4];        // Un activador puede estar en un lugar
+    int []activable_xy = new int[4];              // convencional
+    int estado;
+};
+
+
+class LEVEL {
+    int t_n;
+    int e_n;
+    int s_n;
+    int []start_xy = new int[4];
+    String map_name;
+    int [][][][]map = new int[10][10][8][8];
+     ENEMY []enemies = new ENEMY[100];
+    TELEPORT []teleport = new TELEPORT[20];
+    SWITCH []switches = new SWITCH[20];
+
+    LEVEL()
+    {
+        for(int i = 0; i < enemies.length; i++)
+            enemies[i] = new ENEMY();
+        for(int i = 0; i < teleport.length; i++)
+            teleport[i] = new TELEPORT();
+        for(int i = 0; i < switches.length; i++)
+            switches[i] = new SWITCH();
+    }
+    };
+
+
+class EPISODE {
+    String epi_name;
+    String charset_file;
+    String enemy_file;
+    LEVEL []nivel = new LEVEL[8];
+    };
+
+class BALA {
+    float est;
+    int fuerza;
+    int tipo;
+    int dir;
+    float vel;
+    float []b_xy = new float[4];
+    };
+
+
+
+    int lev, epi_actual, p_l;
+    int[] armas = new int[6];
+    String epi_file, epi_name, file, enemy_file;
+    LEVEL fase = new LEVEL();
 
     @Override
     public void create() {
@@ -60,6 +132,101 @@ public class Main extends Game
 
         setScreen(new MainMenuScreen(this));
 
+    }
+
+    String lee_disco(InputStream inputStream, int length)
+    {
+        StringBuilder result = new StringBuilder();
+        boolean endReached = false;
+        try {
+            for(int i = 0; i < length; i++)
+            {
+                char c = (char) inputStream.read();
+                if(c == 0) endReached = true;
+                if(!endReached) result.append(c);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return result.toString();
+    }
+
+    void carga_nivel() throws IOException {
+        int g,i,h,l,j,k;
+        char n;
+        String path;
+
+        path = "EPISODE/"+epi_file;
+        FileHandle f = Gdx.files.internal(path);
+        InputStream inputStream = f.read();
+        if(inputStream == null) return;
+        epi_name = lee_disco(inputStream,25);
+        file = lee_disco(inputStream,12);
+        enemy_file = lee_disco(inputStream,12);
+        for(i=0; i<=lev; ++i){
+
+            fase.t_n = inputStream.read();
+            fase.e_n = inputStream.read();
+            fase.s_n = inputStream.read();
+
+            for(h = 0; h < 4; h++)
+                fase.start_xy[h] = inputStream.read();
+            fase.map_name = lee_disco(inputStream,25);
+
+            for(h=0; h<10; ++h){
+                for(l=0; l<10; ++l){
+                    for(j=0; j<8; ++j){
+                        for(k=0; k<8; ++k){
+                            fase.map[h][l][j][k] = inputStream.read();
+                        };
+                    };
+                };
+            };
+
+            for(g=0; g<100; ++g){
+                fase.enemies[g].e_xy[0] = inputStream.read();
+                fase.enemies[g].e_xy[1] = inputStream.read();
+                fase.enemies[g].e_xy[2] = inputStream.read();
+                fase.enemies[g].e_xy[3] = inputStream.read();
+                fase.enemies[g].e_t = inputStream.read();
+                fase.enemies[g].e_l = inputStream.read();
+                fase.enemies[g].e_d = inputStream.read();
+                fase.enemies[g].e_w = inputStream.read();
+            };
+            for(g=0; g<20; g++){
+                for(h = 0; h < 4; h++)
+                    fase.teleport[g].origen_xy[h] = inputStream.read();
+                for(h = 0; h < 4; h++)
+                    fase.teleport[g].destino_xy[h] = inputStream.read();
+            };
+            for(g=0; g<20; g++){
+                for(h = 0; h < 4; h++)
+                    fase.switches[g].activador_xy[h] = inputStream.read();
+                for(h = 0; h < 4; h++)
+                    fase.switches[g].activable_xy[h] = inputStream.read();
+                fase.switches[g].estado = inputStream.read();
+            };
+        };
+        inputStream.close();
+
+
+        /*
+
+        sprintf(path,"warrior\\%s",enemy_file);
+        ptr=fopen(path,"rb");
+        load_warrior(ene1);
+        load_warrior(ene2);
+        fclose(ptr);
+
+        for(n=0; n<fase.e_n; ++n){
+            ene_datos[n].xy[0]=fase.enemies[n].e_xy[0];
+            ene_datos[n].xy[1]=fase.enemies[n].e_xy[1];
+            ene_datos[n].xy[2]=fase.enemies[n].e_xy[2];
+            ene_datos[n].xy[3]=fase.enemies[n].e_xy[3];
+            ene_datos[n].pos=0;
+            ene_datos[n].est=0;
+            ene_datos[n].life=fase.enemies[n].e_l;
+        };*/
     }
 
     void loadPalette()
