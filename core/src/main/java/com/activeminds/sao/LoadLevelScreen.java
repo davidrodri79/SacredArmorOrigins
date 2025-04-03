@@ -1,15 +1,26 @@
 package com.activeminds.sao;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 public class LoadLevelScreen implements Screen {
     Main game;
     public LoadLevelScreen(Main game)
     {
         this.game = game;
+
+        if(game.epi_actual == 0) game.epi_file = "INTRO.EPI";
+        if(game.epi_actual == 1) game.epi_file = "CLASSIC.EPI";
+        if(game.epi_actual == 2) game.epi_file = "MEDIEV.EPI";
+        if(game.epi_actual == 3) game.epi_file = "FUTURE.EPI";
+        if(game.epi_actual == 4) game.epi_file = "ICE.EPI";
+        if(game.epi_actual == 5) game.epi_file = "FIRE.EPI";
+        if(game.epi_actual == 6) game.epi_file = "HELL.EPI";
 
         try {
             game.carga_nivel();
@@ -22,6 +33,17 @@ public class LoadLevelScreen implements Screen {
             if(game.fase.enemies[i].e_l==0) game.ene_datos[i].est=7;
 
         game.load_player();
+
+        FileHandle f = Gdx.files.internal("WARRIOR/GAMMA.WAR");
+        if(f.exists() && !f.isDirectory()) {
+            InputStream inputStream = f.read();
+            game.trp = game.load_warrior(inputStream);
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
 
         //Si episodio Hell, carga armadura sagrada

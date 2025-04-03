@@ -9,8 +9,9 @@ public class GameScreen implements Screen {
     Main game;
     int x, y;
     ButtonLayout joypad;
-    float mes_c = 0f;
+    float mes_c = 0f, K;
     String message;
+    boolean FIN_DE_FASE, FIN_EPI, SECRET_FASE;
 
     GameScreen(Main game)
     {
@@ -18,6 +19,9 @@ public class GameScreen implements Screen {
         joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("joypad.json");
         show_mes(game.fase.map_name);
+        FIN_EPI = false;
+        FIN_DE_FASE = false;
+        SECRET_FASE = false;
 
     }
     @Override
@@ -58,7 +62,7 @@ public class GameScreen implements Screen {
 
         joypad.render(game.batch, game.batch);
 
-        float K = delta * 2.5f;
+        K = delta * 2.5f;
 
         // LOGIC STEP =========================================
 
@@ -68,17 +72,39 @@ public class GameScreen implements Screen {
                 int 1Ah
             };
             m1=_DX;*/
-            game.x_room=(char)game.px; game.y_room=(char)game.py;
-            game.vari+=2*K; if(game.vari>=3) game.vari-=3.0;
+        if(FIN_EPI)
+        {
+            if(game.epi_actual == 0)
+            {
+                if((game.x_map==4) && (game.y_map==5)) game.epi_actual=1;
+                if((game.x_map==2) && (game.y_map==4)) game.epi_actual=2;
+                if((game.x_map==6) && (game.y_map==4)) game.epi_actual=3;
+                if((game.x_map==2) && (game.y_map==2)) game.epi_actual=4;
+                if((game.x_map==6) && (game.y_map==2)) game.epi_actual=5;
+                if((game.x_map==4) && (game.y_map==1)) game.epi_actual=6;
+                game.lev=0;
+
+                game.setScreen(new LoadLevelScreen(game));
+            }
+        }
+        else
+        {
+            game.x_room = (char) game.px;
+            game.y_room = (char) game.py;
+            game.vari += 2 * K;
+            if (game.vari >= 3) game.vari -= 3.0;
 
             //play_sound();
 
-            if(game.frame<3.0f) game.frame=game.vari;
-            else game.frame=game.vari-2.0f;
+            if (game.frame < 3.0f) game.frame = game.vari;
+            else game.frame = game.vari - 2.0f;
 
-            game.visto[game.x_map][game.y_map]=1;
+            game.visto[game.x_map][game.y_map] = 1;
 
-            if(mes_c > 0) { mes_c-=K;};
+            if (mes_c > 0) {
+                mes_c -= K;
+            }
+            ;
 
 
             /*
@@ -86,11 +112,13 @@ public class GameScreen implements Screen {
             if(pocima>0) pocima-=K;
             if(invi>0) invi-=K;
 
+            */
             // MOVER ENEMIGOS, AQUI
-            for(g=0; g<fase.e_n; ++g)
-                if(((char)ene_datos[g].xy[0]==x_map) && ((char)ene_datos[g].xy[1]==y_map)) move_enemy(g);
-            set_maps();
+            for(int g=0; g<game.fase.e_n; ++g)
+                if(((char)game.ene_datos[g].xy[0]==game.x_map) && ((char)game.ene_datos[g].xy[1]==game.y_map)) move_enemy((char)g);
+            //set_maps();
 
+            /*
             if(tel_map[x_room][y_room]) teletransporte(tel_map[x_room][y_room]-1);
 
             if((int_map[x_room][y_room]) && (keymap[57])) conecta_int(int_map[x_room][y_room]-1);
@@ -105,35 +133,32 @@ public class GameScreen implements Screen {
 
             if((keymap[57]) && (p_l<=0)) goto GAME_OVER;*/
 
-            if((game.p_e>=5) && (game.p_e<13)) {
+            if ((game.p_e >= 5) && (game.p_e < 13)) {
                 //NO_MUEVE;
-            }
-            else {
+            } else {
                 game.p_p = 0;
                 if (joypad.isPressed("North")) {
                     //if (!keymap[56])
-                        game.p_d = 2;
-                    game.p_p = (char)(game.frame + 1);
+                    game.p_d = 2;
+                    game.p_p = (char) (game.frame + 1);
                     acceso(game.px, game.py - K);
-                }
-                else if (joypad.isPressed("South")) {
+                } else if (joypad.isPressed("South")) {
                     //if (!keymap[56])
-                        game.p_d = 0;
-                    game.p_p = (char)(game.frame + 1);
+                    game.p_d = 0;
+                    game.p_p = (char) (game.frame + 1);
                     acceso(game.px, game.py + K);
-                }
-                else if (joypad.isPressed("West")) {
+                } else if (joypad.isPressed("West")) {
                     //if (!keymap[56])
-                        game.p_d = 1;
-                    game.p_p = (char)(game.frame + 1);
+                    game.p_d = 1;
+                    game.p_p = (char) (game.frame + 1);
                     acceso(game.px - K, game.py);
-                }
-                else if (joypad.isPressed("East")) {
+                } else if (joypad.isPressed("East")) {
                     //if (!keymap[56])
                     game.p_d = 3;
-                    game.p_p = (char)(game.frame + 1);
+                    game.p_p = (char) (game.frame + 1);
                     acceso(game.px + K, game.py);
-                } ;
+                }
+                ;
                 //TECLA_REC:
                 /*if (keymap[29]) p_disparo();
                 if ((keymap[27]) && (S_MAP < 5)) {
@@ -249,19 +274,29 @@ public class GameScreen implements Screen {
             // Da�o al jugador
 
             if(p_e==13) p_punch();
+            */
+            if ((game.p_e < 1) && (game.escudo <= 0) && (K >= 0.f)) {
+                switch (game.fase.map[game.x_map][game.y_map][(char) game.px][(char) game.py]) {
 
-            if((p_e<1) && (escudo<=0) && (!K==0)){
-                switch(fase.map[x_map][y_map][px][py]){
+                    case 10:
+                        game.p_e = 2;
+                        game.p_l -= 3;
+                        break;
+                    case 51:
+                    case 11:
+                        game.p_l = 0;
+                        break;
+                    case 29:
+                        FIN_DE_FASE = true;
+                    case 31:
+                        SECRET_FASE = true;
+                    case 28:
+                        FIN_EPI = true;
 
-                    case 10 : p_e=2; p_l-=3;  break;
-                    case 51 :
-                    case 11 : p_l=0; break;
-                    case 29 : goto FIN_DE_FASE;
-                    case 31 : goto SECRET_FASE;
-                    case 28 : goto FIN_EPI;
+                }
+                ;
 
-                };
-
+                /*
                 for(h=0; h<10; h++){
                     if((balas[h].est==1) && ((char)balas[h].b_xy[2]==(char)px)
                         && ((char)balas[h].b_xy[3]==(char)py)
@@ -273,13 +308,16 @@ public class GameScreen implements Screen {
                     };
                 };
 
+
                 if(p_l<1) {p_e=5; sprintf(message,"%s ha muerto.",p_name);
                     mes_c=25; start_sound(dying);};
                 if(p_l<-4) {p_e=9; sprintf(message,"%s ha sido destruido.",p_name);
-                    mes_c=25; start_sound(falling);};
+                    mes_c=25; start_sound(falling);};*/
 
-            };
+            }
+            ;
 
+            /*
             // Da�o a un enemigo
             for(g=0; g<8; ++g){
                 for(i=0; i<8; ++i){
@@ -311,6 +349,75 @@ public class GameScreen implements Screen {
 
         }while(key!='\x1B');
         */
+        }
+    }
+
+    void move_enemy(char n)
+    {
+        float xx, yy;
+        int r, est;
+
+        r=(int)(Math.random()) % (20-(7*game.DIF));
+        game.ene_datos[n].pos=0;
+        est=(int)game.ene_datos[n].est;
+        xx=game.ene_datos[n].xy[2];
+        yy=game.ene_datos[n].xy[3];
+
+        boolean N_DIR = false;
+
+        if((est>=5) && (est<13))
+        {
+            //NO_MOVE;
+        }
+        else {
+
+            if (r < 5) {
+                if (r < 3) {
+                    if (((char) xx == (char) game.px) && ((char) yy < (char) game.py))
+                        game.fase.enemies[n].e_d = 0;
+                    if (((char) xx == (char) game.px) && ((char) yy > (char) game.py))
+                        game.fase.enemies[n].e_d = 2;
+                    if (((char) yy == (char) game.py) && ((char) xx > (char) game.px))
+                        game.fase.enemies[n].e_d = 1;
+                    if (((char) yy == (char) game.py) && ((char) xx < (char) game.px))
+                        game.fase.enemies[n].e_d = 3;
+                    if (game.invi > 0) game.fase.enemies[n].e_d = (char)Math.random() % 4;
+                }
+                ;
+                game.ene_datos[n].pos = game.frame + 1;
+
+                switch (game.fase.enemies[n].e_d) {
+                    case 0:
+                        if (!ene_acceso(xx, yy + K, n)) N_DIR = true;
+                        break;
+                    case 1:
+                        if (!ene_acceso(xx - K, yy, n)) N_DIR = true;
+                        break;
+                    case 2:
+                        if (!ene_acceso(xx, yy - K, n)) N_DIR = true;
+                        break;
+                    case 3:
+                        if (!ene_acceso(xx + K, yy, n)) N_DIR = true;
+                        break;
+                } ;
+            } ;
+
+            //if(random(20-(4*DIF))==0) e_disparo(n);
+
+        }
+
+	    if(N_DIR)
+        {
+            game.fase.enemies[n].e_d=(char)Math.random() % 4;
+        }
+        //NO_MOVE:
+        //if(est==13) e_punch(n);
+        if(est>=14) game.ene_datos[n].est=0;
+        if((est>0) && (est<5)) game.ene_datos[n].est-=K;
+        if((est>4) && (est<7)) game.ene_datos[n].est+=K;
+        if((est>8) && (est<11)) game.ene_datos[n].est+=K;
+        if((est>12) && (est<14)) game.ene_datos[n].est+=K;
+
     }
 
     void show_mes(String text)
@@ -354,6 +461,37 @@ public class GameScreen implements Screen {
         game.px=nx; game.py=ny; game.x_map=mx; game.y_map=my;
 
 
+    }
+
+    boolean ene_acceso(float nx, float ny, char n)
+    {
+
+        char acc=0, ba, mx=(char)game.x_map, my=(char)game.y_map;
+
+        game.desp=0;
+        ba=(char)game.fase.map[mx][my][(char)nx][(char)ny];
+
+        if(ba==1) acc=1;
+        if((ba>7) && (ba<47)) acc=1;
+
+        if((ba==10) || (ba==11)) acc=0;
+
+        if((ba==32) || (ba==35)) acc=0;
+
+        if((ba>51) && (ba<56) && (game.llave[0] != 0)) acc=1;
+        if((ba>55) && (ba<60) && (game.llave[1] != 0)) acc=1;
+        if((ba>59) && (ba<64) && (game.llave[2] != 0)) acc=1;
+
+        if(nx>=8.0) acc=0;
+        if(nx<0.0) acc=0;
+        if(ny<0.0) acc=0;
+        if(ny>=8.0) acc=0;
+
+        if(acc==0) return false;
+
+        game.ene_datos[n].xy[2]=nx; game.ene_datos[n].xy[3]=ny;
+
+        return true;
     }
 
     private void map_2d() {
@@ -542,13 +680,12 @@ public class GameScreen implements Screen {
                         else show_warrior(scr, game.sol,game.px,game.py,game.p_d,game.p_p,game.p_e,game.p_w,game.desp);
                     };
 
-                    /*
-                    if(enemy){
-                        for(t=0; t<fase.e_n; ++t){
-                            if(((char)ene_datos[t].xy[0]==x_map) && ((char)ene_datos[t].xy[1]==y_map) && ((char)ene_datos[t].xy[2]==g) && ((char)ene_datos[t].xy[3]==i) ) show_enemy(t);
+
+                    if(enemy != 0){
+                        for(int t=0; t<game.fase.e_n; ++t){
+                            if(((int)game.ene_datos[t].xy[0]==game.x_map) && ((int)game.ene_datos[t].xy[1]==game.y_map) && ((char)game.ene_datos[t].xy[2]==g) && ((char)game.ene_datos[t].xy[3]==i) ) show_enemy((char)t);
                         };
-                    };
-                };*/
+                };
             };
 
         }
@@ -698,6 +835,27 @@ public class GameScreen implements Screen {
             }
             ;
         };
+    }
+
+    void show_enemy(char n)
+    {
+        char dir, weapon, estado, pos, tipo;
+        float xx, yy;
+
+        tipo=(char)game.fase.enemies[n].e_t;
+        estado=(char)game.ene_datos[n].est;
+        pos=(char)game.ene_datos[n].pos;
+        dir=(char)game.fase.enemies[n].e_d;
+        weapon=(char)game.fase.enemies[n].e_w;
+        xx=game.ene_datos[n].xy[2];
+        yy=game.ene_datos[n].xy[3];
+
+        if(tipo==0) show_warrior(game.batch, game.trp,xx,yy,dir,pos,estado,weapon, (char) 0);
+        if(tipo==1) show_warrior(game.batch, game.ene1,xx,yy,dir,pos,estado,weapon, (char) 0);
+        if(tipo==2) show_warrior(game.batch, game.ene2,xx,yy,dir,pos,estado,weapon, (char) 0);
+        if(tipo==3) show_warrior(game.batch, null,xx,yy,dir,pos,estado,weapon, (char) 0);
+        if(tipo==4) show_warrior(game.batch, game.sol,xx,yy,dir,pos,estado,weapon, (char) 0);
+
     }
 
     @Override

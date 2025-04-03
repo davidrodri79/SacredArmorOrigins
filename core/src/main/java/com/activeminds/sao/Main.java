@@ -145,8 +145,9 @@ class BALA {
     T_ENEMY []ene_datos = new T_ENEMY[100];
     SPRITE sol, trp, ene1, ene2;
     boolean MAP = false;
-    float frame = 0f, invi = 0f, vari, px, py;
+    float frame = 0f, invi = 0f, vari, px, py, escudo;
     char p_d = 0, p_p = 0, p_e = 0, p_w = 0, desp = 0, x_room, y_room;
+    int DIF = 1;
 
     @Override
     public void create() {
@@ -248,7 +249,7 @@ class BALA {
         };
         inputStream.close();
 
-        path = "WARRIOR/"+enemy_file;
+        path = "WARRIOR/"+enemy_file.toUpperCase();
         f = Gdx.files.internal(path);
         if(f.exists() && !f.isDirectory()) {
             inputStream = f.read();
@@ -259,6 +260,7 @@ class BALA {
         }
 
         for(n=0; n<fase.e_n; ++n){
+            ene_datos[n] = new T_ENEMY();
             ene_datos[n].xy[0]=fase.enemies[n].e_xy[0];
             ene_datos[n].xy[1]=fase.enemies[n].e_xy[1];
             ene_datos[n].xy[2]=fase.enemies[n].e_xy[2];
@@ -411,7 +413,7 @@ class BALA {
     {
         int i,g,j,k,h;
 
-        FileHandle f = Gdx.files.internal("CHARSET/"+file);
+        FileHandle f = Gdx.files.internal("CHARSET/"+file.toUpperCase());
         InputStream inputStream = f.read();
 
         chr.tile = loadBinaryImage(inputStream, 40, 23);

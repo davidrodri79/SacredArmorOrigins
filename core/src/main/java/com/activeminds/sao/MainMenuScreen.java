@@ -55,7 +55,6 @@ public class MainMenuScreen implements Screen {
             if(op == 0)
             {
                 game.lev=0; game.p_l=100; game.epi_actual=0;
-                game.epi_file = "INTRO.EPI";
                 for(int j=0; j<6; ++j) game.armas[j]=0;
                 game.setScreen(new LoadLevelScreen(game));
             }
