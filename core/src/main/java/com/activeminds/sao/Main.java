@@ -388,23 +388,24 @@ class BALA {
         helmet[0] = loadBinaryImage(inputStream, 22, 18);
         helmet[1] = helmet[0];
 
-/*
+
+        bullet = new Texture[2][2][3];
         for(j=0; j<2; ++j)
             for(h=0; h<2; ++h)
                 for(g=0; g<3; ++g)
-                    for(i=0; i<1080; ++i)
-                        fscanf(ptr,"%c",&bullet[j][h][g][i]);
+                    bullet[j][h][g] = loadBinaryImage(inputStream,40,27);
+
+        explos = new Texture[3][3];
         for(h=0; h<3; ++h)
             for(g=0; g<3; ++g)
-                for(i=0; i<1080; ++i)
-                    fscanf(ptr,"%c",&explos[h][g][i]);
-        for(g=0; g<2; ++g)
-            for(i=0; i<1180; ++i)
-                fscanf(ptr,"%c",&field[g][i]);
-        for(i=0; i<920; ++i)
-            fscanf(ptr,"%c",&sombra[i]);
+                explos[h][g] = loadBinaryImage(inputStream,40,27);
 
-        fclose(ptr);*/
+        field = new Texture[2];
+        for(g=0; g<2; ++g)
+                field[g] = loadBinaryImage(inputStream, 20, 59);
+
+        sombra = loadBinaryImage(inputStream,40,23);
+
         try {
             inputStream.close();
         } catch (IOException e) {

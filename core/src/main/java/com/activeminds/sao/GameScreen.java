@@ -60,6 +60,10 @@ public class GameScreen implements Screen {
                 game.setScreen(new LoadLevelScreen(game));
             }
         }
+        else if(FIN_DE_FASE)
+        {
+            game.setScreen(new LevelResultsScreen(game));
+        }
         else
         {
             game.x_room = (char) game.px;
@@ -90,8 +94,8 @@ public class GameScreen implements Screen {
             for(int g=0; g<game.fase.e_n; ++g)
                 if(((char)game.ene_datos[g].xy[0]==game.x_map) && ((char)game.ene_datos[g].xy[1]==game.y_map)) move_enemy((char)g);
 
-            /*
-            if(tel_map[x_room][y_room]) teletransporte(tel_map[x_room][y_room]-1);*/
+
+            if(tel_map[game.x_room][game.y_room] > 0) teletransporte((char)(tel_map[game.x_room][game.y_room]-1));
 
             if((int_map[game.x_room][game.y_room] > 0) && (joypad.consumePush("Push"))) conecta_int((char)(int_map[game.x_room][game.y_room]-1));
 
@@ -103,7 +107,7 @@ public class GameScreen implements Screen {
             if(kbhit())
                 key=toupper(getch());*/
 
-            if((joypad.consumePush("Fire")) && (game.p_l<=0)) { game.setScreen(new LoadLevelScreen(game)); dispose(); }
+            if(((game.p_l<=0) && joypad.consumePush("Fire"))) { game.setScreen(new LoadLevelScreen(game)); dispose(); }
 
             if ((game.p_e >= 5) && (game.p_e < 13)) {
                 //NO_MUEVE;
@@ -149,8 +153,9 @@ public class GameScreen implements Screen {
             if(joypad.consumePush("Weapon"))
             {
                 do {
-                    game.p_w = (char)((game.p_w + 1) % 7);
-                } while((game.p_w == 0) || (game.armas[(game.p_w-1)] == 0));
+                    game.p_w = (char)(game.p_w + 1);
+                    if(game.p_w >= 7) game.p_w = 0;
+                } while((game.p_w != 0) && (game.armas[(game.p_w-1)] == 0));
             }
             /*
             // Cambio de armas
@@ -267,11 +272,20 @@ public class GameScreen implements Screen {
                         game.p_l = 0;
                         break;
                     case 29:
+                        float ppy=game.py-0.5f;
+                        float ppx=game.px-0.5f;
+                        float xx=game.cx-(20*ppy)+(20*ppx);
+                        float yy=game.cy+(10*ppy)+(10*ppx)+game.desp;
+                        float xa=xx-20; float ya=yy-20;
+                        show_mes(game.p_name+"%s ha salido de la zona.");
                         FIN_DE_FASE = true;
+                        break;
                     case 31:
                         SECRET_FASE = true;
+                        break;
                     case 28:
                         FIN_EPI = true;
+                        break;
 
                 }
                 ;
@@ -369,6 +383,14 @@ public class GameScreen implements Screen {
 
         joypad.render(game.batch, game.batch);
 
+    }
+
+    void teletransporte(char n)
+    {
+        game.x_map=game.fase.teleport[n].destino_xy[0];
+        game.y_map=game.fase.teleport[n].destino_xy[1];
+        game.px=(float)game.fase.teleport[n].destino_xy[2];
+        game.py=(float)game.fase.teleport[n].destino_xy[3];
     }
 
     void p_disparo()
