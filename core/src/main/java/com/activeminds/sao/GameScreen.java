@@ -2,13 +2,14 @@ package com.activeminds.sao;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen implements Screen {
 
     Main game;
     int x, y;
-    ButtonLayout joypad;
+    ButtonLayout joypad, minimap;
     float mes_c = 0f, K;
     char[][] tel_map = new char[8][8], int_map  = new char[8][8], ene_map  = new char[8][8];
     String message;
@@ -20,10 +21,14 @@ public class GameScreen implements Screen {
         this.game = game;
         joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("joypad.json");
+        minimap = new ButtonLayout(game.camera, game.manager, null);
+        minimap.loadFromJson("minimap.json");
         show_mes(game.fase.map_name);
         FIN_EPI = false;
         FIN_DE_FASE = false;
         SECRET_FASE = false;
+        if(game.MAP) minimap.setAsActiveInputProcessor();
+        else joypad.setAsActiveInputProcessor();
 
     }
     @Override
@@ -137,15 +142,13 @@ public class GameScreen implements Screen {
                 ;
                 //TECLA_REC:
                 if (joypad.consumePush("Fire")) p_disparo();
-                /*if ((keymap[27]) && (S_MAP < 5)) {
-                    S_MAP++;
-                    vaciarbuffer();
+                if ((minimap.consumePush("Plus")) && (game.S_MAP < 5)) {
+                    game.S_MAP++;
                 }
                 ;
-                if ((keymap[53]) && (S_MAP > 1)) {
-                    S_MAP--;
-                    vaciarbuffer();
-                }*/
+                if ((minimap.consumePush("Minus")) && (game.S_MAP > 1)) {
+                    game.S_MAP--;
+                }
                 ;
             }
             set_maps();
@@ -183,9 +186,16 @@ public class GameScreen implements Screen {
             if(keymap[7]){
                 if(armas[5]) p_w=6;
                 else show_mes("\"Infierno\" no disponible");
+            };*/
+            if(joypad.consumePush("Map")) {
+                game.MAP = true;
+                minimap.setAsActiveInputProcessor();
+            }
+            if(minimap.consumePush("Map")){
+                game.MAP = false;
+                joypad.setAsActiveInputProcessor();
             };
-            if(keymap[15]) {MAP=1-MAP; vaciarbuffer(); keymap[15]=0;};
-
+            /*
             if(keymap[59]) {help();
                 asm{
                     mov ah , 0
@@ -380,9 +390,18 @@ public class GameScreen implements Screen {
 
         //FLIP_BUFFER(scr);
 
+        if(game.MAP)
+            minimap.render(game.batch, game.batch);
+        else
+            joypad.render(game.batch, game.batch);
 
-        joypad.render(game.batch, game.batch);
+    }
 
+    void all_map()
+    {
+        int i,j;
+        for(i=0; i<10; ++i)
+            for(j=0; j<10; ++j) game.visto[i][j]=1;
     }
 
     void teletransporte(char n)
@@ -615,7 +634,7 @@ public class GameScreen implements Screen {
             case 27 : game.pocima=150; show_mes("FUERZA MISTICA"); break;
 
             case 39 : game.invi=150; show_mes("INVISIBILIDAD"); break;
-            //case 38 : all_map(); show_mes("Mapa de la zona"); break;
+            case 38 : all_map(); show_mes("Mapa de la zona"); break;
             case 40 : game.n_secrets++; show_mes("Un area secreta!"); break;
 
         };
@@ -660,7 +679,69 @@ public class GameScreen implements Screen {
         return true;
     }
 
-    private void map_2d() {
+    void map_2d()
+    {
+
+        int xa, ya, xb, yb, orx=40, ory=20, sx=3*game.S_MAP, sy=2*game.S_MAP;
+
+        orx=(int)(160-((8*sx*game.x_map)+(sx*game.px)));
+        ory=(int)(100-((8*sy*game.y_map)+(sy*game.py)));
+
+        game.shapeRenderer.setProjectionMatrix(game.camera.combined);
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        for(xa=0; xa<10; ++xa)
+            for(ya=0; ya<10; ++ya)
+                for(xb=0; xb<8; ++xb)
+                    for(yb=0; yb<8; ++yb)
+                        if(game.visto[xa][ya]==1){
+                            switch(game.fase.map[xa][ya][xb][yb]){
+                                case 0: break;
+                                case 10:cuadro(orx+(8*sx*xa)+(sx*xb),ory+(8*sy*ya)+(sy*yb),(char)1); break;
+                                case 51 :
+                                case 11:cuadro(orx+(8*sx*xa)+(sx*xb),ory+(8*sy*ya)+(sy*yb),(char)56); break;
+                                case 8:
+                                case 9:
+                                case 36:
+                                case 37:
+                                case 1: cuadro(orx+(8*sx*xa)+(sx*xb),ory+(8*sy*ya)+(sy*yb),(char)17); break;
+                                case 30:cuadro(orx+(8*sx*xa)+(sx*xb),ory+(8*sy*ya)+(sy*yb),(char)2); break;
+                                case 52:
+                                case 53:
+                                case 54:
+                                case 55:cuadro(orx+(8*sx*xa)+(sx*xb),ory+(8*sy*ya)+(sy*yb),(char)32); break;
+                                case 56:
+                                case 57:
+                                case 58:
+                                case 59:cuadro(orx+(8*sx*xa)+(sx*xb),ory+(8*sy*ya)+(sy*yb),(char)71); break;
+                                case 60:
+                                case 61:
+                                case 62:
+                                case 63:cuadro(orx+(8*sx*xa)+(sx*xb),ory+(8*sy*ya)+(sy*yb),(char)142); break;
+
+                                default: cuadro(orx+(8*sx*xa)+(sx*xb),ory+(8*sy*ya)+(sy*yb),(char)21); break;
+                            };
+                        };
+
+        cuadro(orx+(8*sx*game.x_map)+(sx*(char)game.px),ory+(8*sy*game.y_map)+(sy*(char)game.py),game.p_col);
+
+        //if(!game.E_MAP) return;
+        for(int j=0; j<game.fase.e_n; ++j)
+            cuadro(orx+(8*sx*(char)game.ene_datos[j].xy[0])+(sy*(char)game.ene_datos[j].xy[2]),ory+(8*sy*(char)game.ene_datos[j].xy[1])+(sy*(char)game.ene_datos[j].xy[3]),(char)4);
+
+        game.shapeRenderer.end();
+    }
+    void cuadro(int x, int y, char c)
+    {
+        game.shapeRenderer.setColor(game.palette[c][0], game.palette[c][1], game.palette[c][2], 1.f);
+        game.shapeRenderer.rect(Main.GAME_SCREEN_START_X+ x,Main.GAME_SCREEN_HEIGHT - y,3*game.S_MAP, 2*game.S_MAP);
+        /*char sx,sy;
+        for(sx=0; sx<3*game.S_MAP; ++sx){
+            for(sy=0; sy<2*game.S_MAP; ++sy){
+                if((x+sx>0) && (x+sx<320) && (y+sy>0) && (y+sy<200))
+                    scr[x+sx+(320*(y+sy))]=c;
+            };
+        };*/
     }
 
     private void visualizar(SpriteBatch scr, int player, int enemy)

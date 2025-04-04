@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +19,7 @@ public class Main extends Game
 
     AssetManager manager;
     public SpriteBatch batch;
+    public ShapeRenderer shapeRenderer;
     public OrthographicCamera camera;
     private Texture image;
     public Texture scr;
@@ -146,8 +148,8 @@ class BALA {
     SPRITE sol, trp, ene1, ene2;
     boolean MAP = false;
     float frame = 0f, invi = 0f, vari, px, py, escudo, pocima, p_e = 0;
-    char p_d = 0, p_p = 0, p_w = 0, desp = 0, x_room, y_room;
-    int DIF = 1;
+    char p_d = 0, p_p = 0, p_w = 0, desp = 0, p_col = 32, x_room, y_room;
+    int DIF = 1, S_MAP = 2;
 
     @Override
     public void create() {
@@ -158,6 +160,7 @@ class BALA {
         manager.finishLoading();
 
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
         image = new Texture("libgdx.png");
 
         camera = new OrthographicCamera();
