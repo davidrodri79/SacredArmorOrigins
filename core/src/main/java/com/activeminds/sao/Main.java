@@ -355,7 +355,11 @@ class BALA {
     Texture[] addings;
     Texture[][] weapon;
     Texture marca1, marca2;
-    Texture helmet[];
+    Texture[] helmet;
+    Texture[] field;
+    Texture[][][] bullet;
+    Texture[][] explos;
+    Texture sombra;
 
 
     void load_items()

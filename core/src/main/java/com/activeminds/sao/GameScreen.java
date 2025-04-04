@@ -814,12 +814,12 @@ public class GameScreen implements Screen {
 
                         int j=(int)(game.cx-(20*ppy)+(20*ppx));
                         int k=(int)(game.cy+(10*ppy)+(10*ppx)+game.desp-10);
-                        /*if(pocima>0){COPY_BUFFER_1(scr,j-20,k-40,20,59,field[0]);
-                            COPY_BUFFER_2(scr,j,k-40,20,59,field[0]);
+                        if(game.pocima>0){game.COPY_BUFFER_1(scr,j-20,k-40,20,59,game.field[0]);
+                            game.COPY_BUFFER_2(scr,j,k-40,20,59,game.field[0]);
                         };
-                        if(escudo>0){COPY_BUFFER_1(scr,j-20,k-40,20,59,field[1]);
-                            COPY_BUFFER_2(scr,j,k-40,20,59,field[1]);
-                        };*/
+                        if(game.escudo>0){game.COPY_BUFFER_1(scr,j-20,k-40,20,59,game.field[1]);
+                            game.COPY_BUFFER_2(scr,j,k-40,20,59,game.field[1]);
+                        };
                         if(game.invi > 0f) show_warrior(scr, null,game.px,game.py,game.p_d,game.p_p,(char)game.p_e,game.p_w,game.desp);
                         else show_warrior(scr, game.sol,game.px,game.py,game.p_d,game.p_p,(char)game.p_e,game.p_w,game.desp);
                     };
