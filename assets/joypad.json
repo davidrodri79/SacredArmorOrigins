@@ -38,10 +38,37 @@
     },
     {
       x: 490
+      y: 160
+      width: 40
+      height: 40
+      action: Weapon,
+      image_on: "gui/Button-on.png",
+      image_off: "gui/Button-off.png"
+    }
+    {
+      x: 490
+      y: 110
+      width: 40
+      height: 40
+      action: Push,
+      image_on: "gui/Button-on.png",
+      image_off: "gui/Button-off.png"
+    }
+    {
+      x: 490
       y: 60
       width: 40
       height: 40
       action: Fire,
+      image_on: "gui/Button-on.png",
+      image_off: "gui/Button-off.png"
+    }
+    {
+      x: 490
+      y: 10
+      width: 40
+      height: 40
+      action: Strafe,
       image_on: "gui/Button-on.png",
       image_off: "gui/Button-off.png"
     }

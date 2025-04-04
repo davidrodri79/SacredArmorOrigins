@@ -10,8 +10,10 @@ public class GameScreen implements Screen {
     int x, y;
     ButtonLayout joypad;
     float mes_c = 0f, K;
+    char[][] tel_map = new char[8][8], int_map  = new char[8][8], ene_map  = new char[8][8];
     String message;
     boolean FIN_DE_FASE, FIN_EPI, SECRET_FASE;
+
 
     GameScreen(Main game)
     {
@@ -32,35 +34,6 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        // RENDER STEP ========================================
-
-        ScreenUtils.clear(0, 0, 0, 1f);
-
-        game.camera.update();
-        game.batch.setProjectionMatrix(game.camera.combined);
-
-        game.batch.begin();
-        if(!game.MAP) visualizar(game.batch, 1,1);
-        else map_2d();
-        if(mes_c > 0) {game.Copytext(game.batch,5,5,message); };
-        game.COPY_BUFFER_1(game.batch,0,166,97,34,game.marca1);
-        game.COPY_BUFFER_1(game.batch,269,150,51,50,game.marca2);
-
-        game.batch.end();
-        /*
-        CLEAR_BUFFER(scr,0);
-        if(!MAP)visualizar(1,1);
-        else map_2d();
-        if(mes_c) {Copytext(scr,5,5,message); mes_c--;};
-        COPY_BUFFER_1(scr,0,166,97,34,marca1);
-        COPY_BUFFER_1(scr,269,150,51,50,marca2);
-        if((p_e>6) && (p_e<13)) Copytext(scr,30,95,"PULSA SPACE PARA REINICIAR");
-        variables();
-
-        FLIP_BUFFER(scr);
-        */
-
-        joypad.render(game.batch, game.batch);
 
         K = delta * 2.5f;
 
@@ -116,22 +89,21 @@ public class GameScreen implements Screen {
             // MOVER ENEMIGOS, AQUI
             for(int g=0; g<game.fase.e_n; ++g)
                 if(((char)game.ene_datos[g].xy[0]==game.x_map) && ((char)game.ene_datos[g].xy[1]==game.y_map)) move_enemy((char)g);
-            //set_maps();
 
             /*
-            if(tel_map[x_room][y_room]) teletransporte(tel_map[x_room][y_room]-1);
+            if(tel_map[x_room][y_room]) teletransporte(tel_map[x_room][y_room]-1);*/
 
-            if((int_map[x_room][y_room]) && (keymap[57])) conecta_int(int_map[x_room][y_room]-1);
+            if((int_map[game.x_room][game.y_room] > 0) && (joypad.consumePush("Push"))) conecta_int((char)(int_map[game.x_room][game.y_room]-1));
 
-            for(i=0; i<10; ++i)
+            /*for(i=0; i<10; ++i)
                 if(balas[i].est) move_bullet(i);
 
 
 
             if(kbhit())
-                key=toupper(getch());
+                key=toupper(getch());*/
 
-            if((keymap[57]) && (p_l<=0)) goto GAME_OVER;*/
+            if((joypad.consumePush("Fire")) && (game.p_l<=0)) { game.setScreen(new LoadLevelScreen(game)); dispose(); }
 
             if ((game.p_e >= 5) && (game.p_e < 13)) {
                 //NO_MUEVE;
@@ -160,8 +132,8 @@ public class GameScreen implements Screen {
                 }
                 ;
                 //TECLA_REC:
-                /*if (keymap[29]) p_disparo();
-                if ((keymap[27]) && (S_MAP < 5)) {
+                if (joypad.consumePush("Fire")) p_disparo();
+                /*if ((keymap[27]) && (S_MAP < 5)) {
                     S_MAP++;
                     vaciarbuffer();
                 }
@@ -171,6 +143,14 @@ public class GameScreen implements Screen {
                     vaciarbuffer();
                 }*/
                 ;
+            }
+            set_maps();
+
+            if(joypad.consumePush("Weapon"))
+            {
+                do {
+                    game.p_w = (char)((game.p_w + 1) % 7);
+                } while((game.p_w == 0) || (game.armas[(game.p_w-1)] == 0));
             }
             /*
             // Cambio de armas
@@ -256,24 +236,24 @@ public class GameScreen implements Screen {
             if((keymap[34]) && (keymap[24]) && (keymap[32]))
             { show_mes("�Atravesar paredes!");
                 GHOST=1-GHOST;
-            };
+            };*/
 
-            if(p_e==13) p_punch();
+            if(game.p_e==13) p_punch();
 
-            if((keymap[27]) && (K>0.01)) {K-=0.03; keymap[27]=0; };
+            /*if((keymap[27]) && (K>0.01)) {K-=0.03; keymap[27]=0; };
             if((keymap[53]) && (K<1.0)) {K+=0.03; keymap[53]=0; };
 
-            vaciarbuffer();
+            vaciarbuffer();*/
 
-            if(p_e>=14) p_e=0;
-            if((p_e>0) && (p_e<5)) p_e-=K;
-            if((p_e>4) && (p_e<7)) p_e+=K;
-            if((p_e>8) && (p_e<11)) p_e+=K;
-            if((p_e>12) && (p_e<14)) p_e+=K;
+            if(game.p_e>=14) game.p_e=0;
+            if((game.p_e>0) && (game.p_e<5)) game.p_e-=K;
+            if((game.p_e>4) && (game.p_e<7)) game.p_e+=K;
+            if((game.p_e>8) && (game.p_e<11)) game.p_e+=K;
+            if((game.p_e>12) && (game.p_e<14)) game.p_e+=K;
 
             // Da�o al jugador
 
-            if(p_e==13) p_punch();
+            /*if(p_e==13) p_punch();
             */
             if ((game.p_e < 1) && (game.escudo <= 0) && (K >= 0.f)) {
                 switch (game.fase.map[game.x_map][game.y_map][(char) game.px][(char) game.py]) {
@@ -306,13 +286,20 @@ public class GameScreen implements Screen {
                         p_e=2;
                         p_l-=balas[h].fuerza;
                     };
+                };*/
+
+
+                if(game.p_l<1) {
+                    game.p_e=5;
+                    show_mes(game.p_name+" ha muerto.");
+                    //start_sound(dying);
                 };
-
-
-                if(p_l<1) {p_e=5; sprintf(message,"%s ha muerto.",p_name);
-                    mes_c=25; start_sound(dying);};
-                if(p_l<-4) {p_e=9; sprintf(message,"%s ha sido destruido.",p_name);
-                    mes_c=25; start_sound(falling);};*/
+                if(game.p_l<-4) {
+                    game.p_e=9;
+                    show_mes(game.p_name+" ha sido destruido.");
+                    mes_c=25;
+                    //start_sound(falling);
+                };
 
             }
             ;
@@ -350,7 +337,124 @@ public class GameScreen implements Screen {
         }while(key!='\x1B');
         */
         }
+
+        // RENDER STEP ========================================
+
+        ScreenUtils.clear(0, 0, 0, 1f);
+
+        game.camera.update();
+        game.batch.setProjectionMatrix(game.camera.combined);
+
+        game.batch.begin();
+        if(!game.MAP) visualizar(game.batch, 1,1);
+        else map_2d();
+        if(mes_c > 0) {game.Copytext(game.batch,5,5,message); };
+        game.COPY_BUFFER_1(game.batch,0,166,97,34,game.marca1);
+        game.COPY_BUFFER_1(game.batch,269,150,51,50,game.marca2);
+        if((game.p_e>6) && (game.p_e<13)) game.Copytext(game.batch,30,95,"PULSA DISPARO PARA REINICIAR");
+        variables();
+        game.batch.end();
+        /*
+        CLEAR_BUFFER(scr,0);
+        if(!MAP)visualizar(1,1);
+        else map_2d();
+        if(mes_c) {Copytext(scr,5,5,message); mes_c--;};
+        COPY_BUFFER_1(scr,0,166,97,34,marca1);
+        COPY_BUFFER_1(scr,269,150,51,50,marca2);
+        if((p_e>6) && (p_e<13)) Copytext(scr,30,95,"PULSA SPACE PARA REINICIAR");
+        variables();*/
+
+        //FLIP_BUFFER(scr);
+
+
+        joypad.render(game.batch, game.batch);
+
     }
+
+    void p_disparo()
+    {
+        char i;
+        float xx, yy;
+        switch(game.p_d){
+            case 0 : xx=game.px; yy=game.py+1.5f; break;
+            case 1 : xx=game.px-1.5f; yy=game.py; break;
+            case 2 : xx=game.px; yy=game.py-1.5f; break;
+            case 3 : xx=game.px+1.5f; yy=game.py; break;
+        };
+
+        switch(game.p_w){
+            case 0 : if((char)game.p_e==0) game.p_e=13; break;
+            /*case 1 : if(!municion[0]) goto NO_AMMO; asigna_bala(xx,yy,3,0,p_d);
+                municion[0]-=1; start_sound(weap1); break;
+            case 2 : if(municion[0]<3) goto NO_AMMO; asigna_bala(xx,yy,3,0,p_d);
+                asigna_bala(xx+0.2,yy,3,0,p_d); asigna_bala(xx-0.2,yy,3,0,p_d);
+                municion[0]-=3; start_sound(weap2); break;
+            case 3 : if(!municion[1]) goto NO_AMMO; asigna_bala(xx,yy,1.3,1,p_d);
+                municion[1]-=1; start_sound(weap3); break;
+            case 4 : if(municion[1]<2) goto NO_AMMO; asigna_bala(xx-0.2,yy,1.6,1,p_d);
+                asigna_bala(xx+0.3,yy,1.6,1,p_d); municion[1]-=2;
+                start_sound(weap3); break;
+            case 5 : if(municion[2]<5) goto NO_AMMO; asigna_bala(xx,yy,1.5,2,p_d);
+                municion[2]-=5; start_sound(weap5); break;
+            case 6 : if(municion[2]<15) goto NO_AMMO; asigna_bala(xx-0.3,yy,1,2,p_d);
+                asigna_bala(xx+0.3,yy,1,2,p_d); municion[2]-=15;
+                start_sound(weap5); break;*/
+
+        };
+        return;
+        //game.show_mes("No queda municion");
+
+    }
+
+    void p_punch()
+    {
+        char g,i,xy;
+        xy=ene_map[(int)game.px][(int)game.py];
+
+        if(xy > 0){
+            if((char)game.ene_datos[xy-1].est>0) return;
+            game.ene_datos[xy-1].est=2;
+            game.ene_datos[xy-1].life-=5;
+            if(game.pocima>0) game.ene_datos[xy-1].life-=15;
+            //start_sound(clak);
+            if(game.ene_datos[xy-1].life<=0)
+                game.ene_datos[xy-1].est=5;
+            if(game.ene_datos[xy-1].life<=-5)
+                game.ene_datos[xy-1].est=9;
+        };
+
+    }
+    void e_punch(char n)
+    {
+        char g,i,xy;
+        out_var(300,10,(int)game.p_e);
+        if(((char)game.px==(char)game.ene_datos[n].xy[2]) && ((char)game.py==(char)game.ene_datos[n].xy[3]) && ((char)game.p_e==0)){
+            game.p_e=2;
+            game.p_l-=5;
+            //start_sound(clak);
+        };
+        if (game.p_e>4) return;
+        if(game.p_l<1) {game.p_e=5; show_mes(game.p_name+" ha muerto.");};
+        if(game.p_l<-4) {game.p_e=9; show_mes(game.p_name+"%s ha sido destruido.");};
+    }
+
+    void conecta_int(char n)
+    {
+        char g,i,h,f;
+        game.fase.switches[n].estado=1;
+        g=(char)game.fase.switches[n].activable_xy[0];
+        i=(char)game.fase.switches[n].activable_xy[1];
+        h=(char)game.fase.switches[n].activable_xy[2];
+        f=(char)game.fase.switches[n].activable_xy[3];
+
+        switch(game.fase.map[g][i][h][f]){
+            case 50 : game.fase.map[g][i][h][f]=37; game.fase.map[g][i][h][f-1]=36; break;
+            case 48 : game.fase.map[g][i][h][f]=9; game.fase.map[g][i][h-1][f]=8; break;
+            case 51 : game.fase.map[g][i][h][f]=1; break;
+        };
+        //start_sound(clak);
+    }
+
 
     void move_enemy(char n)
     {
@@ -411,7 +515,7 @@ public class GameScreen implements Screen {
             game.fase.enemies[n].e_d=(char)Math.random() % 4;
         }
         //NO_MOVE:
-        //if(est==13) e_punch(n);
+        if(est==13) e_punch(n);
         if(est>=14) game.ene_datos[n].est=0;
         if((est>0) && (est<5)) game.ene_datos[n].est-=K;
         if((est>4) && (est<7)) game.ene_datos[n].est+=K;
@@ -449,17 +553,55 @@ public class GameScreen implements Screen {
         if((ba>55) && (ba<60) && (game.llave[1] != 0)) acc=1;
         if((ba>59) && (ba<64) && (game.llave[2] != 0)) acc=1;
 
-        //if(game.ene_map[(char)nx][(char)ny]>0) acc=0;
+        //if(ene_map[(char)nx][(char)ny]>0) acc=0;
 
         //if(game.GHOST) acc=1;
 
         if(acc==0) return;
 
-        //if(is_item(ba)) {pick_item(ba);
-        //    fase.map[x_map][y_map][(char)nx][(char)ny]=1;};
+        if(is_item(ba)) {pick_item(ba);
+            game.fase.map[game.x_map][game.y_map][(char)nx][(char)ny]=1;};
 
         game.px=nx; game.py=ny; game.x_map=mx; game.y_map=my;
 
+
+    }
+
+    boolean is_item(char bb)
+    {
+        if(((bb>11) && (bb<28)) || ((bb>=38) && (bb<=40))) return(true);
+        return(false);
+    }
+    void pick_item(char object)
+    {
+        switch(object){
+            case 12 : game.armas[0]=1; show_mes("Pistola"); break;
+            case 13 : game.armas[1]=1; show_mes("Ametralladora"); break;
+            case 14 : game.armas[2]=1; show_mes("Lanzacohetes"); break;
+            case 15 : game.armas[3]=1; show_mes("\"Aniquilador\""); break;
+            case 16 : game.armas[4]=1; show_mes("\"Dragon\""); break;
+            case 17 : game.armas[5]=1; show_mes("\"Infierno\"!"); break;
+            case 18 : game.llave[0]=1; show_mes("Llave roja"); break;
+            case 19 : game.llave[1]=1; show_mes("Llave amarilla"); break;
+            case 20 : game.llave[2]=1; show_mes("Llave azul"); break;
+            case 21 : game.p_l+=30; show_mes("Botiquin +30"); if(game.p_l>100) game.p_l=100; break;
+            case 22 : game.municion[0]+=20; show_mes("Caja de balas"); break;
+            case 23 : game.municion[1]+=4; show_mes("Cohetes"); break;
+            case 24 : game.municion[2]+=10; show_mes("Frasco de napalm"); break;
+            case 25 : game.p_l=200; show_mes("POCIMA VITAL"); break;
+            case 26 : game.escudo=150; show_mes("ESCUDO PROTECTOR"); break;
+            case 27 : game.pocima=150; show_mes("FUERZA MISTICA"); break;
+
+            case 39 : game.invi=150; show_mes("INVISIBILIDAD"); break;
+            //case 38 : all_map(); show_mes("Mapa de la zona"); break;
+            case 40 : game.n_secrets++; show_mes("Un area secreta!"); break;
+
+        };
+
+        if (game.municion[0]>199) game.municion[0]=199;
+        if (game.municion[1]>99) game.municion[1]=99;
+        if (game.municion[2]>299) game.municion[2]=299;
+        //start_sound(pickup);
 
     }
 
@@ -469,6 +611,8 @@ public class GameScreen implements Screen {
         char acc=0, ba, mx=(char)game.x_map, my=(char)game.y_map;
 
         game.desp=0;
+        if(nx >= 8) nx = 7;
+        if(ny >= 8) ny = 7;
         ba=(char)game.fase.map[mx][my][(char)nx][(char)ny];
 
         if(ba==1) acc=1;
@@ -622,8 +766,8 @@ public class GameScreen implements Screen {
                         case 29: game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.fas_end); break;
                         case 30: game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.teletrans); break;
                         case 31: game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.secret_trans); break;
-                        /*case 33: if(game.fase.switches[game.int_map[g][i]-1].estado==1) game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.boton[1]);
-                        else game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.boton[0]); break;*/
+                        case 33: if(game.fase.switches[int_map[g][i]-1].estado==1) game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.boton[1]);
+                        else game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.boton[0]); break;
 
                         case 36 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.door[1]); break;
                         case 37 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.door[0]); break;
@@ -676,8 +820,8 @@ public class GameScreen implements Screen {
                         if(escudo>0){COPY_BUFFER_1(scr,j-20,k-40,20,59,field[1]);
                             COPY_BUFFER_2(scr,j,k-40,20,59,field[1]);
                         };*/
-                        if(game.invi > 0f) show_warrior(scr, null,game.px,game.py,game.p_d,game.p_p,game.p_e,game.p_w,game.desp);
-                        else show_warrior(scr, game.sol,game.px,game.py,game.p_d,game.p_p,game.p_e,game.p_w,game.desp);
+                        if(game.invi > 0f) show_warrior(scr, null,game.px,game.py,game.p_d,game.p_p,(char)game.p_e,game.p_w,game.desp);
+                        else show_warrior(scr, game.sol,game.px,game.py,game.p_d,game.p_p,(char)game.p_e,game.p_w,game.desp);
                     };
 
 
@@ -689,6 +833,79 @@ public class GameScreen implements Screen {
             };
 
         }
+    }
+
+    void out_var(int x, int y, int var)
+    {
+        String s = ""+var;
+        game.Copytext(game.batch,x,y,s);
+    }
+    void variables()
+    {
+        String a="??";
+        game.Copytext(game.batch,6,170,game.p_name);
+        if(game.p_l>=0) out_var(19,186,game.p_l);
+        else out_var(19,186,0);
+        if(game.llave[0] > 0) game.Copytext(game.batch,60,185,"");
+        if(game.llave[1] > 0) game.Copytext(game.batch,73,185,"");
+        if(game.llave[2] > 0) game.Copytext(game.batch,86,185,"");
+
+        out_var(288,154,game.municion[0]);
+        out_var(288,170,game.municion[1]);
+        out_var(288,186,game.municion[2]);
+
+        switch(game.p_w){
+            /*case 1 : sprintf(a,"��"); break;
+            case 2 : sprintf(a,"��"); break;
+            case 3 : sprintf(a,"��"); break;
+            case 4 : sprintf(a,"��"); break;
+            case 5 : sprintf(a,"��"); break;
+            case 6 : sprintf(a,"��"); break;*/
+        };
+        if (game.p_w > 0) game.Copytext(game.batch,76,169,a);
+
+        if((game.invi>20) || ((game.invi<=20) && (game.invi>0) && ((char)game.frame!=1)))
+            game.COPY_BUFFER_1(game.batch,220,0,24,26,game.addings[(int)(2+game.frame)]);
+
+        if((game.pocima>20) || ((game.pocima<=20) && (game.pocima>0) && ((char)game.frame!=1)))
+            game.COPY_BUFFER_1(game.batch,295,0,24,26,game.addings[(int)(5+game.frame)]);
+
+        if(game.p_l>100) game.COPY_BUFFER_1(game.batch,270,0,24,26,game.addings[11]);
+        if((game.escudo>20) || ((game.escudo<=20) && (game.escudo>0) && ((char)game.frame!=1)))
+            game.COPY_BUFFER_1(game.batch,245,0,24,26,game.addings[1]);
+
+    }
+
+    void set_maps()
+    {
+        int g,i;
+        /* Crear mapa con los teleports */
+        for(g=0; g<8; ++g)
+            for(i=0; i<8; ++i)
+                tel_map[g][i]=0;
+        for(g=0; g<game.fase.t_n; ++g){
+            if((game.fase.teleport[g].origen_xy[0]==game.x_map) && (game.fase.teleport[g].origen_xy[1]==game.y_map))
+                tel_map[game.fase.teleport[g].origen_xy[2]][game.fase.teleport[g].origen_xy[3]]=(char)(g+1);
+        };
+
+        /* Crear mapa con los interruptores */
+        for(g=0; g<8; ++g)
+            for(i=0; i<8; ++i)
+                int_map[g][i]=0;
+        for(g=0; g<game.fase.s_n; ++g){
+            if((game.fase.switches[g].activador_xy[0]==game.x_map) && (game.fase.switches[g].activador_xy[1]==game.y_map))
+                int_map[game.fase.switches[g].activador_xy[2]][game.fase.switches[g].activador_xy[3]]=(char)(g+1);
+        };
+
+        /* Crear mapa con los enemigos */
+        for(g=0; g<8; ++g)
+            for(i=0; i<8; ++i)
+                ene_map[g][i]=0;
+        for(g=0; g<game.fase.e_n; ++g){
+            if(((char)game.ene_datos[g].xy[0]==game.x_map) && ((char)game.ene_datos[g].xy[1]==game.y_map)
+                &&(game.ene_datos[g].life>0))
+                ene_map[(char)game.ene_datos[g].xy[2]][(char)game.ene_datos[g].xy[3]]=(char)(g+1);
+        };
     }
 
     void tile(SpriteBatch scr)

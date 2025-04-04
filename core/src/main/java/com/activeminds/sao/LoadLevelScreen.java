@@ -97,7 +97,7 @@ public class LoadLevelScreen implements Screen {
 
         // Update =====
         game.load_charset();
-
+        game.p_l=100; game.p_e=0;
         game.x_map=game.fase.start_xy[0];
         game.y_map=game.fase.start_xy[1];
         game.px=game.fase.start_xy[2];
@@ -105,6 +105,9 @@ public class LoadLevelScreen implements Screen {
         game.llave[0] = 0;
         game.llave[1] = 0;
         game.llave[2] = 0;
+        game.municion[0] = 0;
+        game.municion[1] = 0;
+        game.municion[2] = 0;
         game.n_secrets=0;
         game.t_secrets=game.total_secrets();
         //game.K=0;
