@@ -300,17 +300,17 @@ public class GameScreen implements Screen {
                 }
                 ;
 
-                /*
-                for(h=0; h<10; h++){
-                    if((balas[h].est==1) && ((char)balas[h].b_xy[2]==(char)px)
-                        && ((char)balas[h].b_xy[3]==(char)py)
-                        && ((char)balas[h].b_xy[0]==x_map)
-                        && ((char)balas[h].b_xy[1]==y_map)){
-                        balas[h].est=2; start_sound(explosion);
-                        p_e=2;
-                        p_l-=balas[h].fuerza;
+
+                for(int h=0; h<10; h++){
+                    if((game.balas[h].est==1) && ((char)game.balas[h].b_xy[2]==(char)game.px)
+                        && ((char)game.balas[h].b_xy[3]==(char)game.py)
+                        && ((char)game.balas[h].b_xy[0]==game.x_map)
+                        && ((char)game.balas[h].b_xy[1]==game.y_map)){
+                        game.balas[h].est=2; //start_sound(explosion);
+                        game.p_e=2;
+                        game.p_l-=game.balas[h].fuerza;
                     };
-                };*/
+                };
 
 
                 if(game.p_l<1) {
@@ -328,27 +328,28 @@ public class GameScreen implements Screen {
             }
             ;
 
-            /*
+
             // Da�o a un enemigo
-            for(g=0; g<8; ++g){
-                for(i=0; i<8; ++i){
-                    for(h=0; h<10; ++h){
-                        for(l=0; l<fase.e_n; ++l){
-                            if(((char)ene_datos[l].xy[0]==x_map) &&
-                                ((char)ene_datos[l].xy[1]==y_map) &&
-                                ((char)ene_datos[l].xy[2]==g) &&
-                                ((char)ene_datos[l].xy[3]==i) &&
-                                ((char)balas[h].b_xy[0]==x_map) &&
-                                ((char)balas[h].b_xy[1]==y_map) &&
-                                ((char)balas[h].b_xy[2]==g) &&
-                                ((char)balas[h].b_xy[3]==i) &&
-                                ((char)balas[h].est==1))
-                                enemy_impact(l,h);
+            for(int g=0; g<8; ++g){
+                for(int i=0; i<8; ++i){
+                    for(int h=0; h<10; ++h){
+                        for(int l=0; l<game.fase.e_n; ++l){
+                            if(((char)game.ene_datos[l].xy[0]==game.x_map) &&
+                                ((char)game.ene_datos[l].xy[1]==game.y_map) &&
+                                ((char)game.ene_datos[l].xy[2]==g) &&
+                                ((char)game.ene_datos[l].xy[3]==i) &&
+                                ((char)game.balas[h].b_xy[0]==game.x_map) &&
+                                ((char)game.balas[h].b_xy[1]==game.y_map) &&
+                                ((char)game.balas[h].b_xy[2]==g) &&
+                                ((char)game.balas[h].b_xy[3]==i) &&
+                                ((char)game.balas[h].est==1))
+                                enemy_impact((char)l,(char)h);
                         };
                     };
                 };
             };
 
+            /*
             // COMPROBACION DEL TIEMPO TRANSCURRIDO
 
             asm{
@@ -360,6 +361,12 @@ public class GameScreen implements Screen {
 
         }while(key!='\x1B');
         */
+
+            if(minimap.consumePush("Quit"))
+            {
+                game.setScreen(new MainMenuScreen(game));
+                dispose();
+            }
         }
 
         // RENDER STEP ========================================
@@ -368,8 +375,9 @@ public class GameScreen implements Screen {
 
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
-
         game.batch.begin();
+        game.shapeRenderer.setProjectionMatrix(game.camera.combined);
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         if(!game.MAP) visualizar(game.batch, 1,1);
         else map_2d();
         if(mes_c > 0) {game.Copytext(game.batch,5,5,message); };
@@ -378,6 +386,7 @@ public class GameScreen implements Screen {
         if((game.p_e>6) && (game.p_e<13)) game.Copytext(game.batch,30,95,"PULSA DISPARO PARA REINICIAR");
         variables();
         game.batch.end();
+        game.shapeRenderer.end();
         /*
         CLEAR_BUFFER(scr,0);
         if(!MAP)visualizar(1,1);
@@ -498,7 +507,7 @@ public class GameScreen implements Screen {
     void e_punch(char n)
     {
         char g,i,xy;
-        out_var(300,10,(int)game.p_e);
+        //out_var(300,10,(int)game.p_e);
         if(((char)game.px==(char)game.ene_datos[n].xy[2]) && ((char)game.py==(char)game.ene_datos[n].xy[3]) && ((char)game.p_e==0)){
             game.p_e=2;
             game.p_l-=5;
@@ -507,6 +516,20 @@ public class GameScreen implements Screen {
         if (game.p_e>4) return;
         if(game.p_l<1) {game.p_e=5; show_mes(game.p_name+" ha muerto.");};
         if(game.p_l<-4) {game.p_e=9; show_mes(game.p_name+"%s ha sido destruido.");};
+    }
+
+    void enemy_impact(char ene, char bul)
+    {
+        char p=1;
+        if(game.pocima>0) p=4;
+        if(game.ene_datos[ene].est>=5) return;
+        game.balas[bul].est=2; //start_sound(explosion);
+        game.ene_datos[ene].est=2;
+        game.ene_datos[ene].life-=game.balas[bul].fuerza*p;
+        if(game.ene_datos[ene].life<=0)
+        {game.ene_datos[ene].est=5; /*start_sound(dying);*/};
+        if(game.ene_datos[ene].life<=-5)
+        {game.ene_datos[ene].est=9; /*start_sound(falling);*/};
     }
 
     void asigna_bala(float xx, float yy, float vv, int tipo, char dir)
@@ -599,7 +622,7 @@ public class GameScreen implements Screen {
                 } ;
             } ;
 
-            //if(random(20-(4*DIF))==0) e_disparo(n);
+            if((int)(100f*Math.random()) % (20-(4*game.DIF))==0) e_disparo(n);
 
         }
 
@@ -616,6 +639,48 @@ public class GameScreen implements Screen {
         if((est>12) && (est<14)) game.ene_datos[n].est+=K;
 
     }
+
+    void e_disparo(char n)
+    {
+        char i, dir;
+        float xx = 0f, yy = 0f, ex, ey;
+
+        dir=(char)game.fase.enemies[n].e_d;
+        ex=game.ene_datos[n].xy[2];
+        ey=game.ene_datos[n].xy[3];
+
+
+        switch(dir){
+            case 0 : xx=ex; yy=ey+1.5f; break;
+            case 1 : xx=ex-1.5f; yy=ey; break;
+            case 2 : xx=ex; yy=ey-1.5f; break;
+            case 3 : xx=ex+1.5f; yy=ey; break;
+        };
+
+        switch(game.fase.enemies[n].e_w){
+            case 0 : if((char)game.ene_datos[n].est==0) game.ene_datos[n].est=13; break;
+            case 1 : asigna_bala(xx,yy,3,0,dir); /*start_sound(weap1);*/ break;
+            case 2 : asigna_bala(xx,yy,3,0,dir); asigna_bala(xx+0.2f,yy,3,0,dir);
+                asigna_bala(xx-0.2f,yy,3,0,dir);
+                //start_sound(weap2);
+                break;
+            case 3 : asigna_bala(xx,yy,1.3f,1,dir);
+                //start_sound(weap3);
+                break;
+            case 4 : asigna_bala(xx-0.2f,yy,1.6f,1,dir); asigna_bala(xx+0.3f,yy,1.6f,1,dir);
+                //start_sound(weap3);
+                break;
+            case 5 : asigna_bala(xx,yy,1.5f,2,dir);
+                //start_sound(weap5);
+                break;
+            case 6 : asigna_bala(xx-0.3f,yy,1,2,dir); asigna_bala(xx+0.3f,yy,1,2,dir);
+                //start_sound(weap5);
+                break;
+
+        };
+
+    }
+
 
     void move_bullet(char n)
     {
@@ -663,7 +728,7 @@ public class GameScreen implements Screen {
     void show_mes(String text)
     {
         message = text;
-        mes_c=35;
+        mes_c=15;
     }
 
     void acceso(float nx, float ny)
@@ -782,8 +847,8 @@ public class GameScreen implements Screen {
         orx=(int)(160-((8*sx*game.x_map)+(sx*game.px)));
         ory=(int)(100-((8*sy*game.y_map)+(sy*game.py)));
 
-        game.shapeRenderer.setProjectionMatrix(game.camera.combined);
-        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        //game.shapeRenderer.setProjectionMatrix(game.camera.combined);
+        //game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         for(xa=0; xa<10; ++xa)
             for(ya=0; ya<10; ++ya)
@@ -824,7 +889,7 @@ public class GameScreen implements Screen {
         for(int j=0; j<game.fase.e_n; ++j)
             cuadro(orx+(8*sx*(char)game.ene_datos[j].xy[0])+(sy*(char)game.ene_datos[j].xy[2]),ory+(8*sy*(char)game.ene_datos[j].xy[1])+(sy*(char)game.ene_datos[j].xy[3]),(char)4);
 
-        game.shapeRenderer.end();
+        //game.shapeRenderer.end();
     }
     void cuadro(int x, int y, char c)
     {
@@ -1283,7 +1348,7 @@ public class GameScreen implements Screen {
         int k=(int)(game.cy+(10*ppy)+(10*ppx)+game.desp);
         int l=game.balas[n].tipo-1;
         if(game.balas[n].est==1){
-            if(game.balas[n].tipo==0) {game.COPY_BUFFER_1(scr,j,k-20,2,1,game.helmet[0]); return;};
+            if(game.balas[n].tipo==0) {game.COPY_BUFFER_1(scr,j,k-20,2,1,game.shell); return;};
             if(game.balas[n].dir==0)
                 game.COPY_BUFFER_1(scr,j-20,k-26,40,27,game.bullet[l][0][(int)game.frame]);
             if(game.balas[n].dir==1)

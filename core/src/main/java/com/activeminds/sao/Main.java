@@ -416,6 +416,17 @@ class BALA {
 
         sombra = loadBinaryImage(inputStream,40,23);
 
+        // Shell
+        Pixmap pixmap = new Pixmap(2, 1, Pixmap.Format.RGBA8888);
+        for(j = 0; j < 2; j++)
+        {
+            int byteData = 15;
+            pixmap.setColor(palette[byteData][0], palette[byteData][1], palette[byteData][2], byteData == 0 ? 0.f : 1.0f );
+            pixmap.drawPixel(j, 0);
+
+        }
+        shell = new Texture(pixmap);
+
         try {
             inputStream.close();
         } catch (IOException e) {

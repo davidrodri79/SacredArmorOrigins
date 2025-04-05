@@ -10,6 +10,15 @@
       image_off: "gui/Button-off.png"
     },
     {
+      x: 250
+      y: 150
+      width: 40
+      height: 40
+      action: Quit,
+      image_on: "gui/Button-on.png",
+      image_off: "gui/Button-off.png"
+    },
+    {
       x: 490
       y: 100
       width: 40

@@ -10,6 +10,8 @@ import java.io.InputStream;
 
 public class LoadLevelScreen implements Screen {
     Main game;
+    long startTime;
+    boolean loaded;
     public LoadLevelScreen(Main game)
     {
         this.game = game;
@@ -71,6 +73,8 @@ public class LoadLevelScreen implements Screen {
         };
 
         game.load_scr("SOLDIER.SCR");
+        startTime = System.currentTimeMillis();
+        loaded = false;
 
     }
     @Override
@@ -96,39 +100,46 @@ public class LoadLevelScreen implements Screen {
         game.batch.end();
 
         // Update =====
-        game.load_charset();
-        game.p_l=100; game.p_e=0;
-        game.x_map=game.fase.start_xy[0];
-        game.y_map=game.fase.start_xy[1];
-        game.px=game.fase.start_xy[2];
-        game.py=game.fase.start_xy[3];
-        game.llave[0] = 1;
-        game.llave[1] = 1;
-        game.llave[2] = 1;
-        game.municion[0] = 0; // PESAO
-        game.municion[1] = 0;
-        game.municion[2] = 0;
-        /*game.armas[0] = 1;
-        game.armas[1] = 1;
-        game.armas[2] = 1;
-        game.armas[3] = 1;
-        game.armas[4] = 1;
-        game.armas[5] = 1;*/
-        game.n_secrets=0;
-        game.t_secrets=game.total_secrets();
-        //game.K=0;
-        //game.m3=0;
+        if(!loaded) {
+            game.load_charset();
+            game.p_l = 100;
+            game.p_e = 0;
+            game.x_map = game.fase.start_xy[0];
+            game.y_map = game.fase.start_xy[1];
+            game.px = game.fase.start_xy[2];
+            game.py = game.fase.start_xy[3];
+            game.llave[0] = 1;
+            game.llave[1] = 1;
+            game.llave[2] = 1;
+            game.municion[0] = 0; // PESAO
+            game.municion[1] = 0;
+            game.municion[2] = 0;
+            /*game.armas[0] = 1;
+            game.armas[1] = 1;
+            game.armas[2] = 1;
+            game.armas[3] = 1;
+            game.armas[4] = 1;
+            game.armas[5] = 1;*/
+            game.n_secrets = 0;
+            game.t_secrets = game.total_secrets();
+            //game.K=0;
+            //game.m3=0;
 
-        game.show_mes(game.fase.map_name);
+            game.show_mes(game.fase.map_name);
 
-        // Mapa inicialmente desconocido
-        for(int i=0; i<10; ++i)
-            for(int j=0; j<10; ++j)
-                game.visto[i][j]=0;
+            // Mapa inicialmente desconocido
+            for (int i = 0; i < 10; ++i)
+                for (int j = 0; j < 10; ++j)
+                    game.visto[i][j] = 0;
 
-        //game.tiem_i=time(NULL);
-        game.setScreen(new GameScreen(game));
-        dispose();
+            loaded = true;
+        }
+
+        if(System.currentTimeMillis() > startTime + 3000) {
+            //game.tiem_i=time(NULL);
+            game.setScreen(new GameScreen(game));
+            dispose();
+        }
     }
 
     @Override
