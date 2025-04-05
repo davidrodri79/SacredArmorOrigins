@@ -3,6 +3,7 @@ package com.activeminds.sao;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.StringBuilder;
 
 public class MainMenuScreen implements Screen {
 
@@ -41,9 +42,13 @@ public class MainMenuScreen implements Screen {
         game.Copytext(game.batch,80,115,"INSTRUCCIONES");
         game.Copytext(game.batch,80,140,"OPCIONES");
         game.Copytext(game.batch,80,165,"SALIR");
-        game.Copytext(game.batch,30,185,"Active Minds 1997,98");
+        StringBuilder string = new StringBuilder();
+        string.append((char)252);
+        string.append((char)253);
+        game.Copytext(game.batch,30,185,"Active Minds 1998,2025"+string.toString());
         game.COPY_BUFFER_1(game.batch,45,60+(25*op),22,18,game.helmet[1]);
         game.COPY_BUFFER_2(game.batch,253,60+(25*op),22,18,game.helmet[1]);
+        //show_all_font();
         game.batch.end();
 
         joypad.render(game.batch, game.batch);
@@ -62,6 +67,19 @@ public class MainMenuScreen implements Screen {
 
         if(op<0) op=4;
         if(op>4) op=0;
+    }
+
+    void show_all_font()
+    {   // 0 32 64 96 128 160 192 224
+        ScreenUtils.clear(0, 0, 0, 1f);
+        for(int i = 0; i < 256; i++)
+        {
+            int x = i % 32;
+            int y = (int)(i /32);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append((char)i);
+            game.Copytext(game.batch, 16 * x - Main.GAME_SCREEN_START_X, 20*y, stringBuilder.toString());
+        }
     }
 
     @Override

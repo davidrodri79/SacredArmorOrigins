@@ -184,7 +184,7 @@ public class ButtonLayout implements InputProcessor {
     public boolean touchDown (int x, int y, int pointer, int button) {
 
         Vector3 touchPos = new Vector3();
-        touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        touchPos.set(x, y, 0);
         camera.unproject(touchPos);
 
         for(String i:buttons.keySet())

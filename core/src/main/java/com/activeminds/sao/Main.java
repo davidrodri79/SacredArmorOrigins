@@ -150,7 +150,7 @@ class BALA {
     boolean MAP = false;
     float frame = 0f, invi = 0f, vari, px, py, escudo, pocima, p_e = 0;
     char p_d = 0, p_p = 0, p_w = 0, desp = 0, p_col = 32, x_room, y_room;
-    int DIF = 1, S_MAP = 2;
+    int DIF = 1, S_MAP = 2, horas, mins, secs;
 
     @Override
     public void create() {
@@ -354,6 +354,26 @@ class BALA {
         return new Texture(pixmap);
     }
 
+    Texture loadBinaryShadow(InputStream inputStream, int width, int height, float r, float g, float b, float a)
+    {
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+
+        try {
+            for(int i = 0; i < height; i++)
+                for(int j = 0; j < width; j++)
+                {
+                    int byteData = inputStream.read();
+                    pixmap.setColor(r, g, b, byteData == 0 ? 0.f : a );
+                    //pixmap.setColor(Color.RED); // Color del píxel
+                    pixmap.drawPixel(j, i);   // Dibuja un píxel en (50,50)
+
+                }
+        } catch (IOException e) {
+            System.out.println("Error!!! Not eneough pixels");
+        }
+        return new Texture(pixmap);
+    }
+
     public void load_scr(String file)
     {
         scr = loadBinaryImage(file, 320, 200);
@@ -414,7 +434,7 @@ class BALA {
         for(g=0; g<2; ++g)
                 field[g] = loadBinaryImage(inputStream, 20, 59);
 
-        sombra = loadBinaryImage(inputStream,40,23);
+        sombra = loadBinaryShadow(inputStream,40,23, 0f, 0f, 0f, 0.3f);
 
         // Shell
         Pixmap pixmap = new Pixmap(2, 1, Pixmap.Format.RGBA8888);
@@ -537,11 +557,16 @@ class BALA {
         return spr;
     }
 
-    public void show_mes(String mapName) {
-    }
 
-    public int total_secrets() {
-        return 0;
+    int total_secrets()
+    {
+        char m,n,o,p,cont=0;
+        for(m=0; m<10; m++)
+            for(n=0; n<10; n++)
+                for(o=0; o<8; o++)
+                    for(p=0; p<8; p++)
+                        if(fase.map[m][n][o][p]==40) cont+=1;
+        return(cont);
     }
 
     Texture[] font;
@@ -567,5 +592,10 @@ class BALA {
 
     public void COPY_BUFFER_2(SpriteBatch batch, int x, int y, int sx, int sy, Texture texture) {
         batch.draw(texture, x + GAME_SCREEN_START_X, VIEWPORT_HEIGHT - y - sy, sx, sy, 0, 0, sx, sy, true, false );
+    }
+
+    public void Shadow_Buffer(SpriteBatch scr, int x, int y, int sx, int sy, Texture texture, int type)
+    {
+        batch.draw(texture, x + GAME_SCREEN_START_X, VIEWPORT_HEIGHT - y - sy);
     }
 }

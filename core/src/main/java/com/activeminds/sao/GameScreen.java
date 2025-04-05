@@ -4,6 +4,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.StringBuilder;
 
 public class GameScreen implements Screen {
 
@@ -14,6 +15,7 @@ public class GameScreen implements Screen {
     char[][] tel_map = new char[8][8], int_map  = new char[8][8], ene_map  = new char[8][8];
     String message;
     boolean FIN_DE_FASE, FIN_EPI, SECRET_FASE;
+    long start_time;
 
 
     GameScreen(Main game)
@@ -29,6 +31,7 @@ public class GameScreen implements Screen {
         SECRET_FASE = false;
         if(game.MAP) minimap.setAsActiveInputProcessor();
         else joypad.setAsActiveInputProcessor();
+        start_time = System.currentTimeMillis();
 
     }
     @Override
@@ -40,7 +43,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
 
 
-        K = delta * 2.5f;
+        K = delta * 3f;
 
         // LOGIC STEP =========================================
 
@@ -63,11 +66,17 @@ public class GameScreen implements Screen {
                 game.lev=0;
 
                 game.setScreen(new LoadLevelScreen(game));
+                dispose();
             }
         }
         else if(FIN_DE_FASE)
         {
+            long intervalo=(System.currentTimeMillis() - start_time)/1000;
+            game.horas=(int)intervalo/3600;
+            game.mins=(int)intervalo/60;
+            game.secs=(int)intervalo-(3600*game.horas)-(60*game.mins);
             game.setScreen(new LevelResultsScreen(game));
+            dispose();
         }
         else
         {
@@ -119,23 +128,23 @@ public class GameScreen implements Screen {
             } else {
                 game.p_p = 0;
                 if (joypad.isPressed("North")) {
-                    //if (!keymap[56])
-                    game.p_d = 2;
+                    if (!joypad.isPressed("Strafe"))
+                        game.p_d = 2;
                     game.p_p = (char) (game.frame + 1);
                     acceso(game.px, game.py - K);
                 } else if (joypad.isPressed("South")) {
-                    //if (!keymap[56])
-                    game.p_d = 0;
+                    if (!joypad.isPressed("Strafe"))
+                        game.p_d = 0;
                     game.p_p = (char) (game.frame + 1);
                     acceso(game.px, game.py + K);
                 } else if (joypad.isPressed("West")) {
-                    //if (!keymap[56])
-                    game.p_d = 1;
+                    if (!joypad.isPressed("Strafe"))
+                        game.p_d = 1;
                     game.p_p = (char) (game.frame + 1);
                     acceso(game.px - K, game.py);
                 } else if (joypad.isPressed("East")) {
-                    //if (!keymap[56])
-                    game.p_d = 3;
+                    if (!joypad.isPressed("Strafe"))
+                        game.p_d = 3;
                     game.p_p = (char) (game.frame + 1);
                     acceso(game.px + K, game.py);
                 }
@@ -482,7 +491,7 @@ public class GameScreen implements Screen {
                     }
                     break;
         };
-        if(NO_AMMO) game.show_mes("No queda municion");
+        if(NO_AMMO) show_mes("No queda municion");
 
     }
 
@@ -1105,27 +1114,32 @@ public class GameScreen implements Screen {
     }
     void variables()
     {
-        String a="??";
-        game.Copytext(game.batch,6,170,game.p_name);
-        if(game.p_l>=0) out_var(19,186,game.p_l);
-        else out_var(19,186,0);
-        if(game.llave[0] > 0) game.Copytext(game.batch,60,185,"");
-        if(game.llave[1] > 0) game.Copytext(game.batch,73,185,"");
-        if(game.llave[2] > 0) game.Copytext(game.batch,86,185,"");
+        game.Copytext(game.batch,6-4,170,game.p_name);
+        if(game.p_l>=0) out_var(19-4,186,game.p_l);
+        else out_var(19-4,186,0);
+        if(game.llave[0] > 0) game.Copytext(game.batch,60-4,185,"");
+        if(game.llave[1] > 0) game.Copytext(game.batch,73-4,185,"");
+        if(game.llave[2] > 0) game.Copytext(game.batch,86-4,185,"");
 
-        out_var(288,154,game.municion[0]);
-        out_var(288,170,game.municion[1]);
-        out_var(288,186,game.municion[2]);
+        out_var(288-4,154,game.municion[0]);
+        out_var(288-4,170,game.municion[1]);
+        out_var(288-4,186,game.municion[2]);
 
+        StringBuilder a = new StringBuilder();
         switch(game.p_w){
-            /*case 1 : sprintf(a,"��"); break;
-            case 2 : sprintf(a,"��"); break;
+            case 1 : a.append((char)202); a.append((char)203); break;
+            case 2 : a.append((char)204); a.append((char)205); break;
+            case 3 : a.append((char)206); a.append((char)207); break;
+            case 4 : a.append((char)208); a.append((char)209); break;
+            case 5 : a.append((char)210); a.append((char)211); break;
+            case 6 : a.append((char)212); a.append((char)213); break;
+            /*case 2 : sprintf(a,"��"); break;
             case 3 : sprintf(a,"��"); break;
             case 4 : sprintf(a,"��"); break;
             case 5 : sprintf(a,"��"); break;
             case 6 : sprintf(a,"��"); break;*/
         };
-        if (game.p_w > 0) game.Copytext(game.batch,76,169,a);
+        if (game.p_w > 0) game.Copytext(game.batch,76-4,169,a.toString());
 
         if((game.invi>20) || ((game.invi<=20) && (game.invi>0) && ((char)game.frame!=1)))
             game.COPY_BUFFER_1(game.batch,220,0,24,26,game.addings[(int)(2+game.frame)]);
@@ -1180,7 +1194,7 @@ public class GameScreen implements Screen {
     {
 
         game.COPY_BUFFER_1(scr,x-20,y,40,23,game.chr.tile);
-        //Shadow_Buffer(scr,x-20,y,40,23,sombra,type);
+        game.Shadow_Buffer(scr,x-20,y,40,23,game.sombra,type);
     }
 
     void show_warrior(SpriteBatch scr, Main.SPRITE fig, float wx, float wy, char dir, char pos, char estado, char arma, char des)
@@ -1192,7 +1206,7 @@ public class GameScreen implements Screen {
         int j=(int)(Main.cx-(20*ppy)+(20*ppx));
         int k=(int)(Main.cy+(10*ppy)+(10*ppx)+des);
 
-        //Shadow_Buffer(scr,j-20,k+des,40,23,sombra,0);
+        game.Shadow_Buffer(scr,j-20,k+des,40,23,game.sombra,0);
 
         if(fig==null)
         {
@@ -1358,7 +1372,7 @@ public class GameScreen implements Screen {
             if(game.balas[n].dir==3)
                 game.COPY_BUFFER_2(scr,j-20,k-26,40,27,game.bullet[l][0][(int)game.frame]);
 
-            //Shadow_Buffer(scr,j-20,k,40,23,sombra,0);
+            game.Shadow_Buffer(scr,j-20,k,40,23,game.sombra,0);
         };
         if((char)game.balas[n].est==2) game.COPY_BUFFER_2(scr,j-20,k-26,40,27,game.explos[game.balas[n].tipo][0]);
         if((char)game.balas[n].est==3) game.COPY_BUFFER_2(scr,j-20,k-26,40,27,game.explos[game.balas[n].tipo][1]);
