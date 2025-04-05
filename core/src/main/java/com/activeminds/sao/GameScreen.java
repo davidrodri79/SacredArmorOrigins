@@ -104,12 +104,12 @@ public class GameScreen implements Screen {
 
             if((int_map[game.x_room][game.y_room] > 0) && (joypad.consumePush("Push"))) conecta_int((char)(int_map[game.x_room][game.y_room]-1));
 
-            /*for(i=0; i<10; ++i)
-                if(balas[i].est) move_bullet(i);
+            for(char i=0; i<10; ++i)
+                if(game.balas[i].est > 0) move_bullet(i);
 
 
 
-            if(kbhit())
+            /*if(kbhit())
                 key=toupper(getch());*/
 
             if(((game.p_l<=0) && joypad.consumePush("Fire"))) { game.setScreen(new LoadLevelScreen(game)); dispose(); }
@@ -415,7 +415,7 @@ public class GameScreen implements Screen {
     void p_disparo()
     {
         char i;
-        float xx, yy;
+        float xx=0f, yy=0f;
         switch(game.p_d){
             case 0 : xx=game.px; yy=game.py+1.5f; break;
             case 1 : xx=game.px-1.5f; yy=game.py; break;
@@ -423,27 +423,57 @@ public class GameScreen implements Screen {
             case 3 : xx=game.px+1.5f; yy=game.py; break;
         };
 
+        boolean NO_AMMO = false;
         switch(game.p_w){
             case 0 : if((char)game.p_e==0) game.p_e=13; break;
-            /*case 1 : if(!municion[0]) goto NO_AMMO; asigna_bala(xx,yy,3,0,p_d);
-                municion[0]-=1; start_sound(weap1); break;
-            case 2 : if(municion[0]<3) goto NO_AMMO; asigna_bala(xx,yy,3,0,p_d);
-                asigna_bala(xx+0.2,yy,3,0,p_d); asigna_bala(xx-0.2,yy,3,0,p_d);
-                municion[0]-=3; start_sound(weap2); break;
-            case 3 : if(!municion[1]) goto NO_AMMO; asigna_bala(xx,yy,1.3,1,p_d);
-                municion[1]-=1; start_sound(weap3); break;
-            case 4 : if(municion[1]<2) goto NO_AMMO; asigna_bala(xx-0.2,yy,1.6,1,p_d);
-                asigna_bala(xx+0.3,yy,1.6,1,p_d); municion[1]-=2;
-                start_sound(weap3); break;
-            case 5 : if(municion[2]<5) goto NO_AMMO; asigna_bala(xx,yy,1.5,2,p_d);
-                municion[2]-=5; start_sound(weap5); break;
-            case 6 : if(municion[2]<15) goto NO_AMMO; asigna_bala(xx-0.3,yy,1,2,p_d);
-                asigna_bala(xx+0.3,yy,1,2,p_d); municion[2]-=15;
-                start_sound(weap5); break;*/
-
+            case 1 : if(game.municion[0] == 0) NO_AMMO = true;
+                     else {
+                         asigna_bala(xx,yy,3,0,game.p_d);
+                        game.municion[0]-=1;
+                        //start_sound(weap1);
+                     }
+                     break;
+            case 2 : if(game.municion[0]<3) NO_AMMO = true;
+                    else {
+                        asigna_bala(xx, yy, 3, 0, game.p_d);
+                        asigna_bala(xx + 0.2f, yy, 3, 0, game.p_d);
+                        asigna_bala(xx - 0.2f, yy, 3, 0, game.p_d);
+                        game.municion[0] -= 3;
+                        //start_sound(weap2);
+                    }
+                    break;
+            case 3 : if(game.municion[1] == 0) NO_AMMO = true;
+                    else {
+                        asigna_bala(xx,yy,1.3f,1,game.p_d);
+                        game.municion[1]-=1;
+                        //start_sound(weap3);
+                    }
+                    break;
+            case 4 : if(game.municion[1]<2) NO_AMMO = true;
+                    else {
+                        asigna_bala(xx - 0.2f, yy, 1.6f, 1, game.p_d);
+                        asigna_bala(xx + 0.3f, yy, 1.6f, 1, game.p_d);
+                        game.municion[1] -= 2;
+                        //start_sound(weap3);
+                    }
+                    break;
+            case 5 : if(game.municion[2]<5) NO_AMMO = true;
+                    else {
+                        asigna_bala(xx,yy,1.5f,2,game.p_d);
+                        game.municion[2]-=5;
+                        //start_sound(weap5);
+                    }
+                 break;
+            case 6 : if(game.municion[2]<15) NO_AMMO = true;
+                    else {
+                        asigna_bala(xx-0.3f,yy,1,2,game.p_d);
+                        asigna_bala(xx+0.3f,yy,1,2,game.p_d);
+                        game.municion[2]-=15;
+                        //start_sound(weap5);
+                    }
+                    break;
         };
-        return;
-        //game.show_mes("No queda municion");
+        if(NO_AMMO) game.show_mes("No queda municion");
 
     }
 
@@ -477,6 +507,28 @@ public class GameScreen implements Screen {
         if (game.p_e>4) return;
         if(game.p_l<1) {game.p_e=5; show_mes(game.p_name+" ha muerto.");};
         if(game.p_l<-4) {game.p_e=9; show_mes(game.p_name+"%s ha sido destruido.");};
+    }
+
+    void asigna_bala(float xx, float yy, float vv, int tipo, char dir)
+    {
+        char i=0;
+        /* Buscar una bala libre para usarla */
+        do{
+            i++;
+            if(i==10) return;
+
+        } while(game.balas[i].est!=0);
+
+        game.balas[i].b_xy[0]=game.x_map;
+        game.balas[i].b_xy[1]=game.y_map;
+        game.balas[i].b_xy[2]=xx;
+        game.balas[i].b_xy[3]=yy;
+        game.balas[i].tipo=tipo;
+        game.balas[i].fuerza=8+(8*tipo);
+        game.balas[i].est=1;
+        game.balas[i].vel=vv;
+        game.balas[i].dir=dir;
+
     }
 
     void conecta_int(char n)
@@ -562,6 +614,49 @@ public class GameScreen implements Screen {
         if((est>4) && (est<7)) game.ene_datos[n].est+=K;
         if((est>8) && (est<11)) game.ene_datos[n].est+=K;
         if((est>12) && (est<14)) game.ene_datos[n].est+=K;
+
+    }
+
+    void move_bullet(char n)
+    {
+        if((game.balas[n].b_xy[0]!=game.x_map) || (game.balas[n].b_xy[1]!=game.y_map)){
+            game.balas[n].est=0; return;};
+
+        if(game.balas[n].est==1){
+            switch(game.balas[n].dir){
+                case 0 : game.balas[n].b_xy[3]+=game.balas[n].vel*K; break;
+                case 1 : game.balas[n].b_xy[2]-=game.balas[n].vel*K; break;
+                case 2 : game.balas[n].b_xy[3]-=game.balas[n].vel*K; break;
+                case 3 : game.balas[n].b_xy[2]+=game.balas[n].vel*K; break;
+            };
+        };
+
+        if(game.balas[n].est >= 2.0) game.balas[n].est+=2.7*K;
+        if(game.balas[n].est >= 5.5) game.balas[n].est=0;
+
+        if(((game.balas[n].b_xy[2]>=8.0) || (game.balas[n].b_xy[2]<0.1) ||
+            (game.balas[n].b_xy[3]>=8.0) || (game.balas[n].b_xy[3]<0.1))
+            &&(game.balas[n].est==1)){
+            game.balas[n].est=0; return;};
+
+        if((char)game.balas[n].est==1)
+            switch(game.fase.map[game.x_map][game.y_map][(char)game.balas[n].b_xy[2]][(char)game.balas[n].b_xy[3]]){
+                case 2 :
+                case 3 :
+                case 4 :
+                case 5 :
+                case 6 :
+                case 7 :
+                case 47:
+                case 48:
+                case 49:
+                case 50:
+                case 73: if(game.balas[n].est==1) game.balas[n].est=2;
+                        //start_sound(explosion);
+                        return;
+            };
+
+
 
     }
 
@@ -904,14 +999,14 @@ public class GameScreen implements Screen {
                             game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.wall1); break;
                     };
 
-                    /*
-                    for(t=0; t<10; ++t){
-                        if((balas[t].est!=0) && ((char)balas[t].b_xy[0]==x_map)
-                            && ((char)balas[t].b_xy[1]==y_map)
-                            && ((char)balas[t].b_xy[2]==g) &&
-                            ((char)balas[t].b_xy[3]==i) )
-                            show_bullet(t);
-                    };*/
+
+                    for(char t=0; t<10; ++t){
+                        if((game.balas[t].est!=0) && ((char)game.balas[t].b_xy[0]==game.x_map)
+                            && ((char)game.balas[t].b_xy[1]==game.y_map)
+                            && ((char)game.balas[t].b_xy[2]==g) &&
+                            ((char)game.balas[t].b_xy[3]==i) )
+                            show_bullet(scr,t);
+                    };
 
                     if(((char)(game.px)==g) && ((char)(game.py)==i) && (player != 0)){
 
@@ -1177,6 +1272,35 @@ public class GameScreen implements Screen {
         if(tipo==4) show_warrior(game.batch, game.sol,xx,yy,dir,pos,estado,weapon, (char) 0);
 
     }
+
+    void show_bullet(SpriteBatch scr, char n)
+    {
+        float ppy,ppx;
+        ppx=(float)game.balas[n].b_xy[2]-0.5f;
+        ppy=(float)game.balas[n].b_xy[3]-0.5f;
+
+        int j=(int)(game.cx-(20*ppy)+(20*ppx));
+        int k=(int)(game.cy+(10*ppy)+(10*ppx)+game.desp);
+        int l=game.balas[n].tipo-1;
+        if(game.balas[n].est==1){
+            if(game.balas[n].tipo==0) {game.COPY_BUFFER_1(scr,j,k-20,2,1,game.helmet[0]); return;};
+            if(game.balas[n].dir==0)
+                game.COPY_BUFFER_1(scr,j-20,k-26,40,27,game.bullet[l][0][(int)game.frame]);
+            if(game.balas[n].dir==1)
+                game.COPY_BUFFER_1(scr,j-20,k-26,40,27,game.bullet[l][1][(int)game.frame]);
+            if(game.balas[n].dir==2)
+                game.COPY_BUFFER_2(scr,j-20,k-26,40,27,game.bullet[l][1][(int)game.frame]);
+            if(game.balas[n].dir==3)
+                game.COPY_BUFFER_2(scr,j-20,k-26,40,27,game.bullet[l][0][(int)game.frame]);
+
+            //Shadow_Buffer(scr,j-20,k,40,23,sombra,0);
+        };
+        if((char)game.balas[n].est==2) game.COPY_BUFFER_2(scr,j-20,k-26,40,27,game.explos[game.balas[n].tipo][0]);
+        if((char)game.balas[n].est==3) game.COPY_BUFFER_2(scr,j-20,k-26,40,27,game.explos[game.balas[n].tipo][1]);
+        if((char)game.balas[n].est==4) game.COPY_BUFFER_2(scr,j-20,k-26,40,27,game.explos[game.balas[n].tipo][2]);
+
+    };
+
 
     @Override
     public void resize(int width, int height) {

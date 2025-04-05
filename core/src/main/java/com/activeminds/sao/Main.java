@@ -145,6 +145,7 @@ class BALA {
     CHARSET chr = new CHARSET();
     LEVEL fase = new LEVEL();
     T_ENEMY []ene_datos = new T_ENEMY[100];
+    BALA[] balas = new BALA[10];
     SPRITE sol, trp, ene1, ene2;
     boolean MAP = false;
     float frame = 0f, invi = 0f, vari, px, py, escudo, pocima, p_e = 0;
@@ -272,6 +273,11 @@ class BALA {
             ene_datos[n].est=0;
             ene_datos[n].life=fase.enemies[n].e_l;
         };
+
+        for(n=0; n<10; ++n) {
+            balas[n] = new BALA();
+            balas[n].est = 0;
+        }
     }
 
     void loadPalette()
@@ -363,6 +369,7 @@ class BALA {
     Texture[][][] bullet;
     Texture[][] explos;
     Texture sombra;
+    Texture shell;
 
 
     void load_items()

@@ -105,9 +105,15 @@ public class LoadLevelScreen implements Screen {
         game.llave[0] = 1;
         game.llave[1] = 1;
         game.llave[2] = 1;
-        game.municion[0] = 0;
+        game.municion[0] = 0; // PESAO
         game.municion[1] = 0;
         game.municion[2] = 0;
+        /*game.armas[0] = 1;
+        game.armas[1] = 1;
+        game.armas[2] = 1;
+        game.armas[3] = 1;
+        game.armas[4] = 1;
+        game.armas[5] = 1;*/
         game.n_secrets=0;
         game.t_secrets=game.total_secrets();
         //game.K=0;
