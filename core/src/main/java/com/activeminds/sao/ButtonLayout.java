@@ -224,7 +224,7 @@ public class ButtonLayout implements InputProcessor {
     {
         // Get screen camera coordinates of touch
         Vector3 touchPos = new Vector3();
-        touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        touchPos.set(screenX, screenY, 0);
         camera.unproject(touchPos);
 
         for(String i:buttons.keySet())

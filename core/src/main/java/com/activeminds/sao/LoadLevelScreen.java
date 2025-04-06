@@ -108,9 +108,9 @@ public class LoadLevelScreen implements Screen {
             game.y_map = game.fase.start_xy[1];
             game.px = game.fase.start_xy[2];
             game.py = game.fase.start_xy[3];
-            game.llave[0] = 0;
-            game.llave[1] = 0;
-            game.llave[2] = 0;
+            game.llave[0] = 1;
+            game.llave[1] = 1;
+            game.llave[2] = 1;
             game.municion[0] = 0; // PESAO
             game.municion[1] = 0;
             game.municion[2] = 0;

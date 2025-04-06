@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game
@@ -135,18 +136,30 @@ class BALA {
     float []b_xy = new float[4];
     };
 
+    class partida {
+    char saved = 0;
+    char epi;
+    char level;
+    char dif;
+    int[] ammo = new int[3];
+    int vida;
+    char[] completed = new char[6];
+    char[] armas = new char[6];
+    };
+
 
 
     int lev, epi_actual, p_l, x_map, y_map, llave[] = new int[3], n_secrets,
         t_secrets, visto[][] = new int[10][10];
     int[] armas = new int[6], municion = new int[3];
-    int[] completed = new int[5];
+    int[] completed = new int[6];
     String epi_file, epi_name, file, enemy_file, p_name = "Sigma";
     CHARSET chr = new CHARSET();
     LEVEL fase = new LEVEL();
     T_ENEMY []ene_datos = new T_ENEMY[100];
     BALA[] balas = new BALA[10];
     SPRITE sol, trp, ene1, ene2;
+    partida[] gamesaves = new partida[5];
     boolean MAP = false;
     float frame = 0f, invi = 0f, vari, px, py, escudo, pocima, p_e = 0;
     char p_d = 0, p_p = 0, p_w = 0, desp = 0, p_col = 32, x_room, y_room;
@@ -168,6 +181,28 @@ class BALA {
         camera.setToOrtho(false, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
         //camera.translate(-176, -100);
 
+        for(int i =0; i < 5; i++)
+            gamesaves[i] = new partida();
+
+        FileHandle file = Gdx.files.local("armor.sav");
+        if(file.exists()) {
+            byte[] bytes = file.readBytes();
+
+            ByteBuffer buffer = ByteBuffer.wrap(bytes);
+
+            for (int j = 0; j < 5; ++j) {
+                gamesaves[j].saved = buffer.getChar();
+                gamesaves[j].epi = buffer.getChar();
+                gamesaves[j].level = buffer.getChar();
+                gamesaves[j].dif = buffer.getChar();
+                for (int k = 0; k < 3; ++k)
+                    gamesaves[j].ammo[k] = buffer.getInt();
+                for (int k = 0; k < 6; ++k)
+                    gamesaves[j].completed[k] = buffer.getChar();
+                for (int k = 0; k < 6; ++k)
+                    gamesaves[j].armas[k] = buffer.getChar();
+            }
+        }
 
         loadPalette();
 

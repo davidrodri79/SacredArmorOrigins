@@ -98,12 +98,12 @@ public class GameScreen implements Screen {
             ;
 
 
-            /*
-            if(escudo>0) escudo-=K;
-            if(pocima>0) pocima-=K;
-            if(invi>0) invi-=K;
 
-            */
+            if(game.escudo>0) game.escudo-=K;
+            if(game.pocima>0) game.pocima-=K;
+            if(game.invi>0) game.invi-=K;
+
+
             // MOVER ENEMIGOS, AQUI
             for(int g=0; g<game.fase.e_n; ++g)
                 if(((char)game.ene_datos[g].xy[0]==game.x_map) && ((char)game.ene_datos[g].xy[1]==game.y_map)) move_enemy((char)g);
@@ -517,7 +517,7 @@ public class GameScreen implements Screen {
     {
         char g,i,xy;
         //out_var(300,10,(int)game.p_e);
-        if(((char)game.px==(char)game.ene_datos[n].xy[2]) && ((char)game.py==(char)game.ene_datos[n].xy[3]) && ((char)game.p_e==0)){
+        if(((char)game.px==(char)game.ene_datos[n].xy[2]) && ((char)game.py==(char)game.ene_datos[n].xy[3]) && ((char)game.p_e==0) && game.escudo == 0){
             game.p_e=2;
             game.p_l-=5;
             //start_sound(clak);
