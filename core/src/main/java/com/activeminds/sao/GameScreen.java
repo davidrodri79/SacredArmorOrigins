@@ -346,6 +346,7 @@ public class GameScreen implements Screen {
                     case 10:
                         game.p_e = 2;
                         game.p_l -= 3;
+                        game.start_sound("sigma0");
                         break;
                     case 51:
                     case 11:
@@ -514,7 +515,7 @@ public class GameScreen implements Screen {
                      else {
                          asigna_bala(xx,yy,3,0,game.p_d);
                         game.municion[0]-=1;
-                        //start_sound(weap1);
+                        game.start_sound("pistola");
                      }
                      break;
             case 2 : if(game.municion[0]<3) NO_AMMO = true;
@@ -523,14 +524,14 @@ public class GameScreen implements Screen {
                         asigna_bala(xx + 0.2f, yy, 3, 0, game.p_d);
                         asigna_bala(xx - 0.2f, yy, 3, 0, game.p_d);
                         game.municion[0] -= 3;
-                        //start_sound(weap2);
+                        game.start_sound("ametrall");
                     }
                     break;
             case 3 : if(game.municion[1] == 0) NO_AMMO = true;
                     else {
                         asigna_bala(xx,yy,1.3f,1,game.p_d);
                         game.municion[1]-=1;
-                        //start_sound(weap3);
+                        game.start_sound("lanzacoh");
                     }
                     break;
             case 4 : if(game.municion[1]<2) NO_AMMO = true;
@@ -538,14 +539,14 @@ public class GameScreen implements Screen {
                         asigna_bala(xx - 0.2f, yy, 1.6f, 1, game.p_d);
                         asigna_bala(xx + 0.3f, yy, 1.6f, 1, game.p_d);
                         game.municion[1] -= 2;
-                        //start_sound(weap3);
+                        game.start_sound("aniquila");
                     }
                     break;
             case 5 : if(game.municion[2]<5) NO_AMMO = true;
                     else {
                         asigna_bala(xx,yy,1.5f,2,game.p_d);
                         game.municion[2]-=5;
-                        //start_sound(weap5);
+                        game.start_sound("dragon");
                     }
                  break;
             case 6 : if(game.municion[2]<15) NO_AMMO = true;
@@ -553,7 +554,7 @@ public class GameScreen implements Screen {
                         asigna_bala(xx-0.3f,yy,1,2,game.p_d);
                         asigna_bala(xx+0.3f,yy,1,2,game.p_d);
                         game.municion[2]-=15;
-                        //start_sound(weap5);
+                        game.start_sound("inferno");
                     }
                     break;
         };
@@ -571,7 +572,7 @@ public class GameScreen implements Screen {
             game.ene_datos[xy-1].est=2;
             game.ene_datos[xy-1].life-=5;
             if(game.pocima>0) game.ene_datos[xy-1].life-=15;
-            //start_sound(clak);
+            game.start_sound("punch");
             if(game.ene_datos[xy-1].life<=0)
                 game.ene_datos[xy-1].est=5;
             if(game.ene_datos[xy-1].life<=-5)
@@ -586,7 +587,7 @@ public class GameScreen implements Screen {
         if(((char)game.px==(char)game.ene_datos[n].xy[2]) && ((char)game.py==(char)game.ene_datos[n].xy[3]) && ((char)game.p_e==0) && game.escudo == 0){
             game.p_e=2;
             game.p_l-=5;
-            //start_sound(clak);
+            game.start_sound("punch");
         };
         if (game.p_e>4) return;
         if(game.p_l<1) {game.p_e=5; show_mes(game.p_name+" ha muerto.");};
@@ -643,7 +644,7 @@ public class GameScreen implements Screen {
             case 48 : game.fase.map[g][i][h][f]=9; game.fase.map[g][i][h-1][f]=8; break;
             case 51 : game.fase.map[g][i][h][f]=1; break;
         };
-        //start_sound(clak);
+        game.start_sound("clak");
     }
 
 

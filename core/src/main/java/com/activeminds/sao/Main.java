@@ -3,6 +3,7 @@ package com.activeminds.sao;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -172,6 +173,17 @@ class BALA {
         manager = new AssetManager();
         manager.load("gui/Button-on.png", Texture.class);
         manager.load("gui/Button-off.png", Texture.class);
+        manager.load("SOUND/aniquila.wav", Sound.class);
+        manager.load("SOUND/ametrall.wav", Sound.class);
+        manager.load("SOUND/clak.wav", Sound.class);
+        manager.load("SOUND/dragon.wav", Sound.class);
+        manager.load("SOUND/inferno.wav", Sound.class);
+        manager.load("SOUND/lanzacoh.wav", Sound.class);
+        manager.load("SOUND/pistola.wav", Sound.class);
+        manager.load("SOUND/punch.wav", Sound.class);
+        manager.load("SOUND/sigma0.wav", Sound.class);
+        manager.load("SOUND/sigma1.wav", Sound.class);
+        manager.load("SOUND/sigma2.wav", Sound.class);
         manager.finishLoading();
 
         batch = new SpriteBatch();
@@ -361,6 +373,12 @@ class BALA {
         super.dispose();
         batch.dispose();
         image.dispose();
+    }
+
+    void start_sound(String file)
+    {
+        if(SND != 0)
+            manager.get("SOUND/"+file+".wav", Sound.class).play();
     }
 
     Texture loadBinaryImage(String fileName, int width, int height)
