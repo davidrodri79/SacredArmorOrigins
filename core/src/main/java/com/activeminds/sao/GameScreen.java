@@ -68,15 +68,44 @@ public class GameScreen implements Screen {
                 game.setScreen(new LoadLevelScreen(game));
                 dispose();
             }
+            else if(game.epi_actual == 6)
+            {
+                game.setScreen(new FinalScreen(game));
+                dispose();
+            }
+            else
+            {
+                game.setScreen(new EpisodeEndScreen(game));
+                dispose();
+            }
         }
         else if(FIN_DE_FASE)
         {
-            long intervalo=(System.currentTimeMillis() - start_time)/1000;
-            game.horas=(int)intervalo/3600;
-            game.mins=(int)intervalo/60;
-            game.secs=(int)intervalo-(3600*game.horas)-(60*game.mins);
-            game.setScreen(new LevelResultsScreen(game));
-            dispose();
+            if(teleport_state == 1)
+            {
+                player_fade += 2*K;
+                if(player_fade > 10.f)
+                {
+                    long intervalo=(System.currentTimeMillis() - start_time)/1000;
+                    game.horas=(int)intervalo/3600;
+                    game.mins=(int)intervalo/60;
+                    game.secs=(int)intervalo-(3600*game.horas)-(60*game.mins);
+                    game.setScreen(new LevelResultsScreen(game));
+                    dispose();
+                }
+            }
+        }
+        else if (SECRET_FASE)
+        {
+            if(teleport_state == 1)
+            {
+                player_fade += 2*K;
+                if(player_fade > 10.f)
+                {
+                    game.setScreen(new SecretLevelScreen(game));
+                    dispose();
+                }
+            }
         }
         else if (teleport_state != 0)
         {
@@ -226,6 +255,16 @@ public class GameScreen implements Screen {
                 game.MAP = false;
                 joypad.setAsActiveInputProcessor();
             };
+            if(minimap.consumePush("Skip")){
+                SECRET_FASE = true;
+                player_fade = 0f;
+                teleport_state = 1;
+            }
+            if(minimap.consumePush("EpisodeEnd")){
+                FIN_EPI = true;
+                player_fade = 0f;
+                teleport_state = 1;
+            }
             /*
             if(keymap[59]) {help();
                 asm{
@@ -318,11 +357,16 @@ public class GameScreen implements Screen {
                         float xx=game.cx-(20*ppy)+(20*ppx);
                         float yy=game.cy+(10*ppy)+(10*ppx)+game.desp;
                         float xa=xx-20; float ya=yy-20;
-                        show_mes(game.p_name+"%s ha salido de la zona.");
+                        show_mes(game.p_name+" ha salido de la zona.");
                         FIN_DE_FASE = true;
+                        player_fade = 0f;
+                        teleport_state = 1;
                         break;
                     case 31:
+                        show_mes("¡¿Una salida secreta?!");
                         SECRET_FASE = true;
+                        player_fade = 0f;
+                        teleport_state = 1;
                         break;
                     case 28:
                         FIN_EPI = true;
@@ -773,6 +817,8 @@ public class GameScreen implements Screen {
         if(ny<0.0){ ny+=8.0; my-=1; };
         if(ny>=8.0){ ny-=8.0; my+=1; };
 
+        if(mx >= 10 || my >= 10) return;
+
         game.desp=0;
         ba=(char)game.fase.map[mx][my][(char)nx][(char)ny];
 
@@ -1060,7 +1106,7 @@ public class GameScreen implements Screen {
                         case 29: game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.fas_end); break;
                         case 30: game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.teletrans); break;
                         case 31: game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.secret_trans); break;
-                        case 33: if(game.fase.switches[int_map[g][i]-1].estado==1) game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.boton[1]);
+                        case 33: if(int_map[g][i] != 0 && game.fase.switches[int_map[g][i]-1].estado==1) game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.boton[1]);
                         else game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.boton[0]); break;
 
                         case 36 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.door[1]); break;

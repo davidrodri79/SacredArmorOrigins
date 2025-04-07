@@ -47,14 +47,6 @@ public class LoadLevelScreen implements Screen {
             }
         }
 
-
-        //Si episodio Hell, carga armadura sagrada
-        /*if(game.epi_actual==6){
-            ptr=fopen("warrior\\sacred.war","rb");
-            load_warrior(sol);
-            fclose(ptr);
-        };*/
-
         //cambia_color(32,p_col);
 
         //Puerta a Hell abierta si 5 reinos completados

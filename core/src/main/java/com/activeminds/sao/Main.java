@@ -560,7 +560,12 @@ class BALA {
 
     void load_player()
     {
-        FileHandle f = Gdx.files.internal("WARRIOR/PLAYER.WAR");
+        String spriteFile = "WARRIOR/PLAYER.WAR";
+        //Si episodio Hell, carga armadura sagrada
+        if(epi_actual==6){
+            spriteFile = "WARRIOR/SACRED.WAR";
+        };
+        FileHandle f = Gdx.files.internal(spriteFile);
         InputStream inputStream = f.read();
         sol = load_warrior(inputStream);
         try {
