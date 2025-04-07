@@ -164,7 +164,7 @@ class BALA {
     boolean MAP = false;
     float frame = 0f, invi = 0f, vari, px, py, escudo, pocima, p_e = 0;
     char p_d = 0, p_p = 0, p_w = 0, desp = 0, p_col = 32, x_room, y_room;
-    int DIF = 1, S_MAP = 2, horas, mins, secs;
+    int DIF = 1, S_MAP = 2, horas, mins, secs, CD = 1, SND = 1;
 
     @Override
     public void create() {
