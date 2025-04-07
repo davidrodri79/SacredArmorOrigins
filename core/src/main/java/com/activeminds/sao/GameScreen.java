@@ -9,9 +9,9 @@ import com.badlogic.gdx.utils.StringBuilder;
 public class GameScreen implements Screen {
 
     Main game;
-    int x, y;
+    int x, y, teleport_state = 0;
     ButtonLayout joypad, minimap;
-    float mes_c = 0f, K;
+    float mes_c = 0f, K, player_fade;
     char[][] tel_map = new char[8][8], int_map  = new char[8][8], ene_map  = new char[8][8];
     String message;
     boolean FIN_DE_FASE, FIN_EPI, SECRET_FASE;
@@ -78,6 +78,28 @@ public class GameScreen implements Screen {
             game.setScreen(new LevelResultsScreen(game));
             dispose();
         }
+        else if (teleport_state != 0)
+        {
+            if(teleport_state == 1)
+            {
+                player_fade += 2*K;
+                if(player_fade > 10.f)
+                {
+                    teletransporte((char)(tel_map[game.x_room][game.y_room]-1));
+                    set_maps();
+                    teleport_state = 2;
+                }
+            }
+            else
+            {
+                player_fade -= 2*K;
+                if(player_fade <= 0)
+                {
+                    teleport_state = 0;
+                    player_fade = 0;
+                }
+            }
+        }
         else
         {
             game.x_room = (char) game.px;
@@ -109,7 +131,7 @@ public class GameScreen implements Screen {
                 if(((char)game.ene_datos[g].xy[0]==game.x_map) && ((char)game.ene_datos[g].xy[1]==game.y_map)) move_enemy((char)g);
 
 
-            if(tel_map[game.x_room][game.y_room] > 0) teletransporte((char)(tel_map[game.x_room][game.y_room]-1));
+            if(tel_map[game.x_room][game.y_room] > 0) teleport_state = 1;
 
             if((int_map[game.x_room][game.y_room] > 0) && (joypad.consumePush("Push"))) conecta_int((char)(int_map[game.x_room][game.y_room]-1));
 
@@ -1092,7 +1114,16 @@ public class GameScreen implements Screen {
                         if(game.escudo>0){game.COPY_BUFFER_1(scr,j-20,k-40,20,59,game.field[1]);
                             game.COPY_BUFFER_2(scr,j,k-40,20,59,game.field[1]);
                         };
-                        if(game.invi > 0f) show_warrior(scr, null,game.px,game.py,game.p_d,game.p_p,(char)game.p_e,game.p_w,game.desp);
+                        if(teleport_state != 0) {
+                            ppy=game.py-0.5f;
+                            ppx=game.px-0.5f;
+                            xx=(int)(game.cx-(20*ppy)+(20*ppx));
+                            yy=(int)(game.cy+(10*ppy)+(10*ppx)+game.desp);
+                            float xa=xx-20, ya=yy-20;
+                            game.Random_Buffer(scr,xa,ya,40,39,game.sol.l_stand[0],1,1,player_fade/10f);
+                            game.Random_Buffer(scr,xa,ya-20,40,39,game.sol.b_stand[0],1,1,player_fade/10f);
+                        }
+                        else if(game.invi > 0f) show_warrior(scr, null,game.px,game.py,game.p_d,game.p_p,(char)game.p_e,game.p_w,game.desp);
                         else show_warrior(scr, game.sol,game.px,game.py,game.p_d,game.p_p,(char)game.p_e,game.p_w,game.desp);
                     };
 

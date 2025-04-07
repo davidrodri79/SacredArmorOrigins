@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -632,5 +633,21 @@ class BALA {
     public void Shadow_Buffer(SpriteBatch scr, int x, int y, int sx, int sy, Texture texture, int type)
     {
         batch.draw(texture, x + GAME_SCREEN_START_X, VIEWPORT_HEIGHT - y - sy);
+    }
+
+    public void Random_Buffer(SpriteBatch scr, float x, float y, int sx, int sy, Texture texture, int type, int dir, float prob) {
+
+        for(int i = 0; i < sy; i++)
+        {
+            for(int j = 0; j < sx; j++)
+            {
+                Color c = new Color(texture.getTextureData().consumePixmap().getPixel(j,i));
+                if(c.a > 0.f && 1.f - Math.random() > prob)
+                {
+                    shapeRenderer.setColor(c.r, c.g, c.b, c.a);
+                    shapeRenderer.rect(x + j + GAME_SCREEN_START_X, VIEWPORT_HEIGHT - y - i, 1, 1);
+                }
+            }
+        }
     }
 }

@@ -61,7 +61,7 @@ public class MainMenuScreen implements Screen {
             {
                 game.lev=0; game.p_l=100; game.epi_actual=0;
                 for(int j=0; j<6; ++j) game.armas[j]=0;
-                game.setScreen(new LoadLevelScreen(game));
+                game.setScreen(new DifficultyScreen(game));
                 dispose();
             }
             if(op == 1)

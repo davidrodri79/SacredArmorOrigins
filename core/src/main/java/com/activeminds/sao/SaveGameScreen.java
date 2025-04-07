@@ -30,7 +30,7 @@ public class SaveGameScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        String[] epis={"Intro  ","Clasico","Mediev.","Futuro","Cristal","Volcan","Infier."},
+        String[] epis={"Intro  ","Clasico","Mediev.","Futuro ","Cristal","Volcan ","Infier."},
         difs={"norm.","difi.","extr."};
 
         game.camera.update();

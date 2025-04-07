@@ -28,7 +28,7 @@ public class LoadGameScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        String[] epis={"Intro  ","Clasico","Mediev.","Futuro","Cristal","Volcan","Infier."},
+        String[] epis={"Intro  ","Clasico","Mediev.","Futuro ","Cristal","Volcan ","Infier."},
             difs={"norm.","difi.","extr."};
 
         game.camera.update();
@@ -51,6 +51,8 @@ public class LoadGameScreen implements Screen {
         game.COPY_BUFFER_1(game.batch,30,60+(16*op),22,18,game.helmet[1]);
         game.COPY_BUFFER_2(game.batch,268,60+(16*op),22,18,game.helmet[1]);
         game.batch.end();
+
+        joypad.render(game.batch, game.batch);
 
         if(joypad.consumePush("Up")) {op--; };
         if(joypad.consumePush("Down")) {op++;};
