@@ -35,24 +35,24 @@ public class HelpScreen implements Screen {
 
         if(step == 0) {
             game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
-            game.Copytext(game.batch,110,10,"ESCENARIOS");
+            game.Copytext(game.batch,110,10,game.loc.get("scenery"));
             game.COPY_BUFFER_1(game.batch,10,25,40,39,game.chr.teletrans);
             game.COPY_BUFFER_1(game.batch,10,70,40,39,game.chr.boton[0]);
             game.COPY_BUFFER_1(game.batch,10,120,40,23,game.chr.bad_tile[0]);
             game.COPY_BUFFER_1(game.batch,10,150,40,23,game.chr.mor_tile[0]);
-            game.Copytext(game.batch,60,35,"Teletransporte");
-            game.Copytext(game.batch,60,50,"Cambio de lugar");
-            game.Copytext(game.batch,60,80,"Interruptor");
-            game.Copytext(game.batch,60,95,"Activa baldosa o puerta");
-            game.Copytext(game.batch,60,130,"Baldosa dañina");
-            game.Copytext(game.batch,60,160,"Baldosa mortal");
+            game.Copytext(game.batch,60,35,game.loc.get("teleport"));
+            game.Copytext(game.batch,60,50,game.loc.get("changeLocation"));
+            game.Copytext(game.batch,60,80,game.loc.get("switch"));
+            game.Copytext(game.batch,60,95,game.loc.get("activateTileDoor"));
+            game.Copytext(game.batch,60,130,game.loc.get("harmingTile"));
+            game.Copytext(game.batch,60,160,game.loc.get("lethalTile"));
 
-            game.Copytext(game.batch,40,185,"Pulsa SPACE para seguir");
+            game.Copytext(game.batch,40,185,game.loc.get("pressSpaceContinue"));
         }
         else if (step == 1)
         {
             game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
-            game.Copytext(game.batch,120,10,"OBJETOS");
+            game.Copytext(game.batch,120,10,game.loc.get("objects"));
             game.COPY_BUFFER_1(game.batch,10,25,24,26,game.keys[0]);
             game.COPY_BUFFER_1(game.batch,35,25,24,26,game.keys[1]);
             game.COPY_BUFFER_1(game.batch,60,25,24,26,game.keys[2]);
@@ -68,30 +68,30 @@ public class HelpScreen implements Screen {
             game.COPY_BUFFER_1(game.batch,150,120,24,26,game.addings[10]);
             game.COPY_BUFFER_1(game.batch,150,150,24,26,game.addings[1]);
 
-            game.Copytext(game.batch,95,35,"Llaves");
-            game.Copytext(game.batch,95,70,"Municion");
-            game.Copytext(game.batch,40,100,"Botiquin");
-            game.Copytext(game.batch,40,130,"Invisible");
-            game.Copytext(game.batch,40,160,"Fuerza");
+            game.Copytext(game.batch,95,35, game.loc.get("keys"));
+            game.Copytext(game.batch,95,70,game.loc.get("ammo"));
+            game.Copytext(game.batch,40,100,game.loc.get("medikit"));
+            game.Copytext(game.batch,40,130,game.loc.get("invisible"));
+            game.Copytext(game.batch,40,160,game.loc.get("strength"));
 
-            game.Copytext(game.batch,180,100,"Salud 200");
-            game.Copytext(game.batch,180,130,"Mapa");
-            game.Copytext(game.batch,180,160,"Invencible");
+            game.Copytext(game.batch,180,100,game.loc.get("health200"));
+            game.Copytext(game.batch,180,130,game.loc.get("map"));
+            game.Copytext(game.batch,180,160,game.loc.get("invincible"));
 
-            game.Copytext(game.batch,40,185,"Pulsa SPACE para seguir");
+            game.Copytext(game.batch,40,185,game.loc.get("pressSpaceContinue"));
         }
         else if (step == 2)
         {
             game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
 
-            game.Copytext(game.batch,30,60,"Active Minds 1998,2025");
+            game.Copytext(game.batch,30,60,game.loc.get("activeMindsTm"));
 
-            game.Copytext(game.batch,20,85,"          STAFF");
-            game.Copytext(game.batch,20,110,"Idea original     NHSP");
-            game.Copytext(game.batch,20,125,"Programacion      NHSP");
-            game.Copytext(game.batch,20,140,"Graficos        NHSP,MTX");
-            game.Copytext(game.batch,20,155,"Sonido            NHSP");
-            game.Copytext(game.batch,20,170,"Mapas        NHSP,MTX,LUKE");
+            game.Copytext(game.batch,20,85,game.loc.get("credits1"));
+            game.Copytext(game.batch,20,110,game.loc.get("credits2"));
+            game.Copytext(game.batch,20,125,game.loc.get("credits3"));
+            game.Copytext(game.batch,20,140,game.loc.get("credits4"));
+            game.Copytext(game.batch,20,155,game.loc.get("credits5"));
+            game.Copytext(game.batch,20,170,game.loc.get("credits6"));
         }
 
         game.batch.end();

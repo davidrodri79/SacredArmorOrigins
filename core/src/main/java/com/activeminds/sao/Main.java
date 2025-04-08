@@ -18,6 +18,7 @@ import java.nio.ByteBuffer;
 
 /* TODO:
     X Instrucciones
+    Localización
     AJuste de dificultad
     Sonidos
     Invisibilidad
@@ -28,6 +29,7 @@ import java.nio.ByteBuffer;
 public class Main extends Game
 {
 
+    LocalizationManager loc;
     AssetManager manager;
     public SpriteBatch batch;
     public ShapeRenderer shapeRenderer;
@@ -177,6 +179,9 @@ class BALA {
 
     @Override
     public void create() {
+
+         loc = new LocalizationManager();
+         loc.loadDefaultLocale();
 
         manager = new AssetManager();
         manager.load("gui/Button-on.png", Texture.class);

@@ -25,11 +25,11 @@ public class EpisodeEndScreen implements Screen {
     public void render(float delta) {
 
         String sacred_item[]={
-            "    El pergamino del alma   ",
-            "  El libro de las armaduras ",
-            "    La malla de armadura    ",
-            " El diamante indestructible ",
-            "    La llama de la fusion   "};
+            game.loc.get("sacred1"),
+            game.loc.get("sacred2"),
+            game.loc.get("sacred3"),
+            game.loc.get("sacred4"),
+            game.loc.get("sacred5")};
 
         ScreenUtils.clear(0, 0, 0, 1f);
 
@@ -40,11 +40,11 @@ public class EpisodeEndScreen implements Screen {
         game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
         game.Copytext(game.batch,50,20,game.epi_name);
         game.COPY_BUFFER_1(game.batch,140,40,40,39,game.chr.epi_end);
-        game.Copytext(game.batch,10,90," Has conseguido uno de los");
-        game.Copytext(game.batch,10,115," cinco objetos sagrados:");
+        game.Copytext(game.batch,10,90,game.loc.get("sacredGot1"));
+        game.Copytext(game.batch,10,115,game.loc.get("sacredGot2"));
         game.Copytext(game.batch,10,140,sacred_item[game.epi_actual-1]);
 
-        game.Copytext(game.batch,35,180,"Pulsa SPACE para seguir");
+        game.Copytext(game.batch,35,180,game.loc.get("pressSpaceContinue"));
 
         game.batch.end();
 

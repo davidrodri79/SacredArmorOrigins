@@ -28,18 +28,19 @@ public class FinalScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        String frases[]={"  Active Minds 1998,2025   ",
-            " Argumento original : NHSP ",
-            "  Episodio clasico : NHSP  ",
-            " Episodio medieval : NHSP  ",
-            " Episodio futurista : MTX  ",
-            "Episodio volcan : MTX,LUKE ",
-            "  Episodio cristal : NHSP  ",
-            " Episodio infierno : NHSP  ",
-            "   Ilustraciones : NHSP    ",
-            "   Fuente y fondos : MTX   ",
-            "    Menus : NHSP y MTX     ",
-            "    ¡Gracias por jugar!    ",
+        String frases[]={
+            game.loc.get("finalCredits1"),
+            game.loc.get("finalCredits2"),
+            game.loc.get("finalCredits3"),
+            game.loc.get("finalCredits4"),
+            game.loc.get("finalCredits5"),
+            game.loc.get("finalCredits6"),
+            game.loc.get("finalCredits7"),
+            game.loc.get("finalCredits8"),
+            game.loc.get("finalCredits9"),
+            game.loc.get("finalCredits10"),
+            game.loc.get("finalCredits11"),
+            game.loc.get("finalCredits12"),
             ""};
 
         ScreenUtils.clear(0, 0, 0, 1f);
@@ -53,29 +54,29 @@ public class FinalScreen implements Screen {
             game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
             game.COPY_BUFFER_1(game.batch, 140, 40, 40, 39, game.chr.epi_end);
             game.Copytext(game.batch, 50, 20, game.epi_name);
-            game.Copytext(game.batch, 10, 90, " Este parece ser el cerebro");
-            game.Copytext(game.batch, 10, 110, " de esta fortaleza. Si lo ");
-            game.Copytext(game.batch, 10, 130, " destruyes, los monstruos");
-            game.Copytext(game.batch, 10, 150, " moriran y habras cumplido");
-            game.Copytext(game.batch, 10, 170, "        tu mision.");
+            game.Copytext(game.batch, 10, 90, game.loc.get("endingA1"));
+            game.Copytext(game.batch, 10, 110, game.loc.get("endingA2"));
+            game.Copytext(game.batch, 10, 130, game.loc.get("endingA3"));
+            game.Copytext(game.batch, 10, 150, game.loc.get("endingA4"));
+            game.Copytext(game.batch, 10, 170, game.loc.get("endingA5"));
         }
         else if (step == 1)
         {
             game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
-            game.Copytext(game.batch,10,30," Ahora, tu mundo podra re-");
-            game.Copytext(game.batch,10,50," cuperar su libertad.Seras");
-            game.Copytext(game.batch,10,70," un heroe de leyenda, el");
-            game.Copytext(game.batch,10,90," guerrero de la Armadura");
-            game.Copytext(game.batch,10,110," Sagrada.");
-            game.Copytext(game.batch,10,130," Pero sabes que muchos");
-            game.Copytext(game.batch,10,150," otros mundos no estan");
-            game.Copytext(game.batch,10,170," a salvo de esta amenaza.");
+            game.Copytext(game.batch,10,30, game.loc.get("endingB1"));
+            game.Copytext(game.batch,10,50,game.loc.get("endingB2"));
+            game.Copytext(game.batch,10,70,game.loc.get("endingB3"));
+            game.Copytext(game.batch,10,90,game.loc.get("endingB4"));
+            game.Copytext(game.batch,10,110,game.loc.get("endingB5"));
+            game.Copytext(game.batch,10,130,game.loc.get("endingB6"));
+            game.Copytext(game.batch,10,150,game.loc.get("endingB7"));
+            game.Copytext(game.batch,10,170,game.loc.get("endingB8"));
         }
         else if (step == 2)
         {
             game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
             game.Copytext(game.batch,15,185,frases[current_phrase]);
-            if(current_phrase==11) game.Copytext(game.batch,130,90,"  FIN  ");
+            if(current_phrase==11) game.Copytext(game.batch,130,90,game.loc.get("theEnd"));
 
             if(System.currentTimeMillis() > lastPhraseChangeTime + 2000)
             {

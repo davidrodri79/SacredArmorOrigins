@@ -33,10 +33,10 @@ public class DifficultyScreen implements Screen {
 
         game.batch.begin();
         game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
-        game.Copytext(game.batch,120,70,"NORMAL");
-        game.Copytext(game.batch,120,100,"DIFICIL");
-        game.Copytext(game.batch,120,130,"EXTREMO!");
-        game.Copytext(game.batch,60,20,"NIVEL DE DIFICULTAD");
+        game.Copytext(game.batch,120,70,game.loc.get("normal"));
+        game.Copytext(game.batch,120,100,game.loc.get("hard"));
+        game.Copytext(game.batch,120,130,game.loc.get("extreme"));
+        game.Copytext(game.batch,60,20,game.loc.get("difficultyLevel"));
         game.COPY_BUFFER_1(game.batch,80,65+(30*op),22,18,game.helmet[1]);
         game.COPY_BUFFER_2(game.batch,218,65+(30*op),22,18,game.helmet[1]);
 
