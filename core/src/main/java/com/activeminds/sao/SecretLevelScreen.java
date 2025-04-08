@@ -34,13 +34,13 @@ public class SecretLevelScreen implements Screen {
         game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
 
         game.Copytext(game.batch,50,20,game.epi_name);
-        game.Copytext(game.batch,40,50,"¡Enhorabuena, soldado!");
-        game.Copytext(game.batch,10,80,"Has encontrado la entrada a");
-        game.Copytext(game.batch,10,100,"la zona secreta del reino.");
-        game.Copytext(game.batch,10,120,"Preparate para el desafio y");
-        game.Copytext(game.batch,10,140,"encuentra el objeto sagrado.");
+        game.Copytext(game.batch,40,50,game.loc.get("secretLevel1"));
+        game.Copytext(game.batch,10,80,game.loc.get("secretLevel2"));
+        game.Copytext(game.batch,10,100,game.loc.get("secretLevel3"));
+        game.Copytext(game.batch,10,120,game.loc.get("secretLevel4"));
+        game.Copytext(game.batch,10,140,game.loc.get("secretLevel5"));
 
-        game.Copytext(game.batch,35,180,"Pulsa SPACE para seguir");
+        game.Copytext(game.batch,35,180,game.loc.get("pressSpaceContinue"));
 
         game.batch.end();
 

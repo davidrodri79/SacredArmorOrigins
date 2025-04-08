@@ -36,16 +36,16 @@ public class SelectColorScreen implements Screen {
 
         game.batch.begin();
         game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
-        game.Copytext(game.batch,80,10,"COLOR DEL SOLDADO");
+        game.Copytext(game.batch,80,10,game.loc.get("soldierColor"));
         StringBuilder frase = new StringBuilder();
-        frase.append("  Pulsa ");
+        frase.append(game.loc.get("changeColor1"));
         frase.append((char)27);
-        frase.append(" o ");
+        frase.append(game.loc.get("changeColor2"));
         frase.append((char)26);
-        frase.append(" para cambiar");
+        frase.append(game.loc.get("changeColor3"));
         game.Copytext(game.batch,10,100,frase.toString());
-        game.Copytext(game.batch,10,120,"   el color, y ENTER para  ");
-        game.Copytext(game.batch,10,140,"         confirmar         ");
+        game.Copytext(game.batch,10,120,game.loc.get("changeColor4"));
+        game.Copytext(game.batch,10,140,game.loc.get("changeColor5"));
         game.COPY_BUFFER_1(game.batch,140,50,40,39,game.sol.l_stand[0]);
         game.COPY_BUFFER_1(game.batch,140,30,40,39,game.sol.b_stand[0]);
         game.batch.end();

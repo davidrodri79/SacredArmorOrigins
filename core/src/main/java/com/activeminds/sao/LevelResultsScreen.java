@@ -40,7 +40,7 @@ public class LevelResultsScreen implements Screen {
         game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
         game.Copytext(game.batch,50,20,game.epi_name);
         game.Copytext(game.batch,20,50,game.fase.map_name);
-        game.Copytext(game.batch,20,70,"¡Zona completada!");
+        game.Copytext(game.batch,20,70,game.loc.get("zoneCompleted"));
         //game.Copytext(game.batch,20,90,"��������������������������");
         game.Copytext(game.batch,20,90,separator.toString());
         int j=0;
@@ -48,16 +48,16 @@ public class LevelResultsScreen implements Screen {
             if(game.ene_datos[i].est>=5) j++;
 
         String frase;
-        frase="Enemigos muertos     "+j+"/"+game.fase.e_n;
+        frase=game.loc.get("enemyKills")+j+"/"+game.fase.e_n;
         game.Copytext(game.batch,20,100,frase);
-        frase="Areas secretas       "+game.n_secrets+"/"+game.t_secrets;
+        frase=game.loc.get("secretAreas")+game.n_secrets+"/"+game.t_secrets;
         game.Copytext(game.batch,20,120,frase);
-        frase="Tiempo             "+String.format("%d:%02d:%02d",game.horas,game.mins,game.secs);
+        frase=game.loc.get("time")+String.format("%d:%02d:%02d",game.horas,game.mins,game.secs);
         game.Copytext(game.batch,20,140,frase);
         //game.Copytext(game.batch,20,155,"��������������������������");
         game.Copytext(game.batch,20,155,separator.toString());
 
-        game.Copytext(game.batch,35,180,"Pulsa SPACE para seguir");
+        game.Copytext(game.batch,35,180, game.loc.get("pressSpaceContinue"));
         game.batch.end();
 
         joypad.render(game.batch, game.batch);

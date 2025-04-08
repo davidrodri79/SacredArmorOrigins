@@ -36,15 +36,15 @@ public class OptionsScreen implements Screen {
 
         game.batch.begin();
         game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
-        game.Copytext(game.batch,120,20,"OPCIONES");
-        game.Copytext(game.batch,80,80,"COLOR SOLDADO");
-        game.Copytext(game.batch,80,110,"NOMBRE JUGADOR");
-        game.Copytext(game.batch,80,140,"MUSICA CD");
-        game.Copytext(game.batch,80,170,"SONIDO");
-        if(game.CD == 1) game.Copytext(game.batch,200,140,"SI");
-        else game.Copytext(game.batch,200,140,"NO");
-        if(game.SND == 1) game.Copytext(game.batch,200,170,"SI");
-        else game.Copytext(game.batch,200,170,"NO");
+        game.Copytext(game.batch,120,20,game.loc.get("options"));
+        game.Copytext(game.batch,80,80,game.loc.get("soldierColor"));
+        game.Copytext(game.batch,80,110,game.loc.get("playerName"));
+        game.Copytext(game.batch,80,140,game.loc.get("cdMusic"));
+        game.Copytext(game.batch,80,170,game.loc.get("sound"));
+        if(game.CD == 1) game.Copytext(game.batch,200,140,game.loc.get("yes"));
+        else game.Copytext(game.batch,200,140,game.loc.get("no"));
+        if(game.SND == 1) game.Copytext(game.batch,200,170,game.loc.get("yes"));
+        else game.Copytext(game.batch,200,170,game.loc.get("no"));
         game.COPY_BUFFER_1(game.batch,45,75+(30*op),22,18,game.helmet[1]);
         game.COPY_BUFFER_2(game.batch,253,75+(30*op),22,18,game.helmet[1]);
         game.batch.end();

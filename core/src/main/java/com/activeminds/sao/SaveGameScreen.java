@@ -30,8 +30,14 @@ public class SaveGameScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        String[] epis={"Intro  ","Clasico","Mediev.","Futuro ","Cristal","Volcan ","Infier."},
-        difs={"norm.","difi.","extr."};
+        String[] epis={game.loc.get("epiShort0"),
+            game.loc.get("epiShort1"),
+            game.loc.get("epiShort2"),
+            game.loc.get("epiShort3"),
+            game.loc.get("epiShort4"),
+            game.loc.get("epiShort5"),
+            game.loc.get("epiShort6")},
+            difs={game.loc.get("difShort1"), game.loc.get("difShort2"), game.loc.get("difShort3")};
 
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
@@ -39,14 +45,14 @@ public class SaveGameScreen implements Screen {
         game.batch.begin();
         game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
 
-        game.Copytext(game.batch,80,20,"SALVAR LA PARTIDA");
-        game.Copytext(game.batch,30,170,"Pulsa ESCAPE para abortar");
+        game.Copytext(game.batch,80,20,game.loc.get("saveGame"));
+        game.Copytext(game.batch,30,170,game.loc.get("pressEscapeAbort"));
         game.Copytext(game.batch,65,75-16,"Éµµµµµµµµµµµµµµµµ»");
         String frase;
         for(int j=0; j<5; ++j){
             if(game.gamesaves[j].saved==1)
                 frase = "³"+epis[game.gamesaves[j].epi]+" L"+(int)(game.gamesaves[j].level+1)+" "+difs[game.gamesaves[j].dif]+"´";
-            else frase = "³  Vacio         ´";
+            else frase = "³"+game.loc.get("emptySlot")+"´";
             game.Copytext(game.batch,65,65+16*j,frase);
             if(j<4)game.Copytext(game.batch,65,75+16*j,"©µµµµµµµµµµµµµµµµª");
         };

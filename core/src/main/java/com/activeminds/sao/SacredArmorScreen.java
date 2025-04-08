@@ -31,13 +31,13 @@ public class SacredArmorScreen implements Screen {
 
         game.batch.begin();
         game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
-        game.Copytext(game.batch,20,40,"Por fin has conseguido re-");
-        game.Copytext(game.batch,20,60,"unir los cinco objetos sa-");
-        game.Copytext(game.batch,20,80,"grados. Ahora podemos crear");
-        game.Copytext(game.batch,20,100,"la armadura sagrada que te");
-        game.Copytext(game.batch,20,120,"permitira entrar en el in-");
-        game.Copytext(game.batch,20,140,"fierno. La batalla final ");
-        game.Copytext(game.batch,20,160,"esta a punto de empezar.");
+        game.Copytext(game.batch,20,40,game.loc.get("sacredArmor1"));
+        game.Copytext(game.batch,20,60,game.loc.get("sacredArmor2"));
+        game.Copytext(game.batch,20,80,game.loc.get("sacredArmor3"));
+        game.Copytext(game.batch,20,100,game.loc.get("sacredArmor4"));
+        game.Copytext(game.batch,20,120,game.loc.get("sacredArmor5"));
+        game.Copytext(game.batch,20,140,game.loc.get("sacredArmor6"));
+        game.Copytext(game.batch,20,160,game.loc.get("sacredArmor7"));
 
         game.batch.end();
 

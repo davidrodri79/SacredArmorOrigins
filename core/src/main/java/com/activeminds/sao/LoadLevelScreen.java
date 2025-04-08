@@ -85,9 +85,9 @@ public class LoadLevelScreen implements Screen {
         game.batch.begin();
         game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
         game.Copytext(game.batch,50,20,game.epi_name);
-        game.Copytext(game.batch,90,80,"Entrando en:");
+        game.Copytext(game.batch,90,80,game.loc.get("entering"));
         game.Copytext(game.batch,20,100,game.fase.map_name);
-        game.Copytext(game.batch,25,150,"Preparado, soldado");
+        game.Copytext(game.batch,25,150,game.loc.get("getReady"));
         game.Copytext(game.batch,235,150,game.p_name);
         game.batch.end();
 
