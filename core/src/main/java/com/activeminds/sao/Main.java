@@ -194,6 +194,25 @@ class BALA {
         camera.setToOrtho(false, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
         //camera.translate(-176, -100);
 
+        FileHandle file0 = Gdx.files.local("usuario.dat");
+        if(file0.exists()) {
+            byte[] bytes = file0.readBytes();
+
+            ByteBuffer buffer = ByteBuffer.wrap(bytes);
+
+            StringBuilder stringBuilder = new StringBuilder();
+            for(int i = 0; i < 6; i++)
+                stringBuilder.append(buffer.getChar());
+            p_name = stringBuilder.toString();
+            p_col = buffer.getChar();
+            CD = buffer.getChar();
+            SND = buffer.getChar();
+        }
+        else
+        {
+            save_options();
+        }
+
         for(int i =0; i < 5; i++)
             gamesaves[i] = new partida();
 
@@ -224,6 +243,27 @@ class BALA {
 
         setScreen(new MainMenuScreen(this));
 
+    }
+
+    void save_options()
+    {
+        FileHandle file = Gdx.files.local("usuario.dat");
+
+        ByteBuffer buffer = ByteBuffer.allocate(20);
+
+        for(int i = 0; i < 6; i++)
+        {
+            if( i < p_name.length())
+                buffer.putChar(p_name.charAt(i));
+            else
+                buffer.putChar(' ');
+        }
+        buffer.putChar(p_col);
+        buffer.putChar((char)CD);
+        buffer.putChar((char)SND);
+
+        byte[] bytes = buffer.array();
+        file.writeBytes(bytes,false);
     }
 
     String lee_disco(InputStream inputStream, int length)
@@ -408,6 +448,29 @@ class BALA {
         return new Texture(pixmap);
     }
 
+    Texture loadBinaryImageColorSwap(InputStream inputStream, int width, int height, char c1, char c2)
+    {
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+
+        try {
+            for(int i = 0; i < height; i++)
+                for(int j = 0; j < width; j++)
+                {
+                    int byteData = inputStream.read();
+                    for(int k = 0; k < 15; k++)
+                        if(byteData == (int)(c1 + k)) byteData = (c2 + k);
+                    pixmap.setColor(palette[byteData][0], palette[byteData][1], palette[byteData][2], byteData == 0 ? 0.f : 1.0f );
+                    //pixmap.setColor(Color.RED); // Color del píxel
+                    pixmap.drawPixel(j, i);   // Dibuja un píxel en (50,50)
+
+                }
+        } catch (IOException e) {
+            System.out.println("Error!!! Not eneough pixels");
+        }
+        return new Texture(pixmap);
+    }
+
+
     Texture loadBinaryShadow(InputStream inputStream, int width, int height, float r, float g, float b, float a)
     {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
@@ -431,6 +494,13 @@ class BALA {
     public void load_scr(String file)
     {
         scr = loadBinaryImage(file, 320, 200);
+    }
+
+    public void load_scr_color_swap(String fileName, char c1, char c2)
+    {
+        FileHandle file = Gdx.files.internal(fileName);
+        InputStream inputStream = file.read();
+        scr = loadBinaryImageColorSwap(inputStream, 320, 200, c1, c2);
     }
 
     Texture[] keys;
@@ -469,7 +539,7 @@ class BALA {
         marca2 = loadBinaryImage(inputStream, 51, 50);
 
         helmet = new Texture[2];
-        helmet[0] = loadBinaryImage(inputStream, 22, 18);
+        helmet[0] = loadBinaryImageColorSwap(inputStream, 22, 18, (char)32, p_col);
         helmet[1] = helmet[0];
 
 
@@ -585,7 +655,7 @@ class BALA {
         };
         FileHandle f = Gdx.files.internal(spriteFile);
         InputStream inputStream = f.read();
-        sol = load_warrior(inputStream);
+        sol = load_warrior_color_swap(inputStream, (char)32, p_col);
         try {
             inputStream.close();
         } catch (IOException e) {
@@ -612,6 +682,29 @@ class BALA {
             spr.w_falling[i] = loadBinaryImage(inputStream, 40, 59);
         for(i=0; i<2; ++i)
             spr.w_ground[i] = loadBinaryImage(inputStream, 60, 30);
+
+        return spr;
+    }
+
+    SPRITE load_warrior_color_swap(InputStream inputStream, char c1, char c2)
+    {
+        SPRITE spr = new SPRITE();
+        int i,g,h;
+        for(i=0; i<2; ++i)
+            spr.b_stand[i] = loadBinaryImageColorSwap(inputStream, 40, 39, c1, c2);
+        for(i=0; i<2; ++i)
+            spr.b_pain[i] = loadBinaryImageColorSwap(inputStream, 40, 39, c1, c2);
+        for(i=0; i<2; ++i)
+            spr.b_punch[i] = loadBinaryImageColorSwap(inputStream, 40, 39, c1, c2);
+        for(h=0; h<2; ++h)
+            for(i=0; i<3; ++i)
+                spr.l_walk[h][i] = loadBinaryImageColorSwap(inputStream, 40, 39, c1, c2);
+        for(i=0; i<2; ++i)
+            spr.l_stand[i] = loadBinaryImageColorSwap(inputStream, 40, 39, c1, c2);
+        for(i=0; i<4; ++i)
+            spr.w_falling[i] = loadBinaryImageColorSwap(inputStream, 40, 59, c1, c2);
+        for(i=0; i<2; ++i)
+            spr.w_ground[i] = loadBinaryImageColorSwap(inputStream, 60, 30, c1, c2);
 
         return spr;
     }

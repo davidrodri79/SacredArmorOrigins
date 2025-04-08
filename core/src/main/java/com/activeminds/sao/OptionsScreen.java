@@ -1,5 +1,7 @@
 package com.activeminds.sao;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -53,10 +55,30 @@ public class OptionsScreen implements Screen {
         if(joypad.consumePush("Down")) {op++;};
         if(joypad.consumePush("Accept"))
         {
+            if(op==0) {
+                game.setScreen(new SelectColorScreen(game));
+                dispose();
+            }
+            if(op==1){
+                Gdx.input.getTextInput(new Input.TextInputListener() {
+                @Override
+                public void input(String text) {
+                    Gdx.app.log("Texto", text);
+                    if(text.length() > 6) game.p_name = text.substring(0,6);
+                    else game.p_name = text;
+                }
+
+                @Override
+                public void canceled() {
+                    Gdx.app.log("Texto", "Cancelado");
+                }
+            }, "Introduce tu nombre", game.p_name, "Escribe aquí...");
+            };
             if(op==2){if (game.CD==1) game.CD=0; else game.CD=1;};
             if(op==3){if (game.SND==1) game.SND=0; else game.SND=1;};
         }
         if(joypad.consumePush("Back")) {
+            game.save_options();
             game.setScreen(new MainMenuScreen(game));
             dispose();
         }

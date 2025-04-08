@@ -13,7 +13,7 @@ public class LevelResultsScreen implements Screen {
     {
         this.game = game;
 
-        game.load_scr("SOLDIER.SCR");
+        game.load_scr_color_swap("SOLDIER.SCR", (char)32, game.p_col);
 
         // Create joypad
         joypad = new ButtonLayout(game.camera, game.manager, null);

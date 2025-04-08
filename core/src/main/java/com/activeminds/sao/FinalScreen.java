@@ -98,7 +98,7 @@ public class FinalScreen implements Screen {
                 }
                 if(step == 2)
                 {
-                    game.load_scr("FINAL.SCR");
+                    game.load_scr_color_swap("FINAL.SCR", (char)69, game.p_col);
                     lastPhraseChangeTime = System.currentTimeMillis();
                 }
                 if(step == 3)

@@ -64,7 +64,7 @@ public class LoadLevelScreen implements Screen {
             if(game.completed[4]==1){ game.fase.map[4][3][7][3]=49; game.fase.map[4][3][7][4]=50;};
         };
 
-        game.load_scr("SOLDIER.SCR");
+        game.load_scr_color_swap("SOLDIER.SCR", (char)32, game.p_col);
         startTime = System.currentTimeMillis();
         loaded = false;
 
