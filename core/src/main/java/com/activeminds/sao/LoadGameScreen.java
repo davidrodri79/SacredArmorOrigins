@@ -71,7 +71,13 @@ public class LoadGameScreen implements Screen {
                     game.completed[j]=game.gamesaves[op].completed[j];
 
                 game.setScreen(new LoadLevelScreen(game));
+                dispose();
             }
+        }
+        if(joypad.consumePush("Back"))
+        {
+            game.setScreen(new MainMenuScreen(game));
+            dispose();
         }
 
         if(op<0) op=4;

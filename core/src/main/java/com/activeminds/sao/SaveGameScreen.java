@@ -95,7 +95,12 @@ public class SaveGameScreen implements Screen {
                 file.writeBytes(bytes,false);
 
                 game.setScreen(new LoadLevelScreen(game));
+                dispose();
             }
+        }
+        if(joypad.consumePush("Back")) {
+            game.setScreen(new LoadLevelScreen(game));
+            dispose();
         }
 
         if(op<0) op=4;

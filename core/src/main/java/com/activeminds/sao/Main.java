@@ -16,6 +16,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
+/* TODO:
+    X Instrucciones
+    AJuste de dificultad
+    Sonidos
+    Invisibilidad
+    Sprites GUI
+ */
+
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game
 {
@@ -24,7 +32,7 @@ public class Main extends Game
     public SpriteBatch batch;
     public ShapeRenderer shapeRenderer;
     public OrthographicCamera camera;
-    private Texture image;
+
     public Texture scr;
 
     float[][] palette;
@@ -188,7 +196,6 @@ class BALA {
 
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
-        image = new Texture("libgdx.png");
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
@@ -240,6 +247,9 @@ class BALA {
 
         Loadfont("ARMOR.FNT");
         load_items();
+
+        this.file = "CLASSIC.CHR";
+        load_charset();
 
         setScreen(new MainMenuScreen(this));
 
@@ -412,7 +422,14 @@ class BALA {
     public void dispose() {
         super.dispose();
         batch.dispose();
-        image.dispose();
+        shapeRenderer.dispose();
+        manager.dispose();
+    }
+
+    void to_dos()
+    {
+        dispose();
+        Gdx.app.exit();
     }
 
     void start_sound(String file)

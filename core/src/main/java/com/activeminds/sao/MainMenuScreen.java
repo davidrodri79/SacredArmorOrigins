@@ -70,10 +70,20 @@ public class MainMenuScreen implements Screen {
                 game.setScreen(new LoadGameScreen(game));
                 dispose();
             }
+            if(op == 2)
+            {
+                game.setScreen(new HelpScreen(game));
+                dispose();
+            }
             if(op == 3)
             {
                 game.setScreen(new OptionsScreen(game));
                 dispose();
+            }
+            if(op == 4)
+            {
+                dispose();
+                game.to_dos();
             }
         }
 
