@@ -197,6 +197,16 @@ class BALA {
         manager.load("SOUND/sigma0.wav", Sound.class);
         manager.load("SOUND/sigma1.wav", Sound.class);
         manager.load("SOUND/sigma2.wav", Sound.class);
+        manager.load("SOUND/exp_bala.wav", Sound.class);
+        manager.load("SOUND/exp_cohe.wav", Sound.class);
+        manager.load("SOUND/exp_fueg.wav", Sound.class);
+        manager.load("SOUND/itmunici.wav", Sound.class);
+        manager.load("SOUND/itllave.wav", Sound.class);
+        manager.load("SOUND/itenergi.wav", Sound.class);
+        manager.load("SOUND/itbotiqu.wav", Sound.class);
+        manager.load("SOUND/itspecia.wav", Sound.class);
+        manager.load("SOUND/secret.wav", Sound.class);
+        manager.load("SOUND/teleport.wav", Sound.class);
         manager.finishLoading();
 
         batch = new SpriteBatch();

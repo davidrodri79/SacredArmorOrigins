@@ -160,7 +160,7 @@ public class GameScreen implements Screen {
                 if(((char)game.ene_datos[g].xy[0]==game.x_map) && ((char)game.ene_datos[g].xy[1]==game.y_map)) move_enemy((char)g);
 
 
-            if(tel_map[game.x_room][game.y_room] > 0) teleport_state = 1;
+            if(tel_map[game.x_room][game.y_room] > 0) { teleport_state = 1; game.start_sound("teleport"); }
 
             if((int_map[game.x_room][game.y_room] > 0) && (joypad.consumePush("Push"))) conecta_int((char)(int_map[game.x_room][game.y_room]-1));
 
@@ -351,6 +351,7 @@ public class GameScreen implements Screen {
                     case 51:
                     case 11:
                         game.p_l = 0;
+                        game.start_sound("sigma1");
                         break;
                     case 29:
                         float ppy=game.py-0.5f;
@@ -382,7 +383,13 @@ public class GameScreen implements Screen {
                         && ((char)game.balas[h].b_xy[3]==(char)game.py)
                         && ((char)game.balas[h].b_xy[0]==game.x_map)
                         && ((char)game.balas[h].b_xy[1]==game.y_map)){
-                        game.balas[h].est=2; //start_sound(explosion);
+                        game.balas[h].est=2;
+                        if(game.balas[h].tipo == 0)
+                            game.start_sound("exp_bala");
+                        else if(game.balas[h].tipo == 1)
+                            game.start_sound("exp_cohe");
+                        else if(game.balas[h].tipo == 2)
+                            game.start_sound("exp_fueg");
                         game.p_e=2;
                         game.p_l-=game.balas[h].fuerza;
                     };
@@ -392,13 +399,13 @@ public class GameScreen implements Screen {
                 if(game.p_l<1) {
                     game.p_e=5;
                     show_mes(game.p_name+" ha muerto.");
-                    //start_sound(dying);
+                    game.start_sound("sigma1");
                 };
                 if(game.p_l<-4) {
                     game.p_e=9;
                     show_mes(game.p_name+" ha sido destruido.");
                     mes_c=25;
-                    //start_sound(falling);
+                    game.start_sound("sigma2");
                 };
 
             }
@@ -599,7 +606,13 @@ public class GameScreen implements Screen {
         char p=1;
         if(game.pocima>0) p=4;
         if(game.ene_datos[ene].est>=5) return;
-        game.balas[bul].est=2; //start_sound(explosion);
+        game.balas[bul].est=2;
+        if(game.balas[bul].tipo == 0)
+            game.start_sound("exp_bala");
+        else if(game.balas[bul].tipo == 1)
+            game.start_sound("exp_cohe");
+        else if(game.balas[bul].tipo == 2)
+            game.start_sound("exp_fueg");
         game.ene_datos[ene].est=2;
         game.ene_datos[ene].life-=game.balas[bul].fuerza*p;
         if(game.ene_datos[ene].life<=0)
@@ -735,22 +748,23 @@ public class GameScreen implements Screen {
 
         switch(game.fase.enemies[n].e_w){
             case 0 : if((char)game.ene_datos[n].est==0) game.ene_datos[n].est=13; break;
-            case 1 : asigna_bala(xx,yy,3,0,dir); /*start_sound(weap1);*/ break;
+            case 1 : asigna_bala(xx,yy,3,0,dir);
+                    game.start_sound("pistola"); break;
             case 2 : asigna_bala(xx,yy,3,0,dir); asigna_bala(xx+0.2f,yy,3,0,dir);
                 asigna_bala(xx-0.2f,yy,3,0,dir);
-                //start_sound(weap2);
+                game.start_sound("ametrall");
                 break;
             case 3 : asigna_bala(xx,yy,1.3f,1,dir);
-                //start_sound(weap3);
+                game.start_sound("lanzacoh");
                 break;
             case 4 : asigna_bala(xx-0.2f,yy,1.6f,1,dir); asigna_bala(xx+0.3f,yy,1.6f,1,dir);
-                //start_sound(weap3);
+                game.start_sound("aniquila");
                 break;
             case 5 : asigna_bala(xx,yy,1.5f,2,dir);
-                //start_sound(weap5);
+                game.start_sound("dragon");
                 break;
             case 6 : asigna_bala(xx-0.3f,yy,1,2,dir); asigna_bala(xx+0.3f,yy,1,2,dir);
-                //start_sound(weap5);
+                game.start_sound("inferno");
                 break;
 
         };
@@ -792,8 +806,15 @@ public class GameScreen implements Screen {
                 case 48:
                 case 49:
                 case 50:
-                case 73: if(game.balas[n].est==1) game.balas[n].est=2;
-                        //start_sound(explosion);
+                case 73: if(game.balas[n].est==1) {
+                    game.balas[n].est = 2;
+                    if (game.balas[n].tipo == 0)
+                        game.start_sound("exp_bala");
+                    else if (game.balas[n].tipo == 1)
+                        game.start_sound("exp_cohe");
+                    else if (game.balas[n].tipo == 2)
+                        game.start_sound("exp_fueg");
+                }
                         return;
             };
 
@@ -854,33 +875,32 @@ public class GameScreen implements Screen {
     void pick_item(char object)
     {
         switch(object){
-            case 12 : game.armas[0]=1; show_mes("Pistola"); break;
-            case 13 : game.armas[1]=1; show_mes("Ametralladora"); break;
-            case 14 : game.armas[2]=1; show_mes("Lanzacohetes"); break;
-            case 15 : game.armas[3]=1; show_mes("\"Aniquilador\""); break;
-            case 16 : game.armas[4]=1; show_mes("\"Dragon\""); break;
-            case 17 : game.armas[5]=1; show_mes("\"Infierno\"!"); break;
-            case 18 : game.llave[0]=1; show_mes("Llave roja"); break;
-            case 19 : game.llave[1]=1; show_mes("Llave amarilla"); break;
-            case 20 : game.llave[2]=1; show_mes("Llave azul"); break;
-            case 21 : game.p_l+=30; show_mes("Botiquin +30"); if(game.p_l>100) game.p_l=100; break;
-            case 22 : game.municion[0]+=20; show_mes("Caja de balas"); break;
-            case 23 : game.municion[1]+=4; show_mes("Cohetes"); break;
-            case 24 : game.municion[2]+=10; show_mes("Frasco de napalm"); break;
-            case 25 : game.p_l=200; show_mes("POCIMA VITAL"); break;
-            case 26 : game.escudo=150; show_mes("ESCUDO PROTECTOR"); break;
-            case 27 : game.pocima=150; show_mes("FUERZA MISTICA"); break;
+            case 12 : game.armas[0]=1; show_mes("Pistola"); game.start_sound("itmunici"); break;
+            case 13 : game.armas[1]=1; show_mes("Ametralladora"); game.start_sound("itmunici"); break;
+            case 14 : game.armas[2]=1; show_mes("Lanzacohetes"); game.start_sound("itmunici"); break;
+            case 15 : game.armas[3]=1; show_mes("\"Aniquilador\""); game.start_sound("itmunici"); break;
+            case 16 : game.armas[4]=1; show_mes("\"Dragon\""); game.start_sound("itmunici"); break;
+            case 17 : game.armas[5]=1; show_mes("\"Infierno\"!"); game.start_sound("itmunici"); break;
+            case 18 : game.llave[0]=1; show_mes("Llave roja"); game.start_sound("itllave"); break;
+            case 19 : game.llave[1]=1; show_mes("Llave amarilla"); game.start_sound("itllave"); break;
+            case 20 : game.llave[2]=1; show_mes("Llave azul"); game.start_sound("itllave"); break;
+            case 21 : game.p_l+=30; show_mes("Botiquin +30"); if(game.p_l>100) game.p_l=100; game.start_sound("itbotiqu"); break;
+            case 22 : game.municion[0]+=20; show_mes("Caja de balas"); game.start_sound("itmunici"); break;
+            case 23 : game.municion[1]+=4; show_mes("Cohetes"); game.start_sound("itmunici"); break;
+            case 24 : game.municion[2]+=10; show_mes("Frasco de napalm"); game.start_sound("itmunici"); break;
+            case 25 : game.p_l=200; show_mes("POCIMA VITAL"); game.start_sound("itbotiqu"); break;
+            case 26 : game.escudo=150; show_mes("ESCUDO PROTECTOR"); game.start_sound("itspecia"); break;
+            case 27 : game.pocima=150; show_mes("FUERZA MISTICA"); game.start_sound("itspecia"); break;
 
-            case 39 : game.invi=150; show_mes("INVISIBILIDAD"); break;
-            case 38 : all_map(); show_mes("Mapa de la zona"); break;
-            case 40 : game.n_secrets++; show_mes("Un area secreta!"); break;
+            case 39 : game.invi=150; show_mes("INVISIBILIDAD"); game.start_sound("itspecia"); break;
+            case 38 : all_map(); show_mes("Mapa de la zona"); game.start_sound("itspecia"); break;
+            case 40 : game.n_secrets++; show_mes("Un area secreta!"); game.start_sound("secret"); break;
 
         };
 
         if (game.municion[0]>199) game.municion[0]=199;
         if (game.municion[1]>99) game.municion[1]=99;
         if (game.municion[2]>299) game.municion[2]=299;
-        //start_sound(pickup);
 
     }
 
