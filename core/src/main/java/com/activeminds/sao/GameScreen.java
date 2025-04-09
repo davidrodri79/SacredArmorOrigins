@@ -633,12 +633,14 @@ public class GameScreen implements Screen {
         float xx, yy;
         int r, est;
 
-        r=(int)(Math.random()) % (20-(7*game.DIF));
+        //r=(int)(Math.random()) % (20-(7*game.DIF));
+        game.ene_datos[n].ai_cooldown -= K;
         game.ene_datos[n].pos=0;
         est=(int)game.ene_datos[n].est;
         xx=game.ene_datos[n].xy[2];
         yy=game.ene_datos[n].xy[3];
 
+        boolean ai_update = game.ene_datos[n].ai_cooldown <= 0f;
         boolean N_DIR = false;
 
         if((est>=5) && (est<13))
@@ -647,8 +649,7 @@ public class GameScreen implements Screen {
         }
         else {
 
-            if (r < 5) {
-                if (r < 3) {
+                if (ai_update) {
                     if (((char) xx == (char) game.px) && ((char) yy < (char) game.py))
                         game.fase.enemies[n].e_d = 0;
                     if (((char) xx == (char) game.px) && ((char) yy > (char) game.py))
@@ -676,9 +677,9 @@ public class GameScreen implements Screen {
                         if (!ene_acceso(xx + K, yy, n)) N_DIR = true;
                         break;
                 } ;
-            } ;
 
-            if((int)(100f*Math.random()) % (20-(4*game.DIF))==0) e_disparo(n);
+            //if((int)(100f*Math.random()) % (20-(4*game.DIF))==0)
+                e_disparo(n);
 
         }
 
@@ -693,6 +694,8 @@ public class GameScreen implements Screen {
         if((est>4) && (est<7)) game.ene_datos[n].est+=K;
         if((est>8) && (est<11)) game.ene_datos[n].est+=K;
         if((est>12) && (est<14)) game.ene_datos[n].est+=K;
+
+        game.ene_datos[n].ai_cooldown = 4f;
 
     }
 
@@ -874,12 +877,11 @@ public class GameScreen implements Screen {
     boolean ene_acceso(float nx, float ny, char n)
     {
 
-        char acc=0, ba, mx=(char)game.x_map, my=(char)game.y_map;
+        char acc=0, ba = 46, mx=(char)game.x_map, my=(char)game.y_map;
 
         game.desp=0;
-        if(nx >= 8) nx = 7;
-        if(ny >= 8) ny = 7;
-        ba=(char)game.fase.map[mx][my][(char)nx][(char)ny];
+        if(nx < 8 && ny < 8)
+            ba=(char)game.fase.map[mx][my][(char)nx][(char)ny];
 
         if(ba==1) acc=1;
         if((ba>7) && (ba<47)) acc=1;

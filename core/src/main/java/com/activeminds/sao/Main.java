@@ -95,6 +95,7 @@ public class Main extends Game
         float est;
         float pos;
         int life;
+        float ai_cooldown = 0f;
 	};
 
 class TELEPORT {
@@ -800,7 +801,7 @@ class BALA {
 
     public void Puts_Shade(SpriteBatch scr, int x, int y, int sx, int sy, Texture texture, int flip) {
 
-        batch.setColor(1f, 1f, 1f, 0.5f);
+        batch.setColor(0.1f, 0.1f, 0.1f, 0.5f);
         batch.draw(texture, x + GAME_SCREEN_START_X, VIEWPORT_HEIGHT - y - sy, sx, sy, 0, 0, sx, sy, flip == 1, false );
         batch.setColor(1f, 1f, 1f, 1f);
     }
