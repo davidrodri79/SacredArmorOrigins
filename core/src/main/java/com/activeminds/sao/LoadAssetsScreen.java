@@ -38,6 +38,14 @@ public class LoadAssetsScreen implements Screen {
         manager.load("gui/EAST_ON.png", Texture.class);
         manager.load("gui/WEST.png", Texture.class);
         manager.load("gui/WEST_ON.png", Texture.class);
+        manager.load("gui/MAP.png", Texture.class);
+        manager.load("gui/MAP_ON.png", Texture.class);
+        manager.load("gui/ATTACK.png", Texture.class);
+        manager.load("gui/ATTACK_ON.png", Texture.class);
+        manager.load("gui/STRAFE.png", Texture.class);
+        manager.load("gui/STRAFE_ON.png", Texture.class);
+        manager.load("gui/SWITCH.png", Texture.class);
+        manager.load("gui/SWITCH_ON.png", Texture.class);
         manager.load("SOUND/aniquila.wav", Sound.class);
         manager.load("SOUND/ametrall.wav", Sound.class);
         manager.load("SOUND/clak.wav", Sound.class);

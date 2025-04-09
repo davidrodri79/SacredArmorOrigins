@@ -37,8 +37,8 @@
       image_off: "gui/NORTH.png"
     },
     {
-      x: 490
-      y: 160
+      x: 460
+      y: 145
       width: 40
       height: 40
       action: Weapon,
@@ -47,30 +47,30 @@
     }
     {
       x: 490
-      y: 110
+      y: 100
       width: 40
       height: 40
       action: Push,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
+      image_on: "gui/SWITCH_ON.png",
+      image_off: "gui/SWITCH.png"
     }
     {
       x: 490
-      y: 60
+      y: 55
       width: 40
       height: 40
       action: Fire,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
+      image_on: "gui/ATTACK_ON.png",
+      image_off: "gui/ATTACK.png"
     }
     {
-      x: 490
+      x: 460
       y: 10
       width: 40
       height: 40
       action: Strafe,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
+      image_on: "gui/STRAFE_ON.png",
+      image_off: "gui/STRAFE.png"
     }
     {
       x: 10
@@ -78,8 +78,8 @@
       width: 40
       height: 40
       action: Map,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
+      image_on: "gui/MAP_ON.png",
+      image_off: "gui/MAP.png"
     }
   ]
 }
