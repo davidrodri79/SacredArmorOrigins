@@ -166,7 +166,7 @@ class BALA {
         t_secrets, visto[][] = new int[10][10];
     int[] armas = new int[6], municion = new int[3];
     int[] completed = new int[6];
-    String epi_file, epi_name, file, enemy_file, p_name = "Sigma";
+    String epi_file, epi_name, file, enemy_file, p_name = "Sigma", enemy_voice0, enemy_voice1, enemy_voice2;
     CHARSET chr = new CHARSET();
     LEVEL fase = new LEVEL();
     T_ENEMY []ene_datos = new T_ENEMY[100];

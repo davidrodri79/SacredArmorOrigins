@@ -17,12 +17,49 @@ public class LoadLevelScreen implements Screen {
         this.game = game;
 
         if(game.epi_actual == 0) game.epi_file = "INTRO.EPI";
-        if(game.epi_actual == 1) game.epi_file = "CLASSIC.EPI";
-        if(game.epi_actual == 2) game.epi_file = "MEDIEV.EPI";
-        if(game.epi_actual == 3) game.epi_file = "FUTURE.EPI";
-        if(game.epi_actual == 4) game.epi_file = "ICE.EPI";
-        if(game.epi_actual == 5) game.epi_file = "FIRE.EPI";
-        if(game.epi_actual == 6) game.epi_file = "HELL.EPI";
+        if(game.epi_actual == 1)
+        {
+            game.epi_file = "CLASSIC.EPI";
+            game.enemy_voice0 = "agamma";
+            game.enemy_voice1 = "caballe";
+            game.enemy_voice2 = "golem";
+        }
+        if(game.epi_actual == 2)
+        {
+            game.epi_file = "MEDIEV.EPI";
+            game.enemy_voice0 = "agamma";
+            game.enemy_voice1 = "caballe";
+            game.enemy_voice2 = "orco";
+
+        }
+        if(game.epi_actual == 3)
+        {
+            game.epi_file = "FUTURE.EPI";
+            game.enemy_voice0 = "agamma";
+            game.enemy_voice1 = "tank";
+            game.enemy_voice2 = "tank";
+        }
+        if(game.epi_actual == 4)
+        {
+            game.epi_file = "ICE.EPI";
+            game.enemy_voice0 = "agamma";
+            game.enemy_voice1 = "mujer";
+            game.enemy_voice2 = "golem";
+        }
+        if(game.epi_actual == 5)
+        {
+            game.epi_file = "FIRE.EPI";
+            game.enemy_voice0 = "agamma";
+            game.enemy_voice1 = "golem";
+            game.enemy_voice2 = "orco";
+        }
+        if(game.epi_actual == 6)
+        {
+            game.epi_file = "HELL.EPI";
+            game.enemy_voice0 = "agamma";
+            game.enemy_voice1 = "agamma";
+            game.enemy_voice2 = "demonio";
+        }
 
         try {
             game.carga_nivel();

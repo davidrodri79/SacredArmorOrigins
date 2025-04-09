@@ -1,5 +1,6 @@
 package com.activeminds.sao;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -381,6 +382,7 @@ public class GameScreen implements Screen {
                             game.start_sound("exp_fueg");
                         game.p_e=2;
                         game.p_l-=game.balas[h].fuerza;
+                        if(game.p_l>=1) game.start_sound("sigma0");
                     };
                 };
 
@@ -547,10 +549,36 @@ public class GameScreen implements Screen {
             game.ene_datos[xy-1].life-=5;
             if(game.pocima>0) game.ene_datos[xy-1].life-=15;
             game.start_sound("punch");
-            if(game.ene_datos[xy-1].life<=0)
-                game.ene_datos[xy-1].est=5;
             if(game.ene_datos[xy-1].life<=-5)
+            {
                 game.ene_datos[xy-1].est=9;
+                if(game.fase.enemies[xy-1].e_t == 0)
+                    game.start_sound(game.enemy_voice0+"2");
+                else if(game.fase.enemies[xy-1].e_t == 1)
+                    game.start_sound(game.enemy_voice1+"2");
+                else if(game.fase.enemies[xy-1].e_t == 2)
+                    game.start_sound(game.enemy_voice2+"2");
+            }
+            else if(game.ene_datos[xy-1].life<=0)
+            {
+                game.ene_datos[xy-1].est=5;
+                if(game.fase.enemies[xy-1].e_t == 0)
+                    game.start_sound(game.enemy_voice0+"1");
+                else if(game.fase.enemies[xy-1].e_t == 1)
+                    game.start_sound(game.enemy_voice1+"1");
+                else if(game.fase.enemies[xy-1].e_t == 2)
+                    game.start_sound(game.enemy_voice2+"1");
+            }
+            else
+            {
+                if(game.fase.enemies[xy-1].e_t == 0)
+                    game.start_sound(game.enemy_voice0+"0");
+                else if(game.fase.enemies[xy-1].e_t == 1)
+                    game.start_sound(game.enemy_voice1+"0");
+                else if(game.fase.enemies[xy-1].e_t == 2)
+                    game.start_sound(game.enemy_voice2+"0");
+            }
+
         };
 
     }
@@ -562,10 +590,11 @@ public class GameScreen implements Screen {
             game.p_e=2;
             game.p_l-=5;
             game.start_sound("punch");
+            if(game.p_l<-4) {game.p_e=9; show_mes(game.p_name+game.loc.get("hasBeenDestroyed")); game.start_sound("sigma2");}
+            else if(game.p_l<1) {game.p_e=5; show_mes(game.p_name+game.loc.get("hasDied")); game.start_sound("sigma1");}
+            else { game.start_sound("sigma0"); }
         };
         if (game.p_e>4) return;
-        if(game.p_l<1) {game.p_e=5; show_mes(game.p_name+game.loc.get("hasDied"));};
-        if(game.p_l<-4) {game.p_e=9; show_mes(game.p_name+game.loc.get("hasBeenDestroyed"));};
     }
 
     void enemy_impact(char ene, char bul)
@@ -582,10 +611,37 @@ public class GameScreen implements Screen {
             game.start_sound("exp_fueg");
         game.ene_datos[ene].est=2;
         game.ene_datos[ene].life-=game.balas[bul].fuerza*p;
-        if(game.ene_datos[ene].life<=0)
-        {game.ene_datos[ene].est=5; /*start_sound(dying);*/};
         if(game.ene_datos[ene].life<=-5)
-        {game.ene_datos[ene].est=9; /*start_sound(falling);*/};
+        {
+            game.ene_datos[ene].est=9;
+            if(game.fase.enemies[ene].e_t == 0)
+                game.start_sound(game.enemy_voice0+"2");
+            else if(game.fase.enemies[ene].e_t == 1)
+                game.start_sound(game.enemy_voice1+"2");
+            else if(game.fase.enemies[ene].e_t == 2)
+                game.start_sound(game.enemy_voice2+"2");
+        }
+        else if(game.ene_datos[ene].life<=0)
+        {
+            game.ene_datos[ene].est=5;
+            if(game.fase.enemies[ene].e_t == 0)
+                game.start_sound(game.enemy_voice0+"1");
+            else if(game.fase.enemies[ene].e_t == 1)
+                game.start_sound(game.enemy_voice1+"1");
+            else if(game.fase.enemies[ene].e_t == 2)
+                game.start_sound(game.enemy_voice2+"1");
+        }
+        else
+        {
+            if(game.fase.enemies[ene].e_t == 0)
+                game.start_sound(game.enemy_voice0+"0");
+            else if(game.fase.enemies[ene].e_t == 1)
+                game.start_sound(game.enemy_voice1+"0");
+            else if(game.fase.enemies[ene].e_t == 2)
+                game.start_sound(game.enemy_voice2+"0");
+        }
+
+
     }
 
     void asigna_bala(float xx, float yy, float vv, int tipo, char dir)
@@ -658,7 +714,7 @@ public class GameScreen implements Screen {
                         game.fase.enemies[n].e_d = 1;
                     if (((char) yy == (char) game.py) && ((char) xx < (char) game.px))
                         game.fase.enemies[n].e_d = 3;
-                    if (game.invi > 0) game.fase.enemies[n].e_d = (char)Math.random() % 4;
+                    if (game.invi > 0) game.fase.enemies[n].e_d = (char)((Math.random()*100) % 4);
                 }
                 ;
                 game.ene_datos[n].pos = game.frame + 1;
@@ -679,13 +735,14 @@ public class GameScreen implements Screen {
                 } ;
 
             //if((int)(100f*Math.random()) % (20-(4*game.DIF))==0)
+            if(ai_update)
                 e_disparo(n);
 
         }
 
 	    if(N_DIR)
         {
-            game.fase.enemies[n].e_d=(char)Math.random() % 4;
+            game.fase.enemies[n].e_d=(char)(Math.random()*100) % 4;
         }
         //NO_MOVE:
         if(est==13) e_punch(n);
@@ -695,7 +752,10 @@ public class GameScreen implements Screen {
         if((est>8) && (est<11)) game.ene_datos[n].est+=K;
         if((est>12) && (est<14)) game.ene_datos[n].est+=K;
 
-        game.ene_datos[n].ai_cooldown = 4f;
+        if(ai_update) {
+            game.ene_datos[n].ai_cooldown = (float)(5f - 2f*game.DIF - Math.random());
+            Gdx.app.log("AI Cooldown", ""+game.ene_datos[n].ai_cooldown);
+        }
 
     }
 
