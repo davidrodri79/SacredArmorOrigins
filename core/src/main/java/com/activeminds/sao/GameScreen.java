@@ -46,13 +46,6 @@ public class GameScreen implements Screen {
         K = delta * 3f;
 
         // LOGIC STEP =========================================
-
-        /*do{
-            asm{
-                mov ah , 0
-                int 1Ah
-            };
-            m1=_DX;*/
         if(FIN_EPI)
         {
             if(game.epi_actual == 0)
@@ -167,10 +160,6 @@ public class GameScreen implements Screen {
             for(char i=0; i<10; ++i)
                 if(game.balas[i].est > 0) move_bullet(i);
 
-
-
-            /*if(kbhit())
-                key=toupper(getch());*/
 
             if(((game.p_l<=0) && joypad.consumePush("Fire"))) { game.setScreen(new LoadLevelScreen(game)); dispose(); }
 
@@ -359,13 +348,13 @@ public class GameScreen implements Screen {
                         float xx=game.cx-(20*ppy)+(20*ppx);
                         float yy=game.cy+(10*ppy)+(10*ppx)+game.desp;
                         float xa=xx-20; float ya=yy-20;
-                        show_mes(game.p_name+" ha salido de la zona.");
+                        show_mes(game.p_name+game.loc.get("exitedZone"));
                         FIN_DE_FASE = true;
                         player_fade = 0f;
                         teleport_state = 1;
                         break;
                     case 31:
-                        show_mes("¡¿Una salida secreta?!");
+                        show_mes(game.loc.get("secretExit"));
                         SECRET_FASE = true;
                         player_fade = 0f;
                         teleport_state = 1;
@@ -398,12 +387,12 @@ public class GameScreen implements Screen {
 
                 if(game.p_l<1) {
                     game.p_e=5;
-                    show_mes(game.p_name+" ha muerto.");
+                    show_mes(game.p_name+game.loc.get("hasDied"));
                     game.start_sound("sigma1");
                 };
                 if(game.p_l<-4) {
                     game.p_e=9;
-                    show_mes(game.p_name+" ha sido destruido.");
+                    show_mes(game.p_name+game.loc.get("hasBeenDestroyed"));
                     mes_c=25;
                     game.start_sound("sigma2");
                 };
@@ -432,19 +421,6 @@ public class GameScreen implements Screen {
                 };
             };
 
-            /*
-            // COMPROBACION DEL TIEMPO TRANSCURRIDO
-
-            asm{
-                mov ah , 0
-                int 1Ah
-            };
-            m2=_DX;
-            K=(float)((m2-m1)*0.25);
-
-        }while(key!='\x1B');
-        */
-
             if(minimap.consumePush("Quit"))
             {
                 game.setScreen(new MainMenuScreen(game));
@@ -466,19 +442,10 @@ public class GameScreen implements Screen {
         if(mes_c > 0) {game.Copytext(game.batch,5,5,message); };
         game.COPY_BUFFER_1(game.batch,0,166,97,34,game.marca1);
         game.COPY_BUFFER_1(game.batch,269,150,51,50,game.marca2);
-        if((game.p_e>6) && (game.p_e<13)) game.Copytext(game.batch,30,95,"PULSA DISPARO PARA REINICIAR");
+        if((game.p_e>6) && (game.p_e<13)) game.Copytext(game.batch,30,95,game.loc.get("pressSpaceToRestart"));
         variables();
         game.batch.end();
         game.shapeRenderer.end();
-        /*
-        CLEAR_BUFFER(scr,0);
-        if(!MAP)visualizar(1,1);
-        else map_2d();
-        if(mes_c) {Copytext(scr,5,5,message); mes_c--;};
-        COPY_BUFFER_1(scr,0,166,97,34,marca1);
-        COPY_BUFFER_1(scr,269,150,51,50,marca2);
-        if((p_e>6) && (p_e<13)) Copytext(scr,30,95,"PULSA SPACE PARA REINICIAR");
-        variables();*/
 
         //FLIP_BUFFER(scr);
 
@@ -565,7 +532,7 @@ public class GameScreen implements Screen {
                     }
                     break;
         };
-        if(NO_AMMO) show_mes("No queda municion");
+        if(NO_AMMO) show_mes(game.loc.get("noAmmoLeft"));
 
     }
 
@@ -597,8 +564,8 @@ public class GameScreen implements Screen {
             game.start_sound("punch");
         };
         if (game.p_e>4) return;
-        if(game.p_l<1) {game.p_e=5; show_mes(game.p_name+" ha muerto.");};
-        if(game.p_l<-4) {game.p_e=9; show_mes(game.p_name+"%s ha sido destruido.");};
+        if(game.p_l<1) {game.p_e=5; show_mes(game.p_name+game.loc.get("hasDied"));};
+        if(game.p_l<-4) {game.p_e=9; show_mes(game.p_name+game.loc.get("hasBeenDestroyed"));};
     }
 
     void enemy_impact(char ene, char bul)
@@ -875,26 +842,26 @@ public class GameScreen implements Screen {
     void pick_item(char object)
     {
         switch(object){
-            case 12 : game.armas[0]=1; show_mes("Pistola"); game.start_sound("itmunici"); break;
-            case 13 : game.armas[1]=1; show_mes("Ametralladora"); game.start_sound("itmunici"); break;
-            case 14 : game.armas[2]=1; show_mes("Lanzacohetes"); game.start_sound("itmunici"); break;
-            case 15 : game.armas[3]=1; show_mes("\"Aniquilador\""); game.start_sound("itmunici"); break;
-            case 16 : game.armas[4]=1; show_mes("\"Dragon\""); game.start_sound("itmunici"); break;
-            case 17 : game.armas[5]=1; show_mes("\"Infierno\"!"); game.start_sound("itmunici"); break;
-            case 18 : game.llave[0]=1; show_mes("Llave roja"); game.start_sound("itllave"); break;
-            case 19 : game.llave[1]=1; show_mes("Llave amarilla"); game.start_sound("itllave"); break;
-            case 20 : game.llave[2]=1; show_mes("Llave azul"); game.start_sound("itllave"); break;
-            case 21 : game.p_l+=30; show_mes("Botiquin +30"); if(game.p_l>100) game.p_l=100; game.start_sound("itbotiqu"); break;
-            case 22 : game.municion[0]+=20; show_mes("Caja de balas"); game.start_sound("itmunici"); break;
-            case 23 : game.municion[1]+=4; show_mes("Cohetes"); game.start_sound("itmunici"); break;
-            case 24 : game.municion[2]+=10; show_mes("Frasco de napalm"); game.start_sound("itmunici"); break;
-            case 25 : game.p_l=200; show_mes("POCIMA VITAL"); game.start_sound("itbotiqu"); break;
-            case 26 : game.escudo=150; show_mes("ESCUDO PROTECTOR"); game.start_sound("itspecia"); break;
-            case 27 : game.pocima=150; show_mes("FUERZA MISTICA"); game.start_sound("itspecia"); break;
+            case 12 : game.armas[0]=1; show_mes(game.loc.get("weapon1")); game.start_sound("itmunici"); break;
+            case 13 : game.armas[1]=1; show_mes(game.loc.get("weapon2")); game.start_sound("itmunici"); break;
+            case 14 : game.armas[2]=1; show_mes(game.loc.get("weapon3")); game.start_sound("itmunici"); break;
+            case 15 : game.armas[3]=1; show_mes(game.loc.get("weapon4")); game.start_sound("itmunici"); break;
+            case 16 : game.armas[4]=1; show_mes(game.loc.get("weapon5")); game.start_sound("itmunici"); break;
+            case 17 : game.armas[5]=1; show_mes(game.loc.get("weapon6")); game.start_sound("itmunici"); break;
+            case 18 : game.llave[0]=1; show_mes(game.loc.get("key1")); game.start_sound("itllave"); break;
+            case 19 : game.llave[1]=1; show_mes(game.loc.get("key2")); game.start_sound("itllave"); break;
+            case 20 : game.llave[2]=1; show_mes(game.loc.get("key3")); game.start_sound("itllave"); break;
+            case 21 : game.p_l+=30; show_mes(game.loc.get("medikit30")); if(game.p_l>100) game.p_l=100; game.start_sound("itbotiqu"); break;
+            case 22 : game.municion[0]+=20; show_mes(game.loc.get("ammo1")); game.start_sound("itmunici"); break;
+            case 23 : game.municion[1]+=4; show_mes(game.loc.get("ammo2")); game.start_sound("itmunici"); break;
+            case 24 : game.municion[2]+=10; show_mes(game.loc.get("ammo3")); game.start_sound("itmunici"); break;
+            case 25 : game.p_l=200; show_mes(game.loc.get("superHealth")); game.start_sound("itbotiqu"); break;
+            case 26 : game.escudo=150; show_mes(game.loc.get("invulnerability")); game.start_sound("itspecia"); break;
+            case 27 : game.pocima=150; show_mes(game.loc.get("superStrength")); game.start_sound("itspecia"); break;
 
-            case 39 : game.invi=150; show_mes("INVISIBILIDAD"); game.start_sound("itspecia"); break;
-            case 38 : all_map(); show_mes("Mapa de la zona"); game.start_sound("itspecia"); break;
-            case 40 : game.n_secrets++; show_mes("Un area secreta!"); game.start_sound("secret"); break;
+            case 39 : game.invi=150; show_mes(game.loc.get("invisibility")); game.start_sound("itspecia"); break;
+            case 38 : all_map(); show_mes(game.loc.get("zoneMap")); game.start_sound("itspecia"); break;
+            case 40 : game.n_secrets++; show_mes(game.loc.get("aSecretArea")); game.start_sound("secret"); break;
 
         };
 

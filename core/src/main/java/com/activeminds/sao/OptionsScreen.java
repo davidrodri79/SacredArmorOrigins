@@ -72,7 +72,7 @@ public class OptionsScreen implements Screen {
                 public void canceled() {
                     Gdx.app.log("Texto", "Cancelado");
                 }
-            }, "Introduce tu nombre", game.p_name, "Escribe aquí...");
+            }, game.loc.get("enterYourName"), game.p_name, "");
             };
             if(op==2){if (game.CD==1) game.CD=0; else game.CD=1;};
             if(op==3){if (game.SND==1) game.SND=0; else game.SND=1;};

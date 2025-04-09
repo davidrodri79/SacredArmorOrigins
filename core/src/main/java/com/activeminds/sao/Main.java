@@ -318,6 +318,10 @@ class BALA {
         InputStream inputStream = f.read();
         if(inputStream == null) return;
         epi_name = lee_disco(inputStream,25);
+
+        //Nombre traducido
+        epi_name = loc.get("episodeName"+epi_actual);
+
         file = lee_disco(inputStream,12);
         enemy_file = lee_disco(inputStream,12);
         for(i=0; i<=lev; ++i){
@@ -329,6 +333,9 @@ class BALA {
             for(h = 0; h < 4; h++)
                 fase.start_xy[h] = inputStream.read();
             fase.map_name = lee_disco(inputStream,25);
+
+            // Nombre traducido
+            fase.map_name = loc.get("levelName"+epi_actual+"-"+lev);
 
             for(h=0; h<10; ++h){
                 for(l=0; l<10; ++l){
