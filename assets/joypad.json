@@ -2,39 +2,39 @@
   "buttons" : [
     {
       x: 10
-      y: 60
+      y: 40
       width: 40
       height: 40,
       action: South,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
+      image_on: "gui/SOUTH_ON.png",
+      image_off: "gui/SOUTH.png"
     },
     {
       x: 50
-      y: 60
+      y: 40
       width: 40
       height: 40
       action: East,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
+      image_on: "gui/EAST_ON.png",
+      image_off: "gui/EAST.png"
     },
     {
       x: 10
-      y: 110
+      y: 80
       width: 40
       height: 40,
       action: West,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
+      image_on: "gui/WEST_ON.png",
+      image_off: "gui/WEST.png"
     },
     {
       x: 50
-      y: 110
+      y: 80
       width: 40
       height: 40,
       action: North,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
+      image_on: "gui/NORTH_ON.png",
+      image_off: "gui/NORTH.png"
     },
     {
       x: 490

@@ -6,53 +6,35 @@
       width: 40
       height: 40
       action: Back,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
+      image_on: "gui/BACK_ON.png",
+      image_off: "gui/BACK.png"
     }
     {
-      x: 10
-      y: 60
-      width: 40
-      height: 40,
-      action: Left,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
-    },
-    {
-      x: 90
-      y: 60
-      width: 40
-      height: 40
-      action: Right,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
-    },
-    {
       x: 50
-      y: 100
+      y: 80
       width: 40
       height: 40,
       action: Up,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
+      image_on: "gui/ARROWUP_ON.png",
+      image_off: "gui/ARROWUP.png"
     },
     {
       x: 50
-      y: 20
+      y: 30
       width: 40
       height: 40,
       action: Down,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
+      image_on: "gui/ARROWDOWN_ON.png",
+      image_off: "gui/ARROWDOWN.png"
     },
     {
-      x: 490
+      x: 480
       y: 60
       width: 40
       height: 40
       action: Accept,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
+      image_on: "gui/ENTER_ON.png",
+      image_off: "gui/ENTER.png"
     }
   ]
 }

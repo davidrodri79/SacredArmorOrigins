@@ -145,7 +145,7 @@ public class ButtonLayout implements InputProcessor {
         {
             Button b = buttons.get(i);
             Texture t = manager.get(b.pressed ? b.imageOn : b.imageOff, Texture.class);
-            spriteBatch.draw(t, b.rect.x, b.rect.y, b.rect.width, b.rect.height, 0, 0, t.getWidth(), t.getHeight(), false, true);
+            spriteBatch.draw(t, b.rect.x, b.rect.y, b.rect.width, b.rect.height, 0, 0, t.getWidth(), t.getHeight(), false, false);
 
         }
         spriteBatch.end();

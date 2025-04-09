@@ -22,6 +22,22 @@ public class LoadAssetsScreen implements Screen {
         // Add assets for loading
         manager.load("gui/Button-on.png", Texture.class);
         manager.load("gui/Button-off.png", Texture.class);
+        manager.load("gui/ARROWUP.png", Texture.class);
+        manager.load("gui/ARROWUP_ON.png", Texture.class);
+        manager.load("gui/ARROWDOWN.png", Texture.class);
+        manager.load("gui/ARROWDOWN_ON.png", Texture.class);
+        manager.load("gui/ENTER.png", Texture.class);
+        manager.load("gui/ENTER_ON.png", Texture.class);
+        manager.load("gui/BACK.png", Texture.class);
+        manager.load("gui/BACK_ON.png", Texture.class);
+        manager.load("gui/NORTH.png", Texture.class);
+        manager.load("gui/NORTH_ON.png", Texture.class);
+        manager.load("gui/SOUTH.png", Texture.class);
+        manager.load("gui/SOUTH_ON.png", Texture.class);
+        manager.load("gui/EAST.png", Texture.class);
+        manager.load("gui/EAST_ON.png", Texture.class);
+        manager.load("gui/WEST.png", Texture.class);
+        manager.load("gui/WEST_ON.png", Texture.class);
         manager.load("SOUND/aniquila.wav", Sound.class);
         manager.load("SOUND/ametrall.wav", Sound.class);
         manager.load("SOUND/clak.wav", Sound.class);
