@@ -175,13 +175,11 @@ class BALA {
     boolean MAP = false;
     float frame = 0f, invi = 0f, vari, px, py, escudo, pocima, p_e = 0;
     char p_d = 0, p_p = 0, p_w = 0, desp = 0, p_col = 32, x_room, y_room;
-    int DIF = 1, S_MAP = 2, horas, mins, secs, CD = 1, SND = 1;
+    int DIF = 1, S_MAP = 2, horas, mins, secs, CD = 1, SND = 1, LANG=0;
 
     @Override
     public void create() {
 
-         loc = new LocalizationManager();
-         loc.loadDefaultLocale();
 
         manager = new AssetManager();
         manager.load("gui/Button-on.png", Texture.class);
@@ -229,11 +227,16 @@ class BALA {
             p_col = buffer.getChar();
             CD = buffer.getChar();
             SND = buffer.getChar();
+            LANG = buffer.getInt();
         }
         else
         {
             save_options();
         }
+
+        loc = new LocalizationManager();
+        loc.loadLanguage(LANG);
+
 
         for(int i =0; i < 5; i++)
             gamesaves[i] = new partida();
@@ -274,7 +277,7 @@ class BALA {
     {
         FileHandle file = Gdx.files.local("usuario.dat");
 
-        ByteBuffer buffer = ByteBuffer.allocate(20);
+        ByteBuffer buffer = ByteBuffer.allocate(40);
 
         for(int i = 0; i < 6; i++)
         {
@@ -286,6 +289,8 @@ class BALA {
         buffer.putChar(p_col);
         buffer.putChar((char)CD);
         buffer.putChar((char)SND);
+        buffer.putInt(LANG);
+
 
         byte[] bytes = buffer.array();
         file.writeBytes(bytes,false);
@@ -766,6 +771,23 @@ class BALA {
             int d=0, i = 0;
             do{
                 char c = text.charAt(i);
+                switch(c)
+                {
+                    case 'á' : c = 160; break;
+                    case 'é' : c = 130; break;
+                    case 'í' : c = 161; break;
+                    case 'ó' : c = 162; break;
+                    case 'ú' : c = 163; break;
+                    case 'Á' : c = 225; break;
+                    case 'É' : c = 130; break;
+                    case 'Í' : c = 233; break;
+                    case 'Ó' : c = 237; break;
+                    case 'Ú' : c = 243; break;
+                    case 'ñ' : c = 164; break;
+                    case 'Ñ' : c = 165; break;
+                    case '¡' : c = 173; break;
+                    case '¿' : c = 168; break;
+                }
                 Copy_Buffer(batch, x+d,y,11,12,font[(int)c],1,0);
                 d+=11;
                 i++;

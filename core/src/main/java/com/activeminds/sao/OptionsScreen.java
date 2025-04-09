@@ -39,10 +39,9 @@ public class OptionsScreen implements Screen {
         game.Copytext(game.batch,120,20,game.loc.get("options"));
         game.Copytext(game.batch,80,80,game.loc.get("soldierColor"));
         game.Copytext(game.batch,80,110,game.loc.get("playerName"));
-        game.Copytext(game.batch,80,140,game.loc.get("cdMusic"));
+        game.Copytext(game.batch,80,140,game.loc.get("language"));
         game.Copytext(game.batch,80,170,game.loc.get("sound"));
-        if(game.CD == 1) game.Copytext(game.batch,200,140,game.loc.get("yes"));
-        else game.Copytext(game.batch,200,140,game.loc.get("no"));
+        game.Copytext(game.batch,200,140,game.loc.get("languageCurrent"));
         if(game.SND == 1) game.Copytext(game.batch,200,170,game.loc.get("yes"));
         else game.Copytext(game.batch,200,170,game.loc.get("no"));
         game.COPY_BUFFER_1(game.batch,45,75+(30*op),22,18,game.helmet[1]);
@@ -74,7 +73,7 @@ public class OptionsScreen implements Screen {
                 }
             }, game.loc.get("enterYourName"), game.p_name, "");
             };
-            if(op==2){if (game.CD==1) game.CD=0; else game.CD=1;};
+            if(op==2){game.LANG++; if (game.LANG>2) game.LANG=0; game.loc.loadLanguage(game.LANG);};
             if(op==3){if (game.SND==1) game.SND=0; else game.SND=1;};
         }
         if(joypad.consumePush("Back")) {

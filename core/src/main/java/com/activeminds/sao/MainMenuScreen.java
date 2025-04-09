@@ -48,7 +48,9 @@ public class MainMenuScreen implements Screen {
         game.Copytext(game.batch,30,185,game.loc.get("activeMindsTm")+string.toString());
         game.COPY_BUFFER_1(game.batch,45,60+(25*op),22,18,game.helmet[1]);
         game.COPY_BUFFER_2(game.batch,253,60+(25*op),22,18,game.helmet[1]);
+
         //show_all_font();
+
         game.batch.end();
 
         joypad.render(game.batch, game.batch);

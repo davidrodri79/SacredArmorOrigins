@@ -13,6 +13,20 @@ public class LocalizationManager {
         bundle = I18NBundle.createBundle(Gdx.files.internal("strings"), locale);
     }
 
+    public void loadLanguage(int lang) {
+        Locale locale;
+        if(lang == 0)
+            locale = new Locale("en");
+        else if(lang == 1)
+            locale = new Locale("fr");
+        else if(lang == 2)
+            locale = new Locale("es");
+        else
+            locale = Locale.getDefault();
+
+        bundle = I18NBundle.createBundle(Gdx.files.internal("strings"), locale);
+    }
+
     public String get(String key) {
         return bundle.get(key);
     }
