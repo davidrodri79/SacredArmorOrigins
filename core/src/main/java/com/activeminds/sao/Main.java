@@ -18,7 +18,7 @@ import java.nio.ByteBuffer;
 
 /* TODO:
     X Instrucciones
-    Localización
+    X Localización
     AJuste de dificultad
     Sonidos
     Invisibilidad
@@ -182,30 +182,6 @@ class BALA {
 
 
         manager = new AssetManager();
-        manager.load("gui/Button-on.png", Texture.class);
-        manager.load("gui/Button-off.png", Texture.class);
-        manager.load("SOUND/aniquila.wav", Sound.class);
-        manager.load("SOUND/ametrall.wav", Sound.class);
-        manager.load("SOUND/clak.wav", Sound.class);
-        manager.load("SOUND/dragon.wav", Sound.class);
-        manager.load("SOUND/inferno.wav", Sound.class);
-        manager.load("SOUND/lanzacoh.wav", Sound.class);
-        manager.load("SOUND/pistola.wav", Sound.class);
-        manager.load("SOUND/punch.wav", Sound.class);
-        manager.load("SOUND/sigma0.wav", Sound.class);
-        manager.load("SOUND/sigma1.wav", Sound.class);
-        manager.load("SOUND/sigma2.wav", Sound.class);
-        manager.load("SOUND/exp_bala.wav", Sound.class);
-        manager.load("SOUND/exp_cohe.wav", Sound.class);
-        manager.load("SOUND/exp_fueg.wav", Sound.class);
-        manager.load("SOUND/itmunici.wav", Sound.class);
-        manager.load("SOUND/itllave.wav", Sound.class);
-        manager.load("SOUND/itenergi.wav", Sound.class);
-        manager.load("SOUND/itbotiqu.wav", Sound.class);
-        manager.load("SOUND/itspecia.wav", Sound.class);
-        manager.load("SOUND/secret.wav", Sound.class);
-        manager.load("SOUND/teleport.wav", Sound.class);
-        manager.finishLoading();
 
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
@@ -263,13 +239,7 @@ class BALA {
 
         loadPalette();
 
-        Loadfont("ARMOR.FNT");
-        load_items();
-
-        this.file = "CLASSIC.CHR";
-        load_charset();
-
-        setScreen(new MainMenuScreen(this));
+        setScreen(new LoadAssetsScreen(this));
 
     }
 
@@ -428,7 +398,7 @@ class BALA {
 
     }
 
-    private void Loadfont(String s) {
+    void Loadfont(String s) {
         font = new Texture[256];
 
         FileHandle file = Gdx.files.internal(s);
@@ -827,4 +797,12 @@ class BALA {
             }
         }
     }
+
+    public void Puts_Shade(SpriteBatch scr, int x, int y, int sx, int sy, Texture texture, int flip) {
+
+        batch.setColor(1f, 1f, 1f, 0.5f);
+        batch.draw(texture, x + GAME_SCREEN_START_X, VIEWPORT_HEIGHT - y - sy, sx, sy, 0, 0, sx, sy, flip == 1, false );
+        batch.setColor(1f, 1f, 1f, 1f);
+    }
+
 }

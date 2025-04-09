@@ -41,7 +41,7 @@ public class OptionsScreen implements Screen {
         game.Copytext(game.batch,80,110,game.loc.get("playerName"));
         game.Copytext(game.batch,80,140,game.loc.get("language"));
         game.Copytext(game.batch,80,170,game.loc.get("sound"));
-        game.Copytext(game.batch,200,140,game.loc.get("languageCurrent"));
+        game.Copytext(game.batch,170,140,game.loc.get("languageCurrent"));
         if(game.SND == 1) game.Copytext(game.batch,200,170,game.loc.get("yes"));
         else game.Copytext(game.batch,200,170,game.loc.get("no"));
         game.COPY_BUFFER_1(game.batch,45,75+(30*op),22,18,game.helmet[1]);

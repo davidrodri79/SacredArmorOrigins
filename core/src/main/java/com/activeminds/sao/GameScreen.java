@@ -1278,49 +1278,49 @@ public class GameScreen implements Screen {
             INVISIBLE:
             if((fig==null)&&(estado<5)) {
                 if (dir == 0) {
-                    /*if (pos) Puts_Shade(scr, j - 20, k - 20, 40, 39, sol -> l_walk[0][pos - 1], 0);
-                    else Puts_Shade(scr, j - 20, k - 20, 40, 39, sol -> l_stand[0], 0);
+                    if (pos != 0) game.Puts_Shade(scr, j - 20, k - 20, 40, 39, game.sol.l_walk[0][pos - 1], 0);
+                    else game.Puts_Shade(scr, j - 20, k - 20, 40, 39, game.sol.l_stand[0], 0);
                     if ((estado > 0) && (estado < 3))
-                        Puts_Shade(scr, j - 20, k - 40, 40, 39, sol -> b_pain[0], 0);
-                    if (estado == 0) Puts_Shade(scr, j - 20, k - 40, 40, 39, sol -> b_stand[0], 0);
+                        game.Puts_Shade(scr, j - 20, k - 40, 40, 39, game.sol.b_pain[0], 0);
+                    if (estado == 0) game.Puts_Shade(scr, j - 20, k - 40, 40, 39, game.sol.b_stand[0], 0);
                     if ((estado > 12) && (estado < 15))
-                        Puts_Shade(scr, j - 20, k - 40, 40, 39, sol -> b_punch[0], 0);*/
+                        game.Puts_Shade(scr, j - 20, k - 40, 40, 39, game.sol.b_punch[0], 0);
                     if (arma > 0) game.COPY_BUFFER_1(scr, j - 36, k - 20, 40, 27, game.weapon[0][arma - 1]);
                     return;
                 }
                 ;
                 if (dir == 1) {
-                    /*if (pos) Puts_Shade(scr, j - 20, k - 20, 40, 39, sol -> l_walk[1][pos - 1], 0);
-                    else Puts_Shade(scr, j - 20, k - 20, 40, 39, sol -> l_stand[1], 0);*/
+                    if (pos != 0) game.Puts_Shade(scr, j - 20, k - 20, 40, 39, game.sol.l_walk[1][pos - 1], 0);
+                    else game.Puts_Shade(scr, j - 20, k - 20, 40, 39, game.sol.l_stand[1], 0);
                     if (arma > 0) game.COPY_BUFFER_1(scr, j - 36, k - 36, 40, 27, game.weapon[1][arma - 1]);
-                    /*if ((estado > 0) && (estado < 3))
-                        Puts_Shade(scr, j - 20, k - 40, 40, 39, sol -> b_pain[1], 0);
-                    if (estado == 0) Puts_Shade(scr, j - 20, k - 40, 40, 39, sol -> b_stand[1], 0);
+                    if ((estado > 0) && (estado < 3))
+                        game.Puts_Shade(scr, j - 20, k - 40, 40, 39, game.sol.b_pain[1], 0);
+                    if (estado == 0) game.Puts_Shade(scr, j - 20, k - 40, 40, 39, game.sol.b_stand[1], 0);
                     if ((estado == 13) || (estado == 14))
-                        Puts_Shade(scr, j - 20, k - 40, 40, 39, sol -> b_punch[1], 0);*/
+                        game.Puts_Shade(scr, j - 20, k - 40, 40, 39, game.sol.b_punch[1], 0);
                     return;
                 }
                 ;
                 if (dir == 2) {
-                    /*if (pos) Puts_Shade(scr, j - 20, k - 20, 40, 39, sol -> l_walk[1][pos - 1], 1);
-                    else Puts_Shade(scr, j - 20, k - 20, 40, 39, sol -> l_stand[1], 1);*/
+                    if (pos != 0) game.Puts_Shade(scr, j - 20, k - 20, 40, 39, game.sol.l_walk[1][pos - 1], 1);
+                    else game.Puts_Shade(scr, j - 20, k - 20, 40, 39, game.sol.l_stand[1], 1);
                     if (arma > 0) game.COPY_BUFFER_2(scr, j - 4, k - 36, 40, 27, game.weapon[1][arma - 1]);
-                    /*if ((estado > 0) && (estado < 3))
-                        Puts_Shade(scr, j - 20, k - 40, 40, 39, sol -> b_pain[1], 1);
-                    if (estado == 0) Puts_Shade(scr, j - 20, k - 40, 40, 39, sol -> b_stand[1], 1);
+                    if ((estado > 0) && (estado < 3))
+                        game.Puts_Shade(scr, j - 20, k - 40, 40, 39, game.sol.b_pain[1], 1);
+                    if (estado == 0) game.Puts_Shade(scr, j - 20, k - 40, 40, 39, game.sol.b_stand[1], 1);
                     if ((estado == 13) || (estado == 14))
-                        Puts_Shade(scr, j - 20, k - 40, 40, 39, sol -> b_punch[1], 1);*/
+                        game.Puts_Shade(scr, j - 20, k - 40, 40, 39, game.sol.b_punch[1], 1);
                     return;
                 }
                 ;
                 if (dir == 3) {
-                    /*if (pos) Puts_Shade(scr, j - 20, k - 20, 40, 39, sol -> l_walk[0][pos - 1], 1);
-                    else Puts_Shade(scr, j - 20, k - 20, 40, 39, sol -> l_stand[0], 1);
+                    if (pos != 0) game.Puts_Shade(scr, j - 20, k - 20, 40, 39, game.sol.l_walk[0][pos - 1], 1);
+                    else game.Puts_Shade(scr, j - 20, k - 20, 40, 39, game.sol.l_stand[0], 1);
                     if ((estado > 0) && (estado < 3))
-                        Puts_Shade(scr, j - 20, k - 40, 40, 39, sol -> b_pain[0], 1);
-                    if (estado == 0) Puts_Shade(scr, j - 20, k - 40, 40, 39, sol -> b_stand[0], 1);
+                        game.Puts_Shade(scr, j - 20, k - 40, 40, 39, game.sol.b_pain[0], 1);
+                    if (estado == 0) game.Puts_Shade(scr, j - 20, k - 40, 40, 39, game.sol.b_stand[0], 1);
                     if ((estado == 13) || (estado == 14))
-                        Puts_Shade(scr, j - 20, k - 40, 40, 39, sol -> b_punch[0], 1);*/
+                        game.Puts_Shade(scr, j - 20, k - 40, 40, 39, game.sol.b_punch[0], 1);
                     if (arma > 0) game.COPY_BUFFER_2(scr, j - 4, k - 20, 40, 27, game.weapon[0][arma - 1]);
                     return;
                 }

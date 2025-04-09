@@ -37,17 +37,18 @@ public class MainMenuScreen implements Screen {
 
         game.batch.begin();
         game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
-        game.Copytext(game.batch, 80,65,game.loc.get("newBattle"));
-        game.Copytext(game.batch,80,90,game.loc.get("loadGame"));
-        game.Copytext(game.batch,80,115,game.loc.get("help"));
-        game.Copytext(game.batch,80,140,game.loc.get("options"));
+        game.Copytext(game.batch, 120,55,"ORIGINS");
+        game.Copytext(game.batch, 80,85,game.loc.get("newBattle"));
+        game.Copytext(game.batch,80,105,game.loc.get("loadGame"));
+        game.Copytext(game.batch,80,125,game.loc.get("help"));
+        game.Copytext(game.batch,80,145,game.loc.get("options"));
         game.Copytext(game.batch,80,165,game.loc.get("quit"));
         StringBuilder string = new StringBuilder();
         string.append((char)252);
         string.append((char)253);
         game.Copytext(game.batch,30,185,game.loc.get("activeMindsTm")+string.toString());
-        game.COPY_BUFFER_1(game.batch,45,60+(25*op),22,18,game.helmet[1]);
-        game.COPY_BUFFER_2(game.batch,253,60+(25*op),22,18,game.helmet[1]);
+        game.COPY_BUFFER_1(game.batch,45,85+(20*op),22,18,game.helmet[1]);
+        game.COPY_BUFFER_2(game.batch,253,85+(20*op),22,18,game.helmet[1]);
 
         //show_all_font();
 

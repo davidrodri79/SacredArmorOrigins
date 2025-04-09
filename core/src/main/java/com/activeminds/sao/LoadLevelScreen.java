@@ -114,6 +114,7 @@ public class LoadLevelScreen implements Screen {
             game.armas[5] = 1;*/
             game.n_secrets = 0;
             game.t_secrets = game.total_secrets();
+            //game.invi = 150;
             //game.K=0;
             //game.m3=0;
 
