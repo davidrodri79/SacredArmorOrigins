@@ -73,7 +73,7 @@ public class OptionsScreen implements Screen {
                 }
             }, game.loc.get("enterYourName"), game.p_name, "");
             };
-            if(op==2){game.LANG++; if (game.LANG>2) game.LANG=0; game.loc.loadLanguage(game.LANG);};
+            if(op==2){game.LANG++; if (game.LANG>4) game.LANG=0; game.loc.loadLanguage(game.LANG);};
             if(op==3){if (game.SND==1) game.SND=0; else game.SND=1;};
         }
         if(joypad.consumePush("Back")) {

@@ -42,8 +42,8 @@
       width: 40
       height: 40
       action: Weapon,
-      image_on: "gui/Button-on.png",
-      image_off: "gui/Button-off.png"
+      image_on: "gui/WEAPON_ON.png",
+      image_off: "gui/WEAPON.png"
     }
     {
       x: 490

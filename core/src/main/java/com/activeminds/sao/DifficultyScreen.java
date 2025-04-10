@@ -49,6 +49,7 @@ public class DifficultyScreen implements Screen {
         if(joypad.consumePush("Accept"))
         {
             game.DIF = op;
+            game.freePlay = false;
             game.setScreen(new LoadLevelScreen(game));
             dispose();
         }

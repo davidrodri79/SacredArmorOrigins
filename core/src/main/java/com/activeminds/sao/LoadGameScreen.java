@@ -82,6 +82,7 @@ public class LoadGameScreen implements Screen {
         }
         if(joypad.consumePush("Back"))
         {
+            game.freePlay = false;
             game.setScreen(new MainMenuScreen(game));
             dispose();
         }

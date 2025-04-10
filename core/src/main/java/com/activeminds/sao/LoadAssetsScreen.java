@@ -44,8 +44,16 @@ public class LoadAssetsScreen implements Screen {
         manager.load("gui/ATTACK_ON.png", Texture.class);
         manager.load("gui/STRAFE.png", Texture.class);
         manager.load("gui/STRAFE_ON.png", Texture.class);
+        manager.load("gui/WEAPON.png", Texture.class);
+        manager.load("gui/WEAPON_ON.png", Texture.class);
         manager.load("gui/SWITCH.png", Texture.class);
         manager.load("gui/SWITCH_ON.png", Texture.class);
+        manager.load("gui/PLUS.png", Texture.class);
+        manager.load("gui/PLUS_ON.png", Texture.class);
+        manager.load("gui/MINUS.png", Texture.class);
+        manager.load("gui/MINUS_ON.png", Texture.class);
+        manager.load("gui/QUIT.png", Texture.class);
+        manager.load("gui/QUIT_ON.png", Texture.class);
         manager.load("SOUND/aniquila.wav", Sound.class);
         manager.load("SOUND/ametrall.wav", Sound.class);
         manager.load("SOUND/clak.wav", Sound.class);
@@ -78,6 +86,9 @@ public class LoadAssetsScreen implements Screen {
         manager.load("SOUND/caballe0.wav", Sound.class);
         manager.load("SOUND/caballe1.wav", Sound.class);
         manager.load("SOUND/caballe2.wav", Sound.class);
+        manager.load("SOUND/robot0.wav", Sound.class);
+        manager.load("SOUND/robot1.wav", Sound.class);
+        manager.load("SOUND/robot2.wav", Sound.class);
         manager.load("SOUND/exp_bala.wav", Sound.class);
         manager.load("SOUND/exp_cohe.wav", Sound.class);
         manager.load("SOUND/exp_fueg.wav", Sound.class);

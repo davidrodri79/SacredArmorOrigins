@@ -173,7 +173,7 @@ class BALA {
     BALA[] balas = new BALA[10];
     SPRITE sol, trp, ene1, ene2;
     partida[] gamesaves = new partida[5];
-    boolean MAP = false;
+    boolean MAP = false, freePlay = false, gore = true;
     float frame = 0f, invi = 0f, vari, px, py, escudo, pocima, p_e = 0;
     char p_d = 0, p_p = 0, p_w = 0, desp = 0, p_col = 32, x_room, y_room;
     int DIF = 1, S_MAP = 2, horas, mins, secs, CD = 1, SND = 1, LANG=0;
@@ -742,23 +742,24 @@ class BALA {
             int d=0, i = 0;
             do{
                 char c = text.charAt(i);
-                switch(c)
+                if(c > 255) c = 0;
+                /*switch(c)
                 {
-                    case 'á' : c = 160; break;
-                    case 'é' : c = 130; break;
-                    case 'í' : c = 161; break;
-                    case 'ó' : c = 162; break;
-                    case 'ú' : c = 163; break;
-                    case 'Á' : c = 225; break;
-                    case 'É' : c = 130; break;
-                    case 'Í' : c = 233; break;
-                    case 'Ó' : c = 237; break;
-                    case 'Ú' : c = 243; break;
-                    case 'ñ' : c = 164; break;
-                    case 'Ñ' : c = 165; break;
-                    case '¡' : c = 173; break;
-                    case '¿' : c = 168; break;
-                }
+                    case 'á' : c = 160; break; //á
+                    case 'é' : c = 130; break; //é
+                    case 'í' : c = 161; break; //í
+                    case 'ó' : c = 162; break; //ó
+                    case 'ú' : c = 163; break; //ú
+                    case 'Á' : c = 225; break; //Á
+                    case 'É' : c = 130; break; //É
+                    case 'Í' : c = 233; break; //Í
+                    case 'Ó' : c = 237; break; //Ó
+                    case 'Ú' : c = 243; break; //Ú
+                    case 'ñ' : c = 164; break; //ñ
+                    case 'Ñ' : c = 165; break; //Ñ
+                    case '¡' : c = 173; break; //!
+                    case '¿' : c = 168; break; //¿
+                }*/
                 Copy_Buffer(batch, x+d,y,11,12,font[(int)c],1,0);
                 d+=11;
                 i++;

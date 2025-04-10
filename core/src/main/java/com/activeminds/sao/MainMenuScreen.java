@@ -20,6 +20,7 @@ public class MainMenuScreen implements Screen {
         // Create joypad
         joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("menukeys.json");
+
     }
 
     @Override
@@ -38,17 +39,18 @@ public class MainMenuScreen implements Screen {
         game.batch.begin();
         game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
         game.Copytext(game.batch, 120,55,"ORIGINS");
-        game.Copytext(game.batch, 80,85,game.loc.get("newBattle"));
-        game.Copytext(game.batch,80,105,game.loc.get("loadGame"));
-        game.Copytext(game.batch,80,125,game.loc.get("help"));
-        game.Copytext(game.batch,80,145,game.loc.get("options"));
-        game.Copytext(game.batch,80,165,game.loc.get("quit"));
+        game.Copytext(game.batch, 80,75,game.loc.get("newBattle"));
+        game.Copytext(game.batch,80,92,game.loc.get("loadGame"));
+        game.Copytext(game.batch,80,109,game.loc.get("freePlay"));
+        game.Copytext(game.batch,80,126,game.loc.get("help"));
+        game.Copytext(game.batch,80,143,game.loc.get("options"));
+        game.Copytext(game.batch,80,160,game.loc.get("quit"));
         StringBuilder string = new StringBuilder();
         string.append((char)252);
         string.append((char)253);
         game.Copytext(game.batch,30,185,game.loc.get("activeMindsTm")+string.toString());
-        game.COPY_BUFFER_1(game.batch,45,85+(20*op),22,18,game.helmet[1]);
-        game.COPY_BUFFER_2(game.batch,253,85+(20*op),22,18,game.helmet[1]);
+        game.COPY_BUFFER_1(game.batch,45,75-3+(17*op),22,18,game.helmet[1]);
+        game.COPY_BUFFER_2(game.batch,253,75-3+(17*op),22,18,game.helmet[1]);
 
         //show_all_font();
 
@@ -58,6 +60,11 @@ public class MainMenuScreen implements Screen {
 
         if(joypad.consumePush("Up")) {op--; };
         if(joypad.consumePush("Down")) {op++;};
+        if(joypad.consumePush("Back"))
+        {
+            dispose();
+            game.to_dos();
+        }
         if(joypad.consumePush("Accept"))
         {
             if(op == 0)
@@ -75,23 +82,28 @@ public class MainMenuScreen implements Screen {
             }
             if(op == 2)
             {
-                game.setScreen(new HelpScreen(game));
+                game.setScreen(new FreePlaySelectScreen(game));
                 dispose();
             }
             if(op == 3)
             {
-                game.setScreen(new OptionsScreen(game));
+                game.setScreen(new HelpScreen(game));
                 dispose();
             }
             if(op == 4)
+            {
+                game.setScreen(new OptionsScreen(game));
+                dispose();
+            }
+            if(op == 5)
             {
                 dispose();
                 game.to_dos();
             }
         }
 
-        if(op<0) op=4;
-        if(op>4) op=0;
+        if(op<0) op=5;
+        if(op>5) op=0;
     }
 
     void show_all_font()

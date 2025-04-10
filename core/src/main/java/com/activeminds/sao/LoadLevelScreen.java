@@ -37,7 +37,7 @@ public class LoadLevelScreen implements Screen {
             game.epi_file = "FUTURE.EPI";
             game.enemy_voice0 = "agamma";
             game.enemy_voice1 = "tank";
-            game.enemy_voice2 = "tank";
+            game.enemy_voice2 = "robot";
         }
         if(game.epi_actual == 4)
         {

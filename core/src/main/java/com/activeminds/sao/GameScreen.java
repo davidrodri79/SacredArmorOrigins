@@ -392,7 +392,7 @@ public class GameScreen implements Screen {
                     show_mes(game.p_name+game.loc.get("hasDied"));
                     game.start_sound("sigma1");
                 };
-                if(game.p_l<-4) {
+                if(game.p_l<-4 && game.gore) {
                     game.p_e=9;
                     show_mes(game.p_name+game.loc.get("hasBeenDestroyed"));
                     mes_c=25;
@@ -549,7 +549,7 @@ public class GameScreen implements Screen {
             game.ene_datos[xy-1].life-=5;
             if(game.pocima>0) game.ene_datos[xy-1].life-=15;
             game.start_sound("punch");
-            if(game.ene_datos[xy-1].life<=-5)
+            if(game.ene_datos[xy-1].life<=-5 && game.gore)
             {
                 game.ene_datos[xy-1].est=9;
                 if(game.fase.enemies[xy-1].e_t == 0)
@@ -590,7 +590,7 @@ public class GameScreen implements Screen {
             game.p_e=2;
             game.p_l-=5;
             game.start_sound("punch");
-            if(game.p_l<-4) {game.p_e=9; show_mes(game.p_name+game.loc.get("hasBeenDestroyed")); game.start_sound("sigma2");}
+            if(game.p_l<-4 && game.gore) {game.p_e=9; show_mes(game.p_name+game.loc.get("hasBeenDestroyed")); game.start_sound("sigma2");}
             else if(game.p_l<1) {game.p_e=5; show_mes(game.p_name+game.loc.get("hasDied")); game.start_sound("sigma1");}
             else { game.start_sound("sigma0"); }
         };
@@ -611,7 +611,7 @@ public class GameScreen implements Screen {
             game.start_sound("exp_fueg");
         game.ene_datos[ene].est=2;
         game.ene_datos[ene].life-=game.balas[bul].fuerza*p;
-        if(game.ene_datos[ene].life<=-5)
+        if(game.ene_datos[ene].life<=-5 && game.gore)
         {
             game.ene_datos[ene].est=9;
             if(game.fase.enemies[ene].e_t == 0)

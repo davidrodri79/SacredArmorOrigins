@@ -21,6 +21,10 @@ public class LocalizationManager {
             locale = new Locale("fr");
         else if(lang == 2)
             locale = new Locale("es");
+        else if(lang == 3)
+            locale = new Locale("de");
+        else if(lang == 4)
+            locale = new Locale("it");
         else
             locale = Locale.getDefault();
 

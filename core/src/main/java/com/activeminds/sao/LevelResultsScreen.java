@@ -64,8 +64,15 @@ public class LevelResultsScreen implements Screen {
 
         if(joypad.consumePush("Accept"))
         {
-            game.lev++;
-            game.setScreen(new SaveGameScreen(game));
+            if(game.freePlay)
+            {
+                game.setScreen(new MainMenuScreen(game));
+            }
+            else
+            {
+                game.lev++;
+                game.setScreen(new SaveGameScreen(game));
+            }
         }
     }
 
