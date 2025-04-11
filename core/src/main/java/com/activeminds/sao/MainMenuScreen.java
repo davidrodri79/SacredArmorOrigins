@@ -2,6 +2,7 @@ package com.activeminds.sao;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.StringBuilder;
 
@@ -37,8 +38,8 @@ public class MainMenuScreen implements Screen {
         game.batch.setProjectionMatrix(game.camera.combined);
 
         game.batch.begin();
-        game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
-        game.Copytext(game.batch, 120,55,"ORIGINS");
+        game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
+        game.CopytextColor(game.batch, 120,55,"ORIGINS", new Color(Color.YELLOW));
         game.Copytext(game.batch, 80,75,game.loc.get("newBattle"));
         game.Copytext(game.batch,80,92,game.loc.get("loadGame"));
         game.Copytext(game.batch,80,109,game.loc.get("freePlay"));

@@ -35,7 +35,9 @@ public class FreePlaySelectScreen implements Screen {
         game.batch.setProjectionMatrix(game.camera.combined);
 
         game.batch.begin();
+        game.batch.setColor(0.5f,0.5f,0.5f,1f);
         game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
+        game.batch.setColor(1f,1f,1f,1f);
         game.Copytext(game.batch,40,30,game.loc.get("difficultyLevel"));
         game.Copytext(game.batch,40,50,game.loc.get(dif_levels[game.DIF]));
         game.Copytext(game.batch,40,75,game.loc.get("episode"));
@@ -70,6 +72,10 @@ public class FreePlaySelectScreen implements Screen {
             else if (op == 3)
             {
                 game.freePlay = true;
+                for(int j=0; j<3; ++j)
+                    game.municion[j]=0;
+                for(int j=0; j<6; ++j)
+                    game.armas[j]=0;
                 game.setScreen(new LoadLevelScreen(game));
                 dispose();
             }

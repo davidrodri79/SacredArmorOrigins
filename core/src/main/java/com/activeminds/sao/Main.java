@@ -19,10 +19,10 @@ import java.nio.ByteBuffer;
 /* TODO:
     X Instrucciones
     X Localización
-    AJuste de dificultad
-    Sonidos
-    Invisibilidad
-    Sprites GUI
+    X AJuste de dificultad
+    X Sonidos
+    X Invisibilidad
+    X Sprites GUI
  */
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -205,6 +205,7 @@ class BALA {
             CD = buffer.getChar();
             SND = buffer.getChar();
             LANG = buffer.getInt();
+            gore = buffer.getInt() == 1;
         }
         else
         {
@@ -261,6 +262,7 @@ class BALA {
         buffer.putChar((char)CD);
         buffer.putChar((char)SND);
         buffer.putInt(LANG);
+        buffer.putInt(gore ? 1 : 0);
 
 
         byte[] bytes = buffer.array();
@@ -765,6 +767,13 @@ class BALA {
                 i++;
             }while(i < text.length());
         }
+
+    public void CopytextColor(SpriteBatch batch, int x, int y, String text, Color color) {
+
+        batch.setColor(color);
+        Copytext(batch, x, y, text);
+        batch.setColor(1f,1f,1f,1f);
+    }
 
     private void Copy_Buffer(SpriteBatch batch, int xx, int yy, int sx, int sy, Texture bitmap, int type, int dir)
     {

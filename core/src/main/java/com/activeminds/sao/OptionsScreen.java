@@ -38,14 +38,17 @@ public class OptionsScreen implements Screen {
         game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
         game.Copytext(game.batch,120,20,game.loc.get("options"));
         game.Copytext(game.batch,80,80,game.loc.get("soldierColor"));
-        game.Copytext(game.batch,80,110,game.loc.get("playerName"));
-        game.Copytext(game.batch,80,140,game.loc.get("language"));
-        game.Copytext(game.batch,80,170,game.loc.get("sound"));
-        game.Copytext(game.batch,170,140,game.loc.get("languageCurrent"));
-        if(game.SND == 1) game.Copytext(game.batch,200,170,game.loc.get("yes"));
+        game.Copytext(game.batch,80,100,game.loc.get("playerName"));
+        game.Copytext(game.batch,80,120,game.loc.get("language"));
+        game.Copytext(game.batch,80,140,game.loc.get("sound"));
+        game.Copytext(game.batch,80,160,"GORE");
+        game.Copytext(game.batch,170,120,game.loc.get("languageCurrent"));
+        if(game.SND == 1) game.Copytext(game.batch,200,140,game.loc.get("yes"));
         else game.Copytext(game.batch,200,170,game.loc.get("no"));
-        game.COPY_BUFFER_1(game.batch,45,75+(30*op),22,18,game.helmet[1]);
-        game.COPY_BUFFER_2(game.batch,253,75+(30*op),22,18,game.helmet[1]);
+        if(game.gore) game.Copytext(game.batch,200,160,game.loc.get("yes"));
+        else game.Copytext(game.batch,200,160,game.loc.get("no"));
+        game.COPY_BUFFER_1(game.batch,45,75+(20*op),22,18,game.helmet[1]);
+        game.COPY_BUFFER_2(game.batch,253,75+(20*op),22,18,game.helmet[1]);
         game.batch.end();
 
         joypad.render(game.batch, game.batch);
@@ -75,6 +78,7 @@ public class OptionsScreen implements Screen {
             };
             if(op==2){game.LANG++; if (game.LANG>4) game.LANG=0; game.loc.loadLanguage(game.LANG);};
             if(op==3){if (game.SND==1) game.SND=0; else game.SND=1;};
+            if(op==4){game.gore = !game.gore;};
         }
         if(joypad.consumePush("Back")) {
             game.save_options();
@@ -82,8 +86,8 @@ public class OptionsScreen implements Screen {
             dispose();
         }
 
-        if(op<0) op=3;
-        if(op>3) op=0;
+        if(op<0) op=4;
+        if(op>4) op=0;
     }
 
     @Override

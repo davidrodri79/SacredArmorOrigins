@@ -49,7 +49,16 @@ public class GameScreen implements Screen {
         // LOGIC STEP =========================================
         if(FIN_EPI)
         {
-            if(game.epi_actual == 0)
+            if(game.freePlay)
+            {
+                long intervalo=(System.currentTimeMillis() - start_time)/1000;
+                game.horas=(int)intervalo/3600;
+                game.mins=(int)intervalo/60;
+                game.secs=(int)intervalo-(3600*game.horas)-(60*game.mins);
+                game.setScreen(new LevelResultsScreen(game));
+                dispose();
+            }
+            else if(game.epi_actual == 0)
             {
                 if((game.x_map==4) && (game.y_map==5)) game.epi_actual=1;
                 if((game.x_map==2) && (game.y_map==4)) game.epi_actual=2;
@@ -156,7 +165,7 @@ public class GameScreen implements Screen {
 
             if(tel_map[game.x_room][game.y_room] > 0) { teleport_state = 1; game.start_sound("teleport"); }
 
-            if((int_map[game.x_room][game.y_room] > 0) && (joypad.consumePush("Push"))) conecta_int((char)(int_map[game.x_room][game.y_room]-1));
+            if((joypad.consumePush("Push") && (int_map[game.x_room][game.y_room] > 0))) conecta_int((char)(int_map[game.x_room][game.y_room]-1));
 
             for(char i=0; i<10; ++i)
                 if(game.balas[i].est > 0) move_bullet(i);
