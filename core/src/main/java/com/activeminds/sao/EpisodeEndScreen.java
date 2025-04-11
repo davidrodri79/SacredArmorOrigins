@@ -3,22 +3,18 @@ package com.activeminds.sao;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class EpisodeEndScreen implements Screen {
-    Main game;
+public class EpisodeEndScreen extends SAOScreen {
+
     ButtonLayout joypad;
     public EpisodeEndScreen(Main game)
     {
-        this.game = game;
+        super(game);
 
         // Create joypad
         joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("menukeys.json");
 
         game.load_scr("WALL.SCR");
-    }
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -37,7 +33,7 @@ public class EpisodeEndScreen implements Screen {
         game.batch.setProjectionMatrix(game.camera.combined);
 
         game.batch.begin();
-        game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
+        game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
         game.Copytext(game.batch,50,20,game.epi_name);
         game.COPY_BUFFER_1(game.batch,140,40,40,39,game.chr.epi_end);
         game.Copytext(game.batch,10,90,game.loc.get("sacredGot1"));
@@ -50,48 +46,28 @@ public class EpisodeEndScreen implements Screen {
 
         joypad.render(game.batch, game.batch);
 
-        if(joypad.consumePush("Accept"))
-        {
-            game.completed[game.epi_actual-1]=1;
+        super.render(delta);
 
-            if(game.completed[0]!=0 && game.completed[1]!=0 && game.completed[2]!=0 && game.completed[3]!=0 &&
-                game.completed[4]!=0)
-            {
+        if(!fadingOut()) {
+            if (joypad.consumePush("Accept")) {
+                startFadeOut(2f);
+            }
+        }
+        if(fadeOutOver())
+        {
+            game.completed[game.epi_actual - 1] = 1;
+
+            if (game.completed[0] != 0 && game.completed[1] != 0 && game.completed[2] != 0 && game.completed[3] != 0 &&
+                game.completed[4] != 0) {
                 game.setScreen(new SacredArmorScreen(game));
                 dispose();
-            }
-            else
-            {
-                game.epi_actual = 0; game.lev = 0;
+            } else {
+                game.epi_actual = 0;
+                game.lev = 0;
                 game.setScreen(new SaveGameScreen(game));
                 dispose();
             }
         }
-
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
 
     }
 }

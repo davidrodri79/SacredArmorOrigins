@@ -6,26 +6,20 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.StringBuilder;
 
-public class MainMenuScreen implements Screen {
+public class MainMenuScreen extends SAOScreen {
 
-    Main game;
     int op = 0;
     ButtonLayout joypad;
 
     public MainMenuScreen(Main game)
     {
-        this.game = game;
+        super(game);
 
         game.load_scr("TITLE.SCR");
 
         // Create joypad
         joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("menukeys.json");
-
-    }
-
-    @Override
-    public void show() {
 
     }
 
@@ -59,52 +53,59 @@ public class MainMenuScreen implements Screen {
 
         joypad.render(game.batch, game.batch);
 
-        if(joypad.consumePush("Up")) {op--; };
-        if(joypad.consumePush("Down")) {op++;};
-        if(joypad.consumePush("Back"))
+        super.render(delta);
+
+        if(!fadingOut()) {
+            if (joypad.consumePush("Up")) {
+                op--;
+            }
+            ;
+            if (joypad.consumePush("Down")) {
+                op++;
+            }
+            ;
+            if (joypad.consumePush("Back")) {
+                startFadeOut(2f);
+            }
+            if (joypad.consumePush("Accept")) {
+                if (op == 0) {
+                    game.lev = 0;
+                    game.p_l = 100;
+                    game.epi_actual = 0;
+                    for (int j = 0; j < 6; ++j) game.armas[j] = 0;
+                    for (int j = 0; j < 6; ++j) game.completed[j] = 0;
+                    game.setScreen(new DifficultyScreen(game));
+                    dispose();
+                }
+                if (op == 1) {
+                    game.setScreen(new LoadGameScreen(game));
+                    dispose();
+                }
+                if (op == 2) {
+                    game.setScreen(new FreePlaySelectScreen(game));
+                    dispose();
+                }
+                if (op == 3) {
+                    game.setScreen(new HelpScreen(game));
+                    dispose();
+                }
+                if (op == 4) {
+                    game.setScreen(new OptionsScreen(game));
+                    dispose();
+                }
+                if (op == 5) {
+                  startFadeOut(2f);
+                }
+            }
+
+            if (op < 0) op = 5;
+            if (op > 5) op = 0;
+        }
+        if(fadeOutOver())
         {
             dispose();
             game.to_dos();
         }
-        if(joypad.consumePush("Accept"))
-        {
-            if(op == 0)
-            {
-                game.lev=0; game.p_l=100; game.epi_actual=0;
-                for(int j=0; j<6; ++j) game.armas[j]=0;
-                for(int j=0; j<6; ++j) game.completed[j] = 0;
-                game.setScreen(new DifficultyScreen(game));
-                dispose();
-            }
-            if(op == 1)
-            {
-                game.setScreen(new LoadGameScreen(game));
-                dispose();
-            }
-            if(op == 2)
-            {
-                game.setScreen(new FreePlaySelectScreen(game));
-                dispose();
-            }
-            if(op == 3)
-            {
-                game.setScreen(new HelpScreen(game));
-                dispose();
-            }
-            if(op == 4)
-            {
-                game.setScreen(new OptionsScreen(game));
-                dispose();
-            }
-            if(op == 5)
-            {
-                dispose();
-                game.to_dos();
-            }
-        }
-
-        if(op<0) op=5;
-        if(op>5) op=0;
     }
 
     void show_all_font()
@@ -118,30 +119,5 @@ public class MainMenuScreen implements Screen {
             stringBuilder.append((char)i);
             game.Copytext(game.batch, 16 * x - Main.GAME_SCREEN_START_X, 20*y, stringBuilder.toString());
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

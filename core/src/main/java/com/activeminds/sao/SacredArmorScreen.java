@@ -3,22 +3,18 @@ package com.activeminds.sao;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class SacredArmorScreen implements Screen {
-    Main game;
+public class SacredArmorScreen extends SAOScreen {
+
     ButtonLayout joypad;
     public SacredArmorScreen(Main game)
     {
-        this.game = game;
+        super(game);
 
         // Create joypad
         joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("menukeys.json");
 
         game.load_scr("SACRED.SCR");
-    }
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -30,7 +26,7 @@ public class SacredArmorScreen implements Screen {
         game.batch.setProjectionMatrix(game.camera.combined);
 
         game.batch.begin();
-        game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
+        game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
         game.Copytext(game.batch,20,40,game.loc.get("sacredArmor1"));
         game.Copytext(game.batch,20,60,game.loc.get("sacredArmor2"));
         game.Copytext(game.batch,20,80,game.loc.get("sacredArmor3"));
@@ -43,38 +39,20 @@ public class SacredArmorScreen implements Screen {
 
         joypad.render(game.batch, game.batch);
 
-        if(joypad.consumePush("Accept"))
-        {
-            {
-                game.epi_actual = 0; game.lev = 0;
-                game.setScreen(new SaveGameScreen(game));
-                dispose();
+        super.render(delta);
+
+        if(!fadingOut()) {
+            if (joypad.consumePush("Accept")) {
+               startFadeOut(2f);
             }
+        }
+        if(fadeOutOver())
+        {
+            game.epi_actual = 0;
+            game.lev = 0;
+            game.setScreen(new SaveGameScreen(game));
+            dispose();
         }
     }
 
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
-    }
 }

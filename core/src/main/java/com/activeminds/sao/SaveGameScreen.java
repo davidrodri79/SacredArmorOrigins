@@ -6,25 +6,20 @@ import com.badlogic.gdx.files.FileHandle;
 
 import java.nio.ByteBuffer;
 
-public class SaveGameScreen implements Screen {
+public class SaveGameScreen extends SAOScreen {
 
-    Main game;
+
     int op = 0;
     ButtonLayout joypad;
     public SaveGameScreen(Main game)
     {
-        this.game = game;
+        super(game);
 
         game.load_scr("WALL.SCR");
 
         // Create joypad
         joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("menukeys.json");
-    }
-
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -43,7 +38,7 @@ public class SaveGameScreen implements Screen {
         game.batch.setProjectionMatrix(game.camera.combined);
 
         game.batch.begin();
-        game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
+        game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
 
         game.Copytext(game.batch,80,20,game.loc.get("saveGame"));
         game.Copytext(game.batch,30,170,game.loc.get("pressEscapeAbort"));
@@ -65,52 +60,61 @@ public class SaveGameScreen implements Screen {
 
         joypad.render(game.batch, game.batch);
 
-        if(joypad.consumePush("Up")) {op--; };
-        if(joypad.consumePush("Down")) {op++;};
-        if(joypad.consumePush("Accept"))
-        {
+        super.render(delta);
+
+        if(!fadingOut()) {
+            if(joypad.consumePush("Up")) {op--; };
+            if(joypad.consumePush("Down")) {op++;};
+            if(joypad.consumePush("Accept"))
             {
-                game.gamesaves[op].epi=(char)game.epi_actual;
-                game.gamesaves[op].level=(char)game.lev;
-                game.gamesaves[op].dif=(char)game.DIF;
-                for(int j=0; j<3; ++j)
-                    game.gamesaves[op].ammo[j]=game.municion[j];
-                for(int j=0; j<6; ++j)
-                    game.gamesaves[op].completed[j]=(char)game.completed[j];
-                for(int j=0; j<6; ++j)
-                    game.gamesaves[op].armas[j]=(char)game.armas[j];
-                game.gamesaves[op].saved=1;
+                {
+                    game.gamesaves[op].epi=(char)game.epi_actual;
+                    game.gamesaves[op].level=(char)game.lev;
+                    game.gamesaves[op].dif=(char)game.DIF;
+                    for(int j=0; j<3; ++j)
+                        game.gamesaves[op].ammo[j]=game.municion[j];
+                    for(int j=0; j<6; ++j)
+                        game.gamesaves[op].completed[j]=(char)game.completed[j];
+                    for(int j=0; j<6; ++j)
+                        game.gamesaves[op].armas[j]=(char)game.armas[j];
+                    game.gamesaves[op].saved=1;
 
-                FileHandle file = Gdx.files.local("armor.sav");
+                    FileHandle file = Gdx.files.local("armor.sav");
 
-                ByteBuffer buffer = ByteBuffer.allocate(1000);
-                for(int j=0; j<5; ++j) {
-                    buffer.putChar(game.gamesaves[j].saved);
-                    buffer.putChar(game.gamesaves[j].epi);
-                    buffer.putChar(game.gamesaves[j].level);
-                    buffer.putChar(game.gamesaves[j].dif);
-                    for(int k=0; k<3; ++k)
-                        buffer.putInt(game.gamesaves[j].ammo[k]);
-                    for(int k=0; k<6; ++k)
-                        buffer.putChar(game.gamesaves[j].completed[k]);
-                    for(int k=0; k<6; ++k)
-                        buffer.putChar(game.gamesaves[j].armas[k]);
+                    ByteBuffer buffer = ByteBuffer.allocate(1000);
+                    for(int j=0; j<5; ++j) {
+                        buffer.putChar(game.gamesaves[j].saved);
+                        buffer.putChar(game.gamesaves[j].epi);
+                        buffer.putChar(game.gamesaves[j].level);
+                        buffer.putChar(game.gamesaves[j].dif);
+                        for(int k=0; k<3; ++k)
+                            buffer.putInt(game.gamesaves[j].ammo[k]);
+                        for(int k=0; k<6; ++k)
+                            buffer.putChar(game.gamesaves[j].completed[k]);
+                        for(int k=0; k<6; ++k)
+                            buffer.putChar(game.gamesaves[j].armas[k]);
+                    }
+
+                    byte[] bytes = buffer.array();
+                    file.writeBytes(bytes,false);
+
+                   startFadeOut(2f);
                 }
-
-                byte[] bytes = buffer.array();
-                file.writeBytes(bytes,false);
-
-                game.setScreen(new LoadLevelScreen(game));
-                dispose();
             }
+
+            if (joypad.consumePush("Back")) {
+                startFadeOut(2f);
+            }
+
+            if (op < 0) op = 4;
+            if (op > 4) op = 0;
         }
-        if(joypad.consumePush("Back")) {
+
+        if(fadeOutOver())
+        {
             game.setScreen(new LoadLevelScreen(game));
             dispose();
         }
-
-        if(op<0) op=4;
-        if(op>4) op=0;
 
     }
 

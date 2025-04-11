@@ -3,23 +3,17 @@ package com.activeminds.sao;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class SecretLevelScreen implements Screen {
-    Main game;
+public class SecretLevelScreen extends SAOScreen {
 
     ButtonLayout joypad;
     public SecretLevelScreen(Main game)
     {
-        this.game = game;
+        super(game);
         // Create joypad
         joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("menukeys.json");
 
         game.load_scr("MAP.SCR");
-    }
-
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -46,36 +40,21 @@ public class SecretLevelScreen implements Screen {
 
         joypad.render(game.batch, game.batch);
 
-        if(joypad.consumePush("Accept")) {
+        super.render(delta);
 
+        if(!fadingOut()) {
+            if (joypad.consumePush("Accept")) {
+
+                startFadeOut(2f);
+            }
+        }
+
+        if(fadeOutOver())
+        {
             game.lev = 7;
             game.setScreen(new SaveGameScreen(game));
             dispose();
         }
     }
 
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
-    }
 }

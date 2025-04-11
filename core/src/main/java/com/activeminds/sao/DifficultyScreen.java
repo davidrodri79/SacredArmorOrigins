@@ -3,24 +3,19 @@ package com.activeminds.sao;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class DifficultyScreen implements Screen {
+public class DifficultyScreen extends SAOScreen {
 
-    Main game;
     int op = 0;
     ButtonLayout joypad;
     public DifficultyScreen(Main game)
     {
-        this.game = game;
+        super(game);
 
         game.load_scr("WALL.SCR");
 
         // Create joypad
         joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("menukeys.json");
-    }
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -32,7 +27,7 @@ public class DifficultyScreen implements Screen {
         game.batch.setProjectionMatrix(game.camera.combined);
 
         game.batch.begin();
-        game.batch.draw(game.scr, game.GAME_SCREEN_START_X, 0);
+        game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
         game.Copytext(game.batch,120,70,game.loc.get("normal"));
         game.Copytext(game.batch,120,100,game.loc.get("hard"));
         game.Copytext(game.batch,120,130,game.loc.get("extreme"));
@@ -44,42 +39,31 @@ public class DifficultyScreen implements Screen {
 
         joypad.render(game.batch, game.batch);
 
-        if(joypad.consumePush("Up")) {op--; };
-        if(joypad.consumePush("Down")) {op++;};
-        if(joypad.consumePush("Accept"))
+        super.render(delta);
+
+        if(!fadingOut()) {
+            if (joypad.consumePush("Up")) {
+                op--;
+            }
+            ;
+            if (joypad.consumePush("Down")) {
+                op++;
+            }
+            ;
+            if (joypad.consumePush("Accept")) {
+                game.DIF = op;
+                game.freePlay = false;
+                startFadeOut(3f);
+            }
+        }
+
+        if(fadeOutOver())
         {
-            game.DIF = op;
-            game.freePlay = false;
             game.setScreen(new LoadLevelScreen(game));
             dispose();
         }
 
         if(op<0) op=2;
         if(op>2) op=0;
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

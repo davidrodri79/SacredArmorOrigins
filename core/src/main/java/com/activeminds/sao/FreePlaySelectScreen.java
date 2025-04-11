@@ -3,14 +3,13 @@ package com.activeminds.sao;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class FreePlaySelectScreen implements Screen {
+public class FreePlaySelectScreen extends SAOScreen {
 
-    Main game;
     int op = 0;
     ButtonLayout joypad;
     public FreePlaySelectScreen(Main game)
     {
-        this.game = game;
+        super(game);
 
         game.load_scr("MAP.SCR");
 
@@ -19,10 +18,6 @@ public class FreePlaySelectScreen implements Screen {
         joypad.loadFromJson("menukeys.json");
 
         game.epi_actual = 1; game.lev = 0;
-    }
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -53,60 +48,43 @@ public class FreePlaySelectScreen implements Screen {
 
         joypad.render(game.batch, game.batch);
 
-        if(joypad.consumePush("Up")) {op--; };
-        if(joypad.consumePush("Down")) {op++;};
-        if(joypad.consumePush("Accept"))
-        {
-            if(op == 0)
-            {
-                game.DIF = (game.DIF + 1 ) % 3;
+        super.render(delta);
+
+        if(!fadingOut()) {
+            if (joypad.consumePush("Up")) {
+                op--;
             }
-            if(op == 1)
-            {
-                game.epi_actual++; if(game.epi_actual > 6) game.epi_actual = 1;
+            ;
+            if (joypad.consumePush("Down")) {
+                op++;
             }
-            else if(op == 2)
-            {
-                game.lev = (game.lev + 1) % 8;
+            ;
+            if (joypad.consumePush("Accept")) {
+                if (op == 0) {
+                    game.DIF = (game.DIF + 1) % 3;
+                }
+                if (op == 1) {
+                    game.epi_actual++;
+                    if (game.epi_actual > 6) game.epi_actual = 1;
+                } else if (op == 2) {
+                    game.lev = (game.lev + 1) % 8;
+                } else if (op == 3) {
+                    game.freePlay = true;
+                    for (int j = 0; j < 3; ++j)
+                        game.municion[j] = 0;
+                    for (int j = 0; j < 6; ++j)
+                        game.armas[j] = 0;
+                    startFadeOut(3f);
+                }
             }
-            else if (op == 3)
-            {
-                game.freePlay = true;
-                for(int j=0; j<3; ++j)
-                    game.municion[j]=0;
-                for(int j=0; j<6; ++j)
-                    game.armas[j]=0;
-                game.setScreen(new LoadLevelScreen(game));
-                dispose();
-            }
+
+            if (op < 0) op = 3;
+            if (op > 3) op = 0;
         }
-
-        if(op < 0 ) op = 3;
-        if(op > 3 ) op = 0;
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
+        if(fadeOutOver())
+        {
+            game.setScreen(new LoadLevelScreen(game));
+            dispose();
+        }
     }
 }

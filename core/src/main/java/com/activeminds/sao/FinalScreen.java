@@ -3,26 +3,20 @@ package com.activeminds.sao;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class FinalScreen implements Screen {
+public class FinalScreen extends SAOScreen {
 
-    Main game;
     ButtonLayout joypad;
     int step = 0, current_phrase = 0;
     long lastPhraseChangeTime;
     public FinalScreen(Main game)
     {
-        this.game = game;
+        super(game);
 
         // Create joypad
         joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("menukeys.json");
 
         game.load_scr("WALL.SCR");
-    }
-
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -89,52 +83,41 @@ public class FinalScreen implements Screen {
 
         joypad.render(game.batch, game.batch);
 
-        if(joypad.consumePush("Accept"))
-        {
-            {
-                step++;
-                if(step == 1)
-                {
-                    game.load_scr("MAP.SCR");
-                }
-                if(step == 2)
-                {
-                    game.load_scr_color_swap("FINAL.SCR", (char)69, game.p_col);
-                    lastPhraseChangeTime = System.currentTimeMillis();
-                }
-                if(step == 3)
-                {
-                    game.setScreen(new MainMenuScreen(game));
-                    dispose();
-                }
+        super.render(delta);
 
+        if(!fadingOut()) {
+            if (joypad.consumePush("Accept")) {
+                {
+                    if (step == 0) {
+                        game.load_scr("MAP.SCR");
+                        step++;
+                    }
+                    else if (step == 1) {
+                        startFadeOut(2f);
+                    }
+                    else if (step == 2) {
+                        startFadeOut(5f);
+                    }
+
+                }
             }
         }
-
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
+        if(fadeOutOver())
+        {
+            if(step == 1)
+            {
+                game.load_scr_color_swap("FINAL.SCR", (char) 69, game.p_col);
+                lastPhraseChangeTime = System.currentTimeMillis();
+                step++;
+                fadingOut = false;
+                fadeOutTimer = 0f;
+            }
+            else if (step == 2)
+            {
+                game.setScreen(new MainMenuScreen(game));
+                dispose();
+            }
+        }
 
     }
 }

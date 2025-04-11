@@ -7,9 +7,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.StringBuilder;
 
-public class GameScreen implements Screen {
+public class GameScreen extends SAOScreen {
 
-    Main game;
     int x, y, teleport_state = 0;
     ButtonLayout joypad, minimap;
     float mes_c = 0f, K, player_fade;
@@ -21,7 +20,7 @@ public class GameScreen implements Screen {
 
     GameScreen(Main game)
     {
-        this.game = game;
+        super(game);
         joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("joypad.json");
         minimap = new ButtonLayout(game.camera, game.manager, null);
@@ -444,26 +443,26 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0, 0, 0, 1f);
 
         game.camera.update();
-        game.batch.setProjectionMatrix(game.camera.combined);
-        game.batch.begin();
+        batch.setProjectionMatrix(game.camera.combined);
+        batch.begin();
         game.shapeRenderer.setProjectionMatrix(game.camera.combined);
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        if(!game.MAP) visualizar(game.batch, 1,1);
+        if(!game.MAP) visualizar(batch, 1,1);
         else map_2d();
-        if(mes_c > 0) {game.Copytext(game.batch,5,5,message); };
-        game.COPY_BUFFER_1(game.batch,0,166,97,34,game.marca1);
-        game.COPY_BUFFER_1(game.batch,269,150,51,50,game.marca2);
-        if((game.p_e>6) && (game.p_e<13)) game.Copytext(game.batch,30,95,game.loc.get("pressSpaceToRestart"));
+        if(mes_c > 0) {game.Copytext(batch,5,5,message); };
+        game.COPY_BUFFER_1(batch,0,166,97,34,game.marca1);
+        game.COPY_BUFFER_1(batch,269,150,51,50,game.marca2);
+        if((game.p_e>6) && (game.p_e<13)) game.Copytext(batch,30,95,game.loc.get("pressSpaceToRestart"));
         variables();
-        game.batch.end();
+        batch.end();
         game.shapeRenderer.end();
 
         //FLIP_BUFFER(scr);
 
         if(game.MAP)
-            minimap.render(game.batch, game.batch);
+            minimap.render(batch, batch);
         else
-            joypad.render(game.batch, game.batch);
+            joypad.render(batch, batch);
 
     }
 
@@ -1246,16 +1245,16 @@ public class GameScreen implements Screen {
     void out_var(int x, int y, int var)
     {
         String s = ""+var;
-        game.Copytext(game.batch,x,y,s);
+        game.Copytext(batch,x,y,s);
     }
     void variables()
     {
-        game.Copytext(game.batch,6-4,170,game.p_name);
+        game.Copytext(batch,6-4,170,game.p_name);
         if(game.p_l>=0) out_var(19-4,186,game.p_l);
         else out_var(19-4,186,0);
-        if(game.llave[0] > 0) game.Copytext(game.batch,60-4,185,"");
-        if(game.llave[1] > 0) game.Copytext(game.batch,73-4,185,"");
-        if(game.llave[2] > 0) game.Copytext(game.batch,86-4,185,"");
+        if(game.llave[0] > 0) game.Copytext(batch,60-4,185,"");
+        if(game.llave[1] > 0) game.Copytext(batch,73-4,185,"");
+        if(game.llave[2] > 0) game.Copytext(batch,86-4,185,"");
 
         out_var(288-4,154,game.municion[0]);
         out_var(288-4,170,game.municion[1]);
@@ -1275,17 +1274,17 @@ public class GameScreen implements Screen {
             case 5 : sprintf(a,"��"); break;
             case 6 : sprintf(a,"��"); break;*/
         };
-        if (game.p_w > 0) game.Copytext(game.batch,76-4,169,a.toString());
+        if (game.p_w > 0) game.Copytext(batch,76-4,169,a.toString());
 
         if((game.invi>20) || ((game.invi<=20) && (game.invi>0) && ((char)game.frame!=1)))
-            game.COPY_BUFFER_1(game.batch,220,0,24,26,game.addings[(int)(2+game.frame)]);
+            game.COPY_BUFFER_1(batch,220,0,24,26,game.addings[(int)(2+game.frame)]);
 
         if((game.pocima>20) || ((game.pocima<=20) && (game.pocima>0) && ((char)game.frame!=1)))
-            game.COPY_BUFFER_1(game.batch,295,0,24,26,game.addings[(int)(5+game.frame)]);
+            game.COPY_BUFFER_1(batch,295,0,24,26,game.addings[(int)(5+game.frame)]);
 
-        if(game.p_l>100) game.COPY_BUFFER_1(game.batch,270,0,24,26,game.addings[11]);
+        if(game.p_l>100) game.COPY_BUFFER_1(batch,270,0,24,26,game.addings[11]);
         if((game.escudo>20) || ((game.escudo<=20) && (game.escudo>0) && ((char)game.frame!=1)))
-            game.COPY_BUFFER_1(game.batch,245,0,24,26,game.addings[1]);
+            game.COPY_BUFFER_1(batch,245,0,24,26,game.addings[1]);
 
     }
 
@@ -1480,11 +1479,11 @@ public class GameScreen implements Screen {
         xx=game.ene_datos[n].xy[2];
         yy=game.ene_datos[n].xy[3];
 
-        if(tipo==0) show_warrior(game.batch, game.trp,xx,yy,dir,pos,estado,weapon, (char) 0);
-        if(tipo==1) show_warrior(game.batch, game.ene1,xx,yy,dir,pos,estado,weapon, (char) 0);
-        if(tipo==2) show_warrior(game.batch, game.ene2,xx,yy,dir,pos,estado,weapon, (char) 0);
-        if(tipo==3) show_warrior(game.batch, null,xx,yy,dir,pos,estado,weapon, (char) 0);
-        if(tipo==4) show_warrior(game.batch, game.sol,xx,yy,dir,pos,estado,weapon, (char) 0);
+        if(tipo==0) show_warrior(batch, game.trp,xx,yy,dir,pos,estado,weapon, (char) 0);
+        if(tipo==1) show_warrior(batch, game.ene1,xx,yy,dir,pos,estado,weapon, (char) 0);
+        if(tipo==2) show_warrior(batch, game.ene2,xx,yy,dir,pos,estado,weapon, (char) 0);
+        if(tipo==3) show_warrior(batch, null,xx,yy,dir,pos,estado,weapon, (char) 0);
+        if(tipo==4) show_warrior(batch, game.sol,xx,yy,dir,pos,estado,weapon, (char) 0);
 
     }
 
@@ -1515,30 +1514,4 @@ public class GameScreen implements Screen {
         if((char)game.balas[n].est==4) game.COPY_BUFFER_2(scr,j-20,k-26,40,27,game.explos[game.balas[n].tipo][2]);
 
     };
-
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
-    }
 }
