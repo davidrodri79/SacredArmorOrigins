@@ -6,23 +6,19 @@ import com.badlogic.gdx.files.FileHandle;
 
 import java.nio.ByteBuffer;
 
-public class LoadGameScreen implements Screen {
+public class LoadGameScreen extends SAOScreen {
 
-    Main game;
+
     ButtonLayout joypad;
     int op = 0;
     public LoadGameScreen(Main game)
     {
-        this.game = game;
+        super(game);
 
         game.load_scr("WALL.SCR");
         // Create joypad
         joypad = new ButtonLayout(game.camera, game.manager, null);
         joypad.loadFromJson("menukeys.json");
-    }
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -60,60 +56,44 @@ public class LoadGameScreen implements Screen {
 
         joypad.render(game.batch, game.batch);
 
-        if(joypad.consumePush("Up")) {op--; };
-        if(joypad.consumePush("Down")) {op++;};
-        if(joypad.consumePush("Accept"))
-        {
-            if(game.gamesaves[op].saved != 0)
-            {
-                game.epi_actual=game.gamesaves[op].epi;
-                game.lev=game.gamesaves[op].level;
-                game.DIF=game.gamesaves[op].dif;
-                for(int j=0; j<3; ++j)
-                    game.municion[j]=game.gamesaves[op].ammo[j];
-                for(int j=0; j<6; ++j)
-                    game.armas[j]=game.gamesaves[op].armas[j];
-                for(int j=0; j<6; ++j)
-                    game.completed[j]=game.gamesaves[op].completed[j];
+        super.render(delta);
 
-                game.setScreen(new LoadLevelScreen(game));
+        if(!fadingOut()) {
+            if(joypad.consumePush("Up")) {op--; };
+            if(joypad.consumePush("Down")) {op++;};
+            if(joypad.consumePush("Accept"))
+            {
+                if(game.gamesaves[op].saved != 0)
+                {
+                    startFadeOut(2f);
+                }
+            }
+
+            if (joypad.consumePush("Back")) {
+                game.freePlay = false;
+                game.setScreen(new MainMenuScreen(game));
                 dispose();
             }
+
+            if (op < 0) op = 4;
+            if (op > 4) op = 0;
         }
-        if(joypad.consumePush("Back"))
+
+        if(fadeOutOver())
         {
-            game.freePlay = false;
-            game.setScreen(new MainMenuScreen(game));
+            game.epi_actual=game.gamesaves[op].epi;
+            game.lev=game.gamesaves[op].level;
+            game.DIF=game.gamesaves[op].dif;
+            for(int j=0; j<3; ++j)
+                game.municion[j]=game.gamesaves[op].ammo[j];
+            for(int j=0; j<6; ++j)
+                game.armas[j]=game.gamesaves[op].armas[j];
+            for(int j=0; j<6; ++j)
+                game.completed[j]=game.gamesaves[op].completed[j];
+
+            game.setScreen(new LoadLevelScreen(game));
             dispose();
         }
-
-        if(op<0) op=4;
-        if(op>4) op=0;
-
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
 
     }
 }
