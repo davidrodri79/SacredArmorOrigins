@@ -796,6 +796,7 @@ class BALA {
 
     public void Random_Buffer(SpriteBatch scr, float x, float y, int sx, int sy, Texture texture, int type, int dir, float prob) {
 
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         for(int i = 0; i < sy; i++)
         {
             for(int j = 0; j < sx; j++)
@@ -808,6 +809,7 @@ class BALA {
                 }
             }
         }
+        shapeRenderer.end();
     }
 
     public void Puts_Shade(SpriteBatch scr, int x, int y, int sx, int sy, Texture texture, int flip) {

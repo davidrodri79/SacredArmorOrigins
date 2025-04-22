@@ -444,18 +444,27 @@ public class GameScreen extends SAOScreen {
 
         game.camera.update();
         batch.setProjectionMatrix(game.camera.combined);
-        batch.begin();
         game.shapeRenderer.setProjectionMatrix(game.camera.combined);
-        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        if(!game.MAP) visualizar(batch, 1,1);
-        else map_2d();
+
+        if(!game.MAP)
+        {
+            batch.begin();
+            visualizar(batch, 1,1);
+            batch.end();
+        }
+        else {
+            game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            map_2d();
+            game.shapeRenderer.end();
+        }
+        batch.begin();
         if(mes_c > 0) {game.Copytext(batch,5,5,message); };
         game.COPY_BUFFER_1(batch,0,166,97,34,game.marca1);
         game.COPY_BUFFER_1(batch,269,150,51,50,game.marca2);
         if((game.p_e>6) && (game.p_e<13)) game.Copytext(batch,30,95,game.loc.get("pressSpaceToRestart"));
         variables();
         batch.end();
-        game.shapeRenderer.end();
+
 
         //FLIP_BUFFER(scr);
 
