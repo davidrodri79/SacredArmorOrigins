@@ -6,6 +6,7 @@
       width: 40
       height: 40
       action: Map,
+      "keyboard": 61,
       image_on: "gui/MAP_ON.png",
       image_off: "gui/MAP.png"
     },
@@ -15,6 +16,7 @@
       width: 40
       height: 40
       action: Quit,
+      "keyboard": 111,
       image_on: "gui/QUIT_ON.png",
       image_off: "gui/QUIT.png"
     },
@@ -24,6 +26,7 @@
       width: 40
       height: 40,
       action: Plus,
+      "keyboard": 72,
       image_on: "gui/PLUS_ON.png",
       image_off: "gui/PLUS.png"
     },
@@ -33,6 +36,7 @@
       width: 40
       height: 40,
       action: Minus,
+      "keyboard": 76,
       image_on: "gui/MINUS_ON.png",
       image_off: "gui/MINUS.png"
     }

@@ -10,6 +10,7 @@ public class ButtonJson
     public String text;
     public String image_on;
     public String image_off;
+    public int keyboard;
 
     public ButtonJson()
     {

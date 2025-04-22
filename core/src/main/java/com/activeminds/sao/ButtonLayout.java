@@ -2,7 +2,9 @@ package com.activeminds.sao;
 
 import com.activeminds.sao.jsonloaders.ButtonJson;
 import com.activeminds.sao.jsonloaders.ButtonLayoutJson;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
@@ -29,15 +31,16 @@ public class ButtonLayout implements InputProcessor {
         String text;
         String imageOn, imageOff;
         boolean pressed;
-        int pushes, releases;
+        int keyboard = -1, pushes, releases;
 
-        Button(int x, int y, int sx, int sy, String action, String text, String on, String off)
+        Button(int x, int y, int sx, int sy, String action, int keyboard, String text, String on, String off)
         {
             rect = new Rectangle(x, y, sx, sy);
             this.action = action;
             this.text = text;
             this.imageOn = on;
             this.imageOff = off;
+            this.keyboard = keyboard;
             pressed = false;
             pushes = 0;
             releases = 0;
@@ -75,13 +78,13 @@ public class ButtonLayout implements InputProcessor {
 
         for(ButtonJson b : l.buttons)
         {
-            addButton(b.x, b.y, b.width, b.height, b.action, b.text, b.image_on, b.image_off);
+            addButton(b.x, b.y, b.width, b.height, b.action, b.keyboard, b.text, b.image_on, b.image_off);
         }
     }
 
-    public void addButton(int x, int y, int sx, int sy, String action, String text, String imageOn, String imageOff)
+    public void addButton(int x, int y, int sx, int sy, String action, int keyboard, String text, String imageOn, String imageOff)
     {
-        Button b = new Button(x, y, sx, sy, action, text, imageOn, imageOff);
+        Button b = new Button(x, y, sx, sy, action, keyboard, text, imageOn, imageOff);
         buttons.put(action, b);
     }
 
@@ -139,13 +142,17 @@ public class ButtonLayout implements InputProcessor {
 
     public void render(SpriteBatch spriteBatch, SpriteBatch textBatch)
     {
+        if(Gdx.app.getType() == Application.ApplicationType.Desktop)
+            return;
         // Button images
         spriteBatch.begin();
         for(String i:buttons.keySet())
         {
             Button b = buttons.get(i);
-            Texture t = manager.get(b.pressed ? b.imageOn : b.imageOff, Texture.class);
-            spriteBatch.draw(t, b.rect.x, b.rect.y, b.rect.width, b.rect.height, 0, 0, t.getWidth(), t.getHeight(), false, false);
+            if(b.imageOn != null && b.imageOff != null) {
+                Texture t = manager.get(b.pressed ? b.imageOn : b.imageOff, Texture.class);
+                spriteBatch.draw(t, b.rect.x, b.rect.y, b.rect.width, b.rect.height, 0, 0, t.getWidth(), t.getHeight(), false, false);
+            }
 
         }
         spriteBatch.end();
@@ -167,11 +174,33 @@ public class ButtonLayout implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
+        for(String i:buttons.keySet())
+        {
+            if(buttons.get(i).keyboard == keycode)
+            {
+                // Button has been pressed
+                buttons.get(i).pressed = true;
+                buttons.get(i).pushes ++;
+                return true;
+            }
+        }
         return false;
+
     }
 
     @Override
     public boolean keyUp(int keycode) {
+
+        for(String i:buttons.keySet())
+        {
+            if(buttons.get(i).keyboard == keycode)
+            {
+                // Button has been pressed
+                buttons.get(i).pressed = false;
+                buttons.get(i).releases ++;
+                return true;
+            }
+        }
         return false;
     }
 
@@ -182,6 +211,9 @@ public class ButtonLayout implements InputProcessor {
 
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
+
+        if(Gdx.app.getType() == Application.ApplicationType.Desktop)
+            return true;
 
         Vector3 touchPos = new Vector3();
         touchPos.set(x, y, 0);
@@ -204,6 +236,9 @@ public class ButtonLayout implements InputProcessor {
     @Override
     public boolean touchUp (int x, int y, int pointer, int button) {
 
+        if(Gdx.app.getType() == Application.ApplicationType.Desktop)
+            return true;
+
         if(pointers.get(pointer) != null)
         {
             // This pointer was linked to a button, so release it
@@ -222,6 +257,9 @@ public class ButtonLayout implements InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer)
     {
+        if(Gdx.app.getType() == Application.ApplicationType.Desktop)
+            return true;
+
         // Get screen camera coordinates of touch
         Vector3 touchPos = new Vector3();
         touchPos.set(screenX, screenY, 0);

@@ -218,33 +218,33 @@ public class GameScreen extends SAOScreen {
                     if(game.p_w >= 7) game.p_w = 0;
                 } while((game.p_w != 0) && (game.armas[(game.p_w-1)] == 0));
             }
-            /*
+
             // Cambio de armas
-            if(keymap[11]) p_w=0;
-            if(keymap[2]){
-                if(armas[0]) p_w=1;
-                else show_mes("Pistola no disponible");
+            if(joypad.consumePush("Weapon_1")) game.p_w=0;
+            if(joypad.consumePush("Weapon_2")){
+                if(game.armas[0] != 0) game.p_w=1;
+                else show_mes(game.loc.get("noWeapon1"));
             };
-            if(keymap[3]){
-                if(armas[1]) p_w=2;
-                else show_mes("Ametralladora no disponible");
+            if(joypad.consumePush("Weapon_3")){
+                if(game.armas[1] != 0) game.p_w=2;
+                else show_mes(game.loc.get("noWeapon2"));
             };
-            if(keymap[4]){
-                if(armas[2]) p_w=3;
-                else show_mes("Lanzacohetes no disponible");
+            if(joypad.consumePush("Weapon_4")){
+                if(game.armas[2] != 0) game.p_w=3;
+                else show_mes(game.loc.get("noWeapon3"));
             };
-            if(keymap[5]){
-                if(armas[3]) p_w=4;
-                else show_mes("Aniquilador no disponible");
+            if(joypad.consumePush("Weapon_5")){
+                if(game.armas[3] != 0) game.p_w=4;
+                else show_mes(game.loc.get("noWeapon4"));
             };
-            if(keymap[6]){
-                if(armas[4]) p_w=5;
-                else show_mes("\"Drag�n\" no disponible");
+            if(joypad.consumePush("Weapon_6")){
+                if(game.armas[4] != 0) game.p_w=5;
+                else show_mes(game.loc.get("noWeapon5"));
             };
-            if(keymap[7]){
-                if(armas[5]) p_w=6;
-                else show_mes("\"Infierno\" no disponible");
-            };*/
+            if(joypad.consumePush("Weapon_7")){
+                if(game.armas[5] != 0) game.p_w=6;
+                else show_mes(game.loc.get("noWeapon6"));
+            };
             if(joypad.consumePush("Map")) {
                 game.MAP = true;
                 minimap.setAsActiveInputProcessor();
@@ -1124,120 +1124,249 @@ public class GameScreen extends SAOScreen {
 
             // Segundo barrido : Objetos y personajes
 
-            for(i=0; i<8; ++i){
-                for(g=0; g<8; ++g){
-                    x=Main.cx-(20*i)+(20*g);
-                    y=Main.cy+(10*i)+(10*g);
+        try {
 
-                    switch(game.fase.map[game.x_map][game.y_map][g][i]){
+            for (i = 0; i < 8; ++i) {
+                for (g = 0; g < 8; ++g) {
+                    x = Main.cx - (20 * i) + (20 * g);
+                    y = Main.cy + (10 * i) + (10 * g);
+
+                    switch (game.fase.map[game.x_map][game.y_map][g][i]) {
 
                         case 32:
-                        case 2 : game.COPY_BUFFER_2(scr,x-20,y-50,20,70,game.chr.wall1); break;
+                        case 2:
+                            game.COPY_BUFFER_2(scr, x - 20, y - 50, 20, 70, game.chr.wall1);
+                            break;
                         case 35:
-                        case 3 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.wall1); break;
-                        case 4 : game.COPY_BUFFER_2(scr,x-20,y-50,20,70,game.chr.wall2); break;
-                        case 5 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.wall2); break;
-                        case 6 : game.COPY_BUFFER_2(scr,x-20,y-50,20,70,game.chr.wall3[frame]); break;
-                        case 7 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.wall3[frame]); break;
-                        case 8 : game.COPY_BUFFER_2(scr,x-20,y-50,20,70,game.chr.door[1]); break;
-                        case 9 : game.COPY_BUFFER_2(scr,x-20,y-50,20,70,game.chr.door[0]); break;
+                        case 3:
+                            game.COPY_BUFFER_1(scr, x, y - 50, 20, 70, game.chr.wall1);
+                            break;
+                        case 4:
+                            game.COPY_BUFFER_2(scr, x - 20, y - 50, 20, 70, game.chr.wall2);
+                            break;
+                        case 5:
+                            game.COPY_BUFFER_1(scr, x, y - 50, 20, 70, game.chr.wall2);
+                            break;
+                        case 6:
+                            game.COPY_BUFFER_2(scr, x - 20, y - 50, 20, 70, game.chr.wall3[frame]);
+                            break;
+                        case 7:
+                            game.COPY_BUFFER_1(scr, x, y - 50, 20, 70, game.chr.wall3[frame]);
+                            break;
+                        case 8:
+                            game.COPY_BUFFER_2(scr, x - 20, y - 50, 20, 70, game.chr.door[1]);
+                            break;
+                        case 9:
+                            game.COPY_BUFFER_2(scr, x - 20, y - 50, 20, 70, game.chr.door[0]);
+                            break;
 
-                        case 12: game.COPY_BUFFER_1(scr,x-20,y-8,40,27,game.weapon[0][0]); break;
-                        case 13: game.COPY_BUFFER_1(scr,x-20,y-8,40,27,game.weapon[0][1]); break;
-                        case 14: game.COPY_BUFFER_1(scr,x-20,y-8,40,27,game.weapon[0][2]); break;
-                        case 15: game.COPY_BUFFER_1(scr,x-20,y-8,40,27,game.weapon[0][3]); break;
-                        case 16: game.COPY_BUFFER_1(scr,x-20,y-8,40,27,game.weapon[0][4]); break;
-                        case 17: game.COPY_BUFFER_1(scr,x-20,y-8,40,27,game.weapon[0][5]); break;
+                        case 12:
+                            game.COPY_BUFFER_1(scr, x - 20, y - 8, 40, 27, game.weapon[0][0]);
+                            break;
+                        case 13:
+                            game.COPY_BUFFER_1(scr, x - 20, y - 8, 40, 27, game.weapon[0][1]);
+                            break;
+                        case 14:
+                            game.COPY_BUFFER_1(scr, x - 20, y - 8, 40, 27, game.weapon[0][2]);
+                            break;
+                        case 15:
+                            game.COPY_BUFFER_1(scr, x - 20, y - 8, 40, 27, game.weapon[0][3]);
+                            break;
+                        case 16:
+                            game.COPY_BUFFER_1(scr, x - 20, y - 8, 40, 27, game.weapon[0][4]);
+                            break;
+                        case 17:
+                            game.COPY_BUFFER_1(scr, x - 20, y - 8, 40, 27, game.weapon[0][5]);
+                            break;
 
-                        case 18: game.COPY_BUFFER_1(scr,x-12,y-11,24,26,game.keys[0]); break;
-                        case 19: game.COPY_BUFFER_1(scr,x-12,y-11,24,26,game.keys[1]); break;
-                        case 20: game.COPY_BUFFER_1(scr,x-12,y-11,24,26,game.keys[2]); break;
-                        case 21: game.COPY_BUFFER_1(scr,x-12,y-11,24,26,game.addings[0]); break;
-                        case 22: game.COPY_BUFFER_1(scr,x-12,y-11,24,26,game.ammo[0]); break;
-                        case 23: game.COPY_BUFFER_1(scr,x-12,y-11,24,26,game.ammo[1]); break;
-                        case 24: game.COPY_BUFFER_1(scr,x-12,y-11,24,26,game.ammo[2+frame]); break;
-                        case 25: game.COPY_BUFFER_1(scr,x-12,y-11,24,26,game.addings[11]); break;
-                        case 26: game.COPY_BUFFER_1(scr,x-12,y-11,24,26,game.addings[1]); break;
-                        case 27: game.COPY_BUFFER_1(scr,x-12,y-11,24,26,game.addings[5+frame]); break;
+                        case 18:
+                            game.COPY_BUFFER_1(scr, x - 12, y - 11, 24, 26, game.keys[0]);
+                            break;
+                        case 19:
+                            game.COPY_BUFFER_1(scr, x - 12, y - 11, 24, 26, game.keys[1]);
+                            break;
+                        case 20:
+                            game.COPY_BUFFER_1(scr, x - 12, y - 11, 24, 26, game.keys[2]);
+                            break;
+                        case 21:
+                            game.COPY_BUFFER_1(scr, x - 12, y - 11, 24, 26, game.addings[0]);
+                            break;
+                        case 22:
+                            game.COPY_BUFFER_1(scr, x - 12, y - 11, 24, 26, game.ammo[0]);
+                            break;
+                        case 23:
+                            game.COPY_BUFFER_1(scr, x - 12, y - 11, 24, 26, game.ammo[1]);
+                            break;
+                        case 24:
+                            game.COPY_BUFFER_1(scr, x - 12, y - 11, 24, 26, game.ammo[2 + frame]);
+                            break;
+                        case 25:
+                            game.COPY_BUFFER_1(scr, x - 12, y - 11, 24, 26, game.addings[11]);
+                            break;
+                        case 26:
+                            game.COPY_BUFFER_1(scr, x - 12, y - 11, 24, 26, game.addings[1]);
+                            break;
+                        case 27:
+                            game.COPY_BUFFER_1(scr, x - 12, y - 11, 24, 26, game.addings[5 + frame]);
+                            break;
 
-                        case 28: game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.epi_end); break;
-                        case 29: game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.fas_end); break;
-                        case 30: game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.teletrans); break;
-                        case 31: game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.secret_trans); break;
-                        case 33: if(int_map[g][i] != 0 && game.fase.switches[int_map[g][i]-1].estado==1) game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.boton[1]);
-                        else game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.boton[0]); break;
+                        case 28:
+                            game.COPY_BUFFER_1(scr, x - 20, y - 20, 40, 39, game.chr.epi_end);
+                            break;
+                        case 29:
+                            game.COPY_BUFFER_1(scr, x - 20, y - 20, 40, 39, game.chr.fas_end);
+                            break;
+                        case 30:
+                            game.COPY_BUFFER_1(scr, x - 20, y - 20, 40, 39, game.chr.teletrans);
+                            break;
+                        case 31:
+                            game.COPY_BUFFER_1(scr, x - 20, y - 20, 40, 39, game.chr.secret_trans);
+                            break;
+                        case 33:
+                            if (int_map[g][i] != 0 && game.fase.switches[int_map[g][i] - 1].estado == 1)
+                                game.COPY_BUFFER_1(scr, x - 20, y - 20, 40, 39, game.chr.boton[1]);
+                            else game.COPY_BUFFER_1(scr, x - 20, y - 20, 40, 39, game.chr.boton[0]);
+                            break;
 
-                        case 36 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.door[1]); break;
-                        case 37 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.door[0]); break;
+                        case 36:
+                            game.COPY_BUFFER_1(scr, x, y - 50, 20, 70, game.chr.door[1]);
+                            break;
+                        case 37:
+                            game.COPY_BUFFER_1(scr, x, y - 50, 20, 70, game.chr.door[0]);
+                            break;
 
-                        case 38 : game.COPY_BUFFER_1(scr,x-12,y-11,24,26,game.addings[8+frame]); break;
-                        case 39 : game.COPY_BUFFER_1(scr,x-12,y-11,24,26,game.addings[2+frame]); break;
+                        case 38:
+                            game.COPY_BUFFER_1(scr, x - 12, y - 11, 24, 26, game.addings[8 + frame]);
+                            break;
+                        case 39:
+                            game.COPY_BUFFER_1(scr, x - 12, y - 11, 24, 26, game.addings[2 + frame]);
+                            break;
 
-                        case 47 : game.COPY_BUFFER_2(scr,x-20,y-50,20,70,game.chr.clos_door[1]); break;
-                        case 48 : game.COPY_BUFFER_2(scr,x-20,y-50,20,70,game.chr.clos_door[0]); break;
-                        case 49 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.clos_door[1]); break;
-                        case 50 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.clos_door[0]); break;
+                        case 47:
+                            game.COPY_BUFFER_2(scr, x - 20, y - 50, 20, 70, game.chr.clos_door[1]);
+                            break;
+                        case 48:
+                            game.COPY_BUFFER_2(scr, x - 20, y - 50, 20, 70, game.chr.clos_door[0]);
+                            break;
+                        case 49:
+                            game.COPY_BUFFER_1(scr, x, y - 50, 20, 70, game.chr.clos_door[1]);
+                            break;
+                        case 50:
+                            game.COPY_BUFFER_1(scr, x, y - 50, 20, 70, game.chr.clos_door[0]);
+                            break;
 
-                        case 52 : game.COPY_BUFFER_2(scr,x-20,y-50,20,70,game.chr.key_door1[game.llave[0]][1]); break;
-                        case 53 : game.COPY_BUFFER_2(scr,x-20,y-50,20,70,game.chr.key_door1[game.llave[0]][0]); break;
-                        case 54 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.key_door1[game.llave[0]][1]); break;
-                        case 55 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.key_door1[game.llave[0]][0]); break;
-                        case 56 : game.COPY_BUFFER_2(scr,x-20,y-50,20,70,game.chr.key_door2[game.llave[1]][1]); break;
-                        case 57 : game.COPY_BUFFER_2(scr,x-20,y-50,20,70,game.chr.key_door2[game.llave[1]][0]); break;
-                        case 58 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.key_door2[game.llave[1]][1]); break;
-                        case 59 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.key_door2[game.llave[1]][0]); break;
-                        case 60 : game.COPY_BUFFER_2(scr,x-20,y-50,20,70,game.chr.key_door3[game.llave[2]][1]); break;
-                        case 61 : game.COPY_BUFFER_2(scr,x-20,y-50,20,70,game.chr.key_door3[game.llave[2]][0]); break;
-                        case 62 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.key_door3[game.llave[2]][1]); break;
-                        case 63 : game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.key_door3[game.llave[2]][0]); break;
+                        case 52:
+                            game.COPY_BUFFER_2(scr, x - 20, y - 50, 20, 70, game.chr.key_door1[game.llave[0]][1]);
+                            break;
+                        case 53:
+                            game.COPY_BUFFER_2(scr, x - 20, y - 50, 20, 70, game.chr.key_door1[game.llave[0]][0]);
+                            break;
+                        case 54:
+                            game.COPY_BUFFER_1(scr, x, y - 50, 20, 70, game.chr.key_door1[game.llave[0]][1]);
+                            break;
+                        case 55:
+                            game.COPY_BUFFER_1(scr, x, y - 50, 20, 70, game.chr.key_door1[game.llave[0]][0]);
+                            break;
+                        case 56:
+                            game.COPY_BUFFER_2(scr, x - 20, y - 50, 20, 70, game.chr.key_door2[game.llave[1]][1]);
+                            break;
+                        case 57:
+                            game.COPY_BUFFER_2(scr, x - 20, y - 50, 20, 70, game.chr.key_door2[game.llave[1]][0]);
+                            break;
+                        case 58:
+                            game.COPY_BUFFER_1(scr, x, y - 50, 20, 70, game.chr.key_door2[game.llave[1]][1]);
+                            break;
+                        case 59:
+                            game.COPY_BUFFER_1(scr, x, y - 50, 20, 70, game.chr.key_door2[game.llave[1]][0]);
+                            break;
+                        case 60:
+                            game.COPY_BUFFER_2(scr, x - 20, y - 50, 20, 70, game.chr.key_door3[game.llave[2]][1]);
+                            break;
+                        case 61:
+                            game.COPY_BUFFER_2(scr, x - 20, y - 50, 20, 70, game.chr.key_door3[game.llave[2]][0]);
+                            break;
+                        case 62:
+                            game.COPY_BUFFER_1(scr, x, y - 50, 20, 70, game.chr.key_door3[game.llave[2]][1]);
+                            break;
+                        case 63:
+                            game.COPY_BUFFER_1(scr, x, y - 50, 20, 70, game.chr.key_door3[game.llave[2]][0]);
+                            break;
 
-                        case 70: game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.decor1); break;
-                        case 71: game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.decor2); break;
-                        case 72: game.COPY_BUFFER_1(scr,x-20,y-20,40,39,game.chr.decor3[frame]); break;
-                        case 73: game.COPY_BUFFER_1(scr,x-20,y-60,40,79,game.chr.column); break;
-                        case 74: game.COPY_BUFFER_2(scr,x-20,y-50,20,70,game.chr.wall1);
-                            game.COPY_BUFFER_1(scr,x,y-50,20,70,game.chr.wall1); break;
-                    };
+                        case 70:
+                            game.COPY_BUFFER_1(scr, x - 20, y - 20, 40, 39, game.chr.decor1);
+                            break;
+                        case 71:
+                            game.COPY_BUFFER_1(scr, x - 20, y - 20, 40, 39, game.chr.decor2);
+                            break;
+                        case 72:
+                            game.COPY_BUFFER_1(scr, x - 20, y - 20, 40, 39, game.chr.decor3[frame]);
+                            break;
+                        case 73:
+                            game.COPY_BUFFER_1(scr, x - 20, y - 60, 40, 79, game.chr.column);
+                            break;
+                        case 74:
+                            game.COPY_BUFFER_2(scr, x - 20, y - 50, 20, 70, game.chr.wall1);
+                            game.COPY_BUFFER_1(scr, x, y - 50, 20, 70, game.chr.wall1);
+                            break;
+                    }
+                    ;
 
 
-                    for(char t=0; t<10; ++t){
-                        if((game.balas[t].est!=0) && ((char)game.balas[t].b_xy[0]==game.x_map)
-                            && ((char)game.balas[t].b_xy[1]==game.y_map)
-                            && ((char)game.balas[t].b_xy[2]==g) &&
-                            ((char)game.balas[t].b_xy[3]==i) )
-                            show_bullet(scr,t);
-                    };
+                    for (char t = 0; t < 10; ++t) {
+                        if ((game.balas[t].est != 0) && ((char) game.balas[t].b_xy[0] == game.x_map)
+                            && ((char) game.balas[t].b_xy[1] == game.y_map)
+                            && ((char) game.balas[t].b_xy[2] == g) &&
+                            ((char) game.balas[t].b_xy[3] == i))
+                            show_bullet(scr, t);
+                    }
+                    ;
 
-                    if(((char)(game.px)==g) && ((char)(game.py)==i) && (player != 0)){
+                    if (((char) (game.px) == g) && ((char) (game.py) == i) && (player != 0)) {
 
-                        int j=(int)(game.cx-(20*ppy)+(20*ppx));
-                        int k=(int)(game.cy+(10*ppy)+(10*ppx)+game.desp-10);
-                        if(game.pocima>0){game.COPY_BUFFER_1(scr,j-20,k-40,20,59,game.field[0]);
-                            game.COPY_BUFFER_2(scr,j,k-40,20,59,game.field[0]);
-                        };
-                        if(game.escudo>0){game.COPY_BUFFER_1(scr,j-20,k-40,20,59,game.field[1]);
-                            game.COPY_BUFFER_2(scr,j,k-40,20,59,game.field[1]);
-                        };
-                        if(teleport_state != 0) {
-                            ppy=game.py-0.5f;
-                            ppx=game.px-0.5f;
-                            xx=(int)(game.cx-(20*ppy)+(20*ppx));
-                            yy=(int)(game.cy+(10*ppy)+(10*ppx)+game.desp);
-                            float xa=xx-20, ya=yy-20;
-                            game.Random_Buffer(scr,xa,ya,40,39,game.sol.l_stand[0],1,1,player_fade/10f);
-                            game.Random_Buffer(scr,xa,ya-20,40,39,game.sol.b_stand[0],1,1,player_fade/10f);
+                        int j = (int) (game.cx - (20 * ppy) + (20 * ppx));
+                        int k = (int) (game.cy + (10 * ppy) + (10 * ppx) + game.desp - 10);
+                        if (game.pocima > 0) {
+                            game.COPY_BUFFER_1(scr, j - 20, k - 40, 20, 59, game.field[0]);
+                            game.COPY_BUFFER_2(scr, j, k - 40, 20, 59, game.field[0]);
                         }
-                        else if(game.invi > 0f) show_warrior(scr, null,game.px,game.py,game.p_d,game.p_p,(char)game.p_e,game.p_w,game.desp);
-                        else show_warrior(scr, game.sol,game.px,game.py,game.p_d,game.p_p,(char)game.p_e,game.p_w,game.desp);
-                    };
+                        ;
+                        if (game.escudo > 0) {
+                            game.COPY_BUFFER_1(scr, j - 20, k - 40, 20, 59, game.field[1]);
+                            game.COPY_BUFFER_2(scr, j, k - 40, 20, 59, game.field[1]);
+                        }
+                        ;
+                        if (teleport_state != 0) {
+                            ppy = game.py - 0.5f;
+                            ppx = game.px - 0.5f;
+                            xx = (int) (game.cx - (20 * ppy) + (20 * ppx));
+                            yy = (int) (game.cy + (10 * ppy) + (10 * ppx) + game.desp);
+                            float xa = xx - 20, ya = yy - 20;
+                            game.Random_Buffer(scr, xa, ya, 40, 39, game.sol.l_stand[0], 1, 1, player_fade / 10f);
+                            game.Random_Buffer(scr, xa, ya - 20, 40, 39, game.sol.b_stand[0], 1, 1, player_fade / 10f);
+                        } else if (game.invi > 0f)
+                            show_warrior(scr, null, game.px, game.py, game.p_d, game.p_p, (char) game.p_e, game.p_w, game.desp);
+                        else
+                            show_warrior(scr, game.sol, game.px, game.py, game.p_d, game.p_p, (char) game.p_e, game.p_w, game.desp);
+                    }
+                    ;
 
 
-                    if(enemy != 0){
-                        for(int t=0; t<game.fase.e_n; ++t){
-                            if(((int)game.ene_datos[t].xy[0]==game.x_map) && ((int)game.ene_datos[t].xy[1]==game.y_map) && ((char)game.ene_datos[t].xy[2]==g) && ((char)game.ene_datos[t].xy[3]==i) ) show_enemy((char)t);
-                        };
-                };
-            };
+                    if (enemy != 0) {
+                        for (int t = 0; t < game.fase.e_n; ++t) {
+                            if (((int) game.ene_datos[t].xy[0] == game.x_map) && ((int) game.ene_datos[t].xy[1] == game.y_map) && ((char) game.ene_datos[t].xy[2] == g) && ((char) game.ene_datos[t].xy[3] == i))
+                                show_enemy((char) t);
+                        }
+                        ;
+                    }
+                    ;
+                }
+                ;
+
+            }
+        }catch(Exception e)
+        {
+            System.out.println(e.toString());
+            System.out.println(e.getStackTrace().toString());
 
         }
     }

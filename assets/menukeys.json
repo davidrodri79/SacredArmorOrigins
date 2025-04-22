@@ -6,6 +6,7 @@
       width: 40
       height: 40
       action: Back,
+      "keyboard": 111,
       image_on: "gui/BACK_ON.png",
       image_off: "gui/BACK.png"
     }
@@ -15,6 +16,7 @@
       width: 40
       height: 40,
       action: Up,
+      "keyboard": 19,
       image_on: "gui/ARROWUP_ON.png",
       image_off: "gui/ARROWUP.png"
     },
@@ -24,6 +26,7 @@
       width: 40
       height: 40,
       action: Down,
+      "keyboard": 20,
       image_on: "gui/ARROWDOWN_ON.png",
       image_off: "gui/ARROWDOWN.png"
     },
@@ -33,6 +36,7 @@
       width: 40
       height: 40
       action: Accept,
+      "keyboard": 66,
       image_on: "gui/ENTER_ON.png",
       image_off: "gui/ENTER.png"
     }

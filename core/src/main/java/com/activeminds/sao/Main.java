@@ -1,5 +1,6 @@
 package com.activeminds.sao;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -353,7 +354,7 @@ class BALA {
 
         path = "WARRIOR/"+enemy_file.toUpperCase();
         f = Gdx.files.internal(path);
-        if(f.exists() && !f.isDirectory()) {
+        if(!enemy_file.isEmpty() && f.exists() && !f.isDirectory()) {
             inputStream = f.read();
 
             ene1 = load_warrior(inputStream);
