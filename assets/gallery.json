@@ -1,0 +1,34 @@
+{
+  "buttons" : [
+    {
+      x: 10
+      y: 150
+      width: 40
+      height: 40
+      action: Quit,
+      "keyboard": 111,
+      image_on: "gui/QUIT_ON.png",
+      image_off: "gui/QUIT.png"
+    },
+    {
+      x: 490
+      y: 80
+      width: 40
+      height: 40,
+      action: Plus,
+      "keyboard": 22,
+      image_on: "gui/PLUS_ON.png",
+      image_off: "gui/PLUS.png"
+    },
+    {
+      x: 10
+      y: 80
+      width: 40
+      height: 40,
+      action: Minus,
+      "keyboard": 21,
+      image_on: "gui/MINUS_ON.png",
+      image_off: "gui/MINUS.png"
+    }
+  ]
+}

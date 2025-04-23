@@ -143,6 +143,8 @@ public class GameScreen extends SAOScreen {
             if (game.frame < 3.0f) game.frame = game.vari;
             else game.frame = game.vari - 2.0f;
 
+            if(game.frame >= 3.0f) game.frame = 0f;
+
             game.visto[game.x_map][game.y_map] = 1;
 
             if (mes_c > 0) {
@@ -431,7 +433,7 @@ public class GameScreen extends SAOScreen {
                 };
             };
 
-            if(minimap.consumePush("Quit"))
+            if(minimap.consumePush("Quit") || joypad.consumePush("Quit"))
             {
                 game.setScreen(new MainMenuScreen(game));
                 dispose();
@@ -776,7 +778,7 @@ public class GameScreen extends SAOScreen {
 
         if(ai_update) {
             game.ene_datos[n].ai_cooldown = (float)(5f - 2f*game.DIF - Math.random());
-            Gdx.app.log("AI Cooldown", ""+game.ene_datos[n].ai_cooldown);
+            //Gdx.app.log("AI Cooldown", ""+game.ene_datos[n].ai_cooldown);
         }
 
     }

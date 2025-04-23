@@ -146,5 +146,13 @@
       action: Weapon_7,
       "keyboard": 14
     }
+    {
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+      action: Quit,
+      "keyboard": 111,
+    }
   ]
 }
