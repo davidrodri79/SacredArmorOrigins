@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.Gdx;
 
 import java.util.Locale;
+import java.util.MissingResourceException;
 
 public class LocalizationManager {
     private I18NBundle bundle;
@@ -32,7 +33,16 @@ public class LocalizationManager {
     }
 
     public String get(String key) {
-        return bundle.get(key);
+        String text;
+        try
+        {
+            text = bundle.get(key);
+        }
+        catch(MissingResourceException e)
+        {
+            text = key;
+        }
+        return text;
     }
 
     // Cambiar idioma manualmente

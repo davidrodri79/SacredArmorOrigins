@@ -1,12 +1,15 @@
 package com.activeminds.sao;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.StringBuilder;
 
 public class HelpScreen implements Screen {
     Main game;
     ButtonLayout joypad;
-    int step = 0;
+    int step;
     public HelpScreen(Main game)
     {
         this.game = game;
@@ -18,6 +21,15 @@ public class HelpScreen implements Screen {
         game.load_scr("WALL.SCR");
 
         game.load_charset();
+
+        if(Gdx.app.getType() == Application.ApplicationType.Desktop)
+        {
+            step = 0;
+        }
+        else
+        {
+            step = 1;
+        }
     }
     @Override
     public void show() {
@@ -35,6 +47,34 @@ public class HelpScreen implements Screen {
 
         if(step == 0) {
             game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
+            game.Copytext(game.batch,110,10,game.loc.get("controls"));
+            StringBuilder string = new StringBuilder();
+            string.append((char)30);
+            string.append((char)24);
+            string.append((char)28);
+            game.Copytext(game.batch,30,20,string.toString());
+            string = new StringBuilder();
+            string.append((char)27);
+            string.append((char)22);
+            string.append((char)26);
+            game.Copytext(game.batch,30,30,string.toString());
+            game.Copytext(game.batch,30,30,game.loc.get("controls1"));
+            string = new StringBuilder();
+            string.append((char)31);
+            string.append((char)25);
+            string.append((char)29);
+            game.Copytext(game.batch,30,40,string.toString());
+            game.Copytext(game.batch,10,55,game.loc.get("controls2"));
+            game.Copytext(game.batch,10,70,game.loc.get("controls3"));
+            game.Copytext(game.batch,10,85,game.loc.get("controls4"));
+            game.Copytext(game.batch,10,100,game.loc.get("controls5"));
+            game.Copytext(game.batch,10,118,game.loc.get("controls6"));
+            game.Copytext(game.batch,10,133,game.loc.get("controls7"));
+            game.Copytext(game.batch,10,148,game.loc.get("controls8"));
+            game.Copytext(game.batch,10,163,game.loc.get("controls9"));
+            game.Copytext(game.batch,40,185,game.loc.get("pressSpaceContinue"));
+        } else if(step == 1) {
+            game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
             game.Copytext(game.batch,110,10,game.loc.get("scenery"));
             game.COPY_BUFFER_1(game.batch,10,25,40,39,game.chr.teletrans);
             game.COPY_BUFFER_1(game.batch,10,70,40,39,game.chr.boton[0]);
@@ -49,7 +89,7 @@ public class HelpScreen implements Screen {
 
             game.Copytext(game.batch,40,185,game.loc.get("pressSpaceContinue"));
         }
-        else if (step == 1)
+        else if (step == 2)
         {
             game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
             game.Copytext(game.batch,120,10,game.loc.get("objects"));
@@ -80,7 +120,7 @@ public class HelpScreen implements Screen {
 
             game.Copytext(game.batch,40,185,game.loc.get("pressSpaceContinue"));
         }
-        else if (step == 2)
+        else if (step == 3)
         {
             game.batch.draw(game.scr, Main.GAME_SCREEN_START_X, 0);
 
@@ -102,11 +142,11 @@ public class HelpScreen implements Screen {
         {
             {
                 step++;
-                if(step == 2)
+                if(step == 3)
                 {
                     game.load_scr("TITLE.SCR");
                 }
-                if(step == 3)
+                if(step == 4)
                 {
                     game.setScreen(new MainMenuScreen(game));
                     dispose();

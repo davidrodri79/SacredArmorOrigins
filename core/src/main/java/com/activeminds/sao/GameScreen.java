@@ -451,6 +451,11 @@ public class GameScreen extends SAOScreen {
             batch.begin();
             visualizar(batch, 1,1);
             batch.end();
+
+            if(teleport_state != 0)
+            {
+                visualizar_player_teleport(batch);
+            }
         }
         else {
             game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -1345,13 +1350,13 @@ public class GameScreen extends SAOScreen {
                         }
                         ;
                         if (teleport_state != 0) {
-                            ppy = game.py - 0.5f;
+                            /*ppy = game.py - 0.5f;
                             ppx = game.px - 0.5f;
                             xx = (int) (game.cx - (20 * ppy) + (20 * ppx));
                             yy = (int) (game.cy + (10 * ppy) + (10 * ppx) + game.desp);
                             float xa = xx - 20, ya = yy - 20;
                             game.Random_Buffer(scr, xa, ya, 40, 39, game.sol.l_stand[0], 1, 1, player_fade / 10f);
-                            game.Random_Buffer(scr, xa, ya - 20, 40, 39, game.sol.b_stand[0], 1, 1, player_fade / 10f);
+                            game.Random_Buffer(scr, xa, ya - 20, 40, 39, game.sol.b_stand[0], 1, 1, player_fade / 10f);*/
                         } else if (game.invi > 0f)
                             show_warrior(scr, null, game.px, game.py, game.p_d, game.p_p, (char) game.p_e, game.p_w, game.desp);
                         else
@@ -1378,6 +1383,21 @@ public class GameScreen extends SAOScreen {
             System.out.println(e.getStackTrace().toString());
 
         }
+    }
+
+    void visualizar_player_teleport(SpriteBatch scr)
+    {
+        int xx, yy;
+        float ppx, ppy;
+        ppy = game.py - 0.5f;
+        ppx = game.px - 0.5f;
+        xx = (int) (game.cx - (20 * ppy) + (20 * ppx));
+        yy = (int) (game.cy + (10 * ppy) + (10 * ppx) + game.desp);
+        float xa = xx - 20, ya = yy - 20;
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        game.Random_Buffer(scr, xa, ya, 40, 39, game.sol.l_stand[0], 1, 1, player_fade / 10f);
+        game.Random_Buffer(scr, xa, ya - 20, 40, 39, game.sol.b_stand[0], 1, 1, player_fade / 10f);
+        game.shapeRenderer.end();
     }
 
     void out_var(int x, int y, int var)
